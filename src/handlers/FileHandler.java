@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class FileHandler {
 	public static final String DATA_FOLDER = System.getProperty("user.home") + "/AppData/Roaming/iButtonData";
-	public static final File LogFile = new File(DATA_FOLDER + "/log.txt");
+
 
 	/**
 	 * 
@@ -28,16 +28,17 @@ public class FileHandler {
 	 * @throws IOException
 	 *             If the file could not be written.
 	 */
-	public static void writeToFile(String text, File file) throws IOException {
+	public static void writeToFile(String text, File file, Boolean append) throws IOException {
 
 		File f = new File(DATA_FOLDER);
 		if (!f.exists()) {
 			f.mkdir();
 		}
 
-		FileWriter fw = new FileWriter(file);
+		FileWriter fw = new FileWriter(file, append);
 		BufferedWriter bw = new BufferedWriter(fw);
 		bw.write(text);
+		//bw.append(text);
 		bw.close();
 		fw.close();
 

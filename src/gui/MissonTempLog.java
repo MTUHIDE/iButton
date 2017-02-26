@@ -4,18 +4,19 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
 import com.dalsemi.onewire.OneWireException;
-import com.dalsemi.onewire.adapter.DSPortAdapter;
 import com.dalsemi.onewire.container.MissionContainer;
 
 import handlers.DeviceHandler;
 import handlers.MissionHandler;
 import output.DataFile;
+import output.Logger;
 
 /**
  * Demos the current features so far program in a GUI.
@@ -30,6 +31,9 @@ public class MissonTempLog extends JFrame implements ActionListener {
 	private JButton startMission = new JButton("Start Mission");
 	private JButton stopMission = new JButton("Stop Mission");
 	private JButton uploadData = new JButton("Upload Data");
+	
+	private List<DeviceHandler> devices;
+	private DeviceHandler activeDevice;
 
 	/**
 	 * Sets up the JFrame
@@ -58,59 +62,61 @@ public class MissonTempLog extends JFrame implements ActionListener {
 	 */
 	public static void main(String[] args) {
 		MissonTempLog misson = new MissonTempLog();
-		try {
-			DeviceHandler.getAdapter();
-			misson.log.append("Found Adapter!\n");
-		} catch (OneWireException e) {
-			misson.log.append("Could not Find Adapter!\n");
-		}
-
+		misson.load();
 	}
 
+	public void load(){
+		try {
+			devices = DeviceHandler.getDevices(DeviceHandler.deviceDefaultName, DeviceHandler.adapterDefaultName);
+			activeDevice = devices.get(0);
+			Logger.writeToLog("Found adapters");
+			log.append("Found Adapters!\n");
+		} catch (OneWireException e) {
+			Logger.writeErrorToLog(e);
+			log.append("Could not Find Adapters!\n");
+		}
+	}
+	
 	/**
 	 * Listens for button clicks.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent a) {
-		DSPortAdapter adapter = null;
-		MissionContainer ms = null;
-
-		try {
-			adapter = DeviceHandler.getAdapter();
-			ms = MissionHandler.getMissionContainer(adapter);
-		} catch (OneWireException e) {
-			e.printStackTrace();
-		}
+		MissionContainer ms = (MissionContainer) activeDevice.device;
 
 		if (a.getSource() == startMission) {
 			log.append("Starting misson!\n");
 			try {
-				MissionHandler.startMission(adapter, ms);
+				MissionHandler.startMission(activeDevice.adapter, ms);
+				Logger.writeToLog("Started new mission");
 			} catch (OneWireException e) {
-				e.printStackTrace();
+				Logger.writeErrorToLog(e);
 			}
 		}
 		if (a.getSource() == stopMission) {
 			log.append("Stoping misson!\n");
 			try {
-				MissionHandler.stopMission(adapter, ms);
+				MissionHandler.stopMission(activeDevice.adapter, ms);
+				Logger.writeToLog("Stop mission");
 			} catch (OneWireException e) {
-				e.printStackTrace();
+				Logger.writeErrorToLog(e);
 			}
 		}
 		if (a.getSource() == uploadData) {
 			log.append("Loading Mission...\n");
 			try {
 				log.append("Writting to file...\n");
-				try { //TODO Should be ran on a new thread so the GUI does not freeze.
-					new DataFile(DeviceHandler.getAddress(), MissionHandler.getMissonTemperatureData(adapter, ms))
+				try { // TODO Should be ran on a new thread so the GUI does not
+						// freeze.
+					new DataFile(activeDevice.getAddress(), MissionHandler.getMissonTemperatureData(activeDevice.adapter, ms))
 							.writeDataFile();
 				} catch (IOException e) {
-					e.printStackTrace();
+					Logger.writeErrorToLog(e);
 				}
+				Logger.writeToLog("Wrote data");
 				log.append("Done!\n");
 			} catch (OneWireException e) {
-				e.printStackTrace();
+				Logger.writeErrorToLog(e);
 			}
 		}
 

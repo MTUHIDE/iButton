@@ -46,7 +46,7 @@ public class DataFile {
 	 */
 	public void writeDataFile() throws IOException {
 		String head = "Temperatures,Time," + address + "\n";
-		FileHandler.writeToFile(head + samples.toString(), datFile);
+		FileHandler.writeToFile(head + samples.toString(), datFile, false);
 	}
 
 }
