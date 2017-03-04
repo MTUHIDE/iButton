@@ -1,5 +1,7 @@
 package handlers;
 
+import java.sql.Date;
+
 /**
  * Stores a list of mission samples containing temperature and time readings.
  * 
@@ -131,7 +133,7 @@ public class MissionSamples {
 		public long getTime() {
 			return time;
 		}
-
+		
 		/**
 		 * A text representation of a sample. Formatted for a CSV file. First
 		 * column: Temperature to two decimal places. Second column: Time the
@@ -140,7 +142,7 @@ public class MissionSamples {
 		 * @return CSV formatted string of a sample.
 		 */
 		public String toString() {
-			return String.format("%.2f", temperature) + "," + time;
+			return new Date(time) + "," + String.format("%.2f", temperature);
 		}
 
 	}
