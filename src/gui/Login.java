@@ -7,28 +7,15 @@ import javax.swing.JPasswordField;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import network.Authentication;
-import network.Site;
-
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.awt.event.ActionEvent;
-
-import output.Logger;
 
 public class Login extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JTextField username;
 	private JPasswordField passwordField;
-	private JButton btnLogin, btnRegister;
+	private JButton btnLogin, btnRegister, btnSettings;
 
 	public Login() {
 		setBackground(Color.WHITE);
@@ -48,6 +35,10 @@ public class Login extends JPanel implements ActionListener {
 		lblPassword.setBounds(275, 187, 79, 14);
 		lblPassword.setLabelFor(passwordField);
 		add(lblPassword);
+
+		JLabel lblversion = new JLabel("CoCo iButton App v" + IButtonApp.version);
+		lblversion.setBounds(707, 429, 137, 14);
+		add(lblversion);
 
 		username = new JTextField();
 		username.setBounds(275, 153, 300, 23);
@@ -70,30 +61,18 @@ public class Login extends JPanel implements ActionListener {
 		btnRegister.setBackground(Color.LIGHT_GRAY);
 		add(btnRegister);
 
-		JLabel lblCocoIbuttonVa = new JLabel("CoCo iButton App v1.1a");
-		lblCocoIbuttonVa.setBounds(707, 429, 137, 14);
-		add(lblCocoIbuttonVa);
+		btnSettings = new JButton("Settings");
+		btnSettings.setBounds(10, 420, 89, 23);
+		btnSettings.addActionListener(this);
+		btnSettings.setBackground(Color.LIGHT_GRAY);
+		add(btnSettings);
 
-		JButton btnNewButton = new JButton("Settings");
-		btnNewButton.setBounds(10, 420, 89, 23);
-		add(btnNewButton);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getSource() == btnLogin) {
-			try {
-				InputStream response = Authentication.loginAuthentication(username.getText(),
-						passwordField.getPassword().toString());
-				IButtonApp.activePanel = new DashBoard();
-				Reader reader = new InputStreamReader(response);
-				Gson gson = new GsonBuilder().create();
-				Site p = gson.fromJson(reader, Site.class);
-				// System.out.println(p);
-
-			} catch (IOException e) {
-				Logger.writeErrorToLog(e);
-			}
+			IButtonApp.login();
 		}
 		if (action.getSource() == btnRegister) {
 			System.out.println("Register");

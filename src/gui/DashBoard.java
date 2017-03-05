@@ -1,48 +1,53 @@
 package gui;
 
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-import com.dalsemi.onewire.OneWireException;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import handlers.DeviceHandler;
-import network.Authentication;
+import network.Site;
 
 import java.awt.Color;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.List;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
-public class DashBoard extends JPanel {
+public class DashBoard extends JPanel implements ListSelectionListener {
 	private static final long serialVersionUID = 1L;
-	
-	public DashBoard() {
+	private JList<Site> list;
+	private JTextArea info;
+
+	public DashBoard(Site[] sites) {
+		DefaultListModel<Site> model = new DefaultListModel<Site>();
 		setBackground(Color.WHITE);
 		setLayout(null);
 
-		try {
-			List<DeviceHandler> devices = DeviceHandler.getDevices(DeviceHandler.deviceDefaultName, DeviceHandler.adapterDefaultName);
-
-			DefaultListModel<DeviceHandler> model = new DefaultListModel<DeviceHandler>();
-
-			for (DeviceHandler d : devices) {
-				model.addElement(d);
-			}
-			
-			JList<DeviceHandler> list = new JList<DeviceHandler>(model);
-
-			list.setBackground(Color.LIGHT_GRAY);
-			list.setBounds(28, 28, 177, 423);
-			add(list);
-
-		} catch (OneWireException e) {
-			//e.printStackTrace();
+		for (Site d : sites) {
+			model.addElement(d);
 		}
+
+		list = new JList<Site>(model);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setBackground(Color.LIGHT_GRAY);
+		list.setBounds(10, 28, 177, 250);
+		list.addListSelectionListener(this);
 		
+		info = new JTextArea();
+		info.setSize(427, 250);
+		info.setLocation(259, 28);
+		info.setEditable(false);
+		
+		
+		add(list);
+		add(info);
+
 	}
 
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		@SuppressWarnings("unchecked")
+		JList<Site> lsm = (JList<Site>) e.getSource();
+		info.setText(lsm.getSelectedValue().getInfo());
+
+	}
 }

@@ -1,20 +1,7 @@
 package network;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-
 public class Upload {
-	public static void uploadFile() {
+	/*public static void uploadFile() {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpPost uploadFile = new HttpPost("...");
 		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
@@ -40,5 +27,5 @@ public class Upload {
 			e1.printStackTrace();
 		}
 
-	}
+	}*/
 }
