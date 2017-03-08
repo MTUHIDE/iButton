@@ -3,17 +3,17 @@ package network;
 import handlers.DeviceHandler;
 
 public class Site {
-	public String id, deviceName, deviceDescription;
-	public float deviceLatitude, deviceLongitude;
+	public String id, siteName, siteDescription;
+	public float siteLatitude, siteLongitude;
 	public DeviceHandler device;
 
 	public String toString() {
-		return deviceName;
+		return siteName;
 	}
 	
 	public String getInfo() {
-		return "ID: " + id + ", Device Name: " + deviceName + "\nDescription: " + deviceDescription + "\nLocation: "
-				+ deviceLatitude + ":" + deviceLongitude + "\niButton: " + device;
+		return "ID: " + id + ", Device Name: " + siteName + "\nDescription: " + siteDescription + "\nLocation: "
+				+ siteLatitude + ":" + siteLongitude + "\niButton: " + device;
 	}
 
 }

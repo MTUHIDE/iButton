@@ -9,6 +9,8 @@ import javax.swing.SwingConstants;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 
 public class Login extends JPanel implements ActionListener {
@@ -73,6 +75,12 @@ public class Login extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent action) {
 		if (action.getSource() == btnLogin) {
 			IButtonApp.login();
+			try {
+				IButtonApp.getSites();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		if (action.getSource() == btnRegister) {
 			System.out.println("Register");
