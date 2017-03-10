@@ -14,6 +14,7 @@ import java.awt.Color;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.border.EtchedBorder;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
@@ -105,8 +106,9 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 
 	@Override
 	public void actionPerformed(ActionEvent action) {
+		System.out.println(action.getActionCommand());
 		if (action.getSource() == btnAddSite) {
-
+			
 		}
 		if (action.getSource() == btnStartMission) {
 
@@ -121,8 +123,8 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		if (action.getSource() == btnSettings) {
 
 		}
-		if (action.getSource() == btnLogOut) {
-
+		if (action.getActionCommand() == "Log Out") {
+			IButtonApp.logout();
 		}
 	}
 }
