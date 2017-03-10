@@ -5,19 +5,24 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import java.awt.Color;
+import java.awt.Desktop;
+
 import javax.swing.SwingConstants;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class Login extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JTextField username;
 	private JPasswordField passwordField;
 	private JButton btnLogin, btnRegister, btnSettings;
+	private JLabel lblWrongCons;
 
 	public Login() {
 		setBackground(Color.WHITE);
@@ -68,22 +73,34 @@ public class Login extends JPanel implements ActionListener {
 		btnSettings.addActionListener(this);
 		btnSettings.setBackground(Color.LIGHT_GRAY);
 		add(btnSettings);
+		
+		lblWrongCons = new JLabel("Wrong Password or Username");
+		lblWrongCons.setEnabled(false);
+		lblWrongCons.setVisible(false);
+		lblWrongCons.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblWrongCons.setHorizontalAlignment(SwingConstants.CENTER);
+		lblWrongCons.setForeground(Color.RED);
+		lblWrongCons.setBounds(328, 326, 198, 14);
+		add(lblWrongCons);
 
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getSource() == btnLogin) {
-			IButtonApp.login();
-			try {
-				IButtonApp.getSites();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (!IButtonApp.login(username.getText(), new String(passwordField.getPassword()))){
+				lblWrongCons.setEnabled(true);
+				lblWrongCons.setVisible(true);
 			}
 		}
 		if (action.getSource() == btnRegister) {
-			System.out.println("Register");
+			if (Desktop.isDesktopSupported()) {
+				try {
+					Desktop.getDesktop().browse(new URI("https://cocotemp.herokuapp.com/register"));
+				} catch (IOException | URISyntaxException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package handlers;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * Stores a list of mission samples containing temperature and time readings.
@@ -78,7 +79,7 @@ public class MissionSamples {
 	public String toString() {
 		String CSV = "";
 		for (Sample s : samples) {
-			CSV += s.toString() + "\n";
+			CSV += s.toString() + System.lineSeparator();
 		}
 		return CSV;
 	}
@@ -101,6 +102,7 @@ public class MissionSamples {
 	public class Sample {
 		private double temperature;
 		private long time;
+		private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
 		/**
 		 * Creates a connection between a time and temperature.
@@ -133,7 +135,7 @@ public class MissionSamples {
 		public long getTime() {
 			return time;
 		}
-		
+
 		/**
 		 * A text representation of a sample. Formatted for a CSV file. First
 		 * column: Temperature to two decimal places. Second column: Time the
@@ -142,7 +144,8 @@ public class MissionSamples {
 		 * @return CSV formatted string of a sample.
 		 */
 		public String toString() {
-			return new Date(time) + "," + String.format("%.2f", temperature);
+			Date date = new Date(time);
+			return format.format(date) + "," + String.format("%.0f", temperature);
 		}
 
 	}

@@ -1,31 +1,47 @@
 package network;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
+
 public class Upload {
-	/*public static void uploadFile() {
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-		HttpPost uploadFile = new HttpPost("...");
+	public static final String UPLOAD_URL = "https://cocotemp.herokuapp.com/upload";
+
+	public static void uploadFile(Site site, File file) {
+
+		FileBody fileBody = new FileBody(file, ContentType.DEFAULT_BINARY); //CSV File
+
 		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-		builder.addTextBody("field1", "yes", ContentType.TEXT_PLAIN);
+		builder.addTextBody("siteID", site.id, ContentType.DEFAULT_TEXT);
+		builder.addPart("csvData", fileBody);
+		builder.addTextBody("description", "Test upload", ContentType.DEFAULT_TEXT);
 
-		// This attaches the file to the POST:
-		File f = new File("[/path/to/upload]");
+		// Authentication
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials("jusbmx", "notagoodpass"); //Test account
+		provider.setCredentials(AuthScope.ANY, credentials);
+		HttpClient httpclient = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
+
+		HttpPost httppost = new HttpPost(UPLOAD_URL);
+		httppost.setEntity(builder.build());
 		try {
-			builder.addBinaryBody("file", new FileInputStream(f), ContentType.APPLICATION_OCTET_STREAM, f.getName());
-
-			HttpEntity multipart = builder.build();
-			uploadFile.setEntity(multipart);
-			CloseableHttpResponse response = null;
-			HttpEntity responseEntity = response.getEntity();
-			try {
-				response = httpClient.execute(uploadFile);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			HttpResponse response = httpclient.execute(httppost);
+			System.out.println(response.getEntity().getContent());
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
-	}*/
+	}
+
 }
