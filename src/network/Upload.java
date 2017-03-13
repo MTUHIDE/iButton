@@ -2,6 +2,7 @@ package network;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -19,28 +20,26 @@ public class Upload {
 	public static final String UPLOAD_URL = "https://cocotemp.herokuapp.com/upload";
 
 	public static void uploadFile(Site site, File file) {
-
-		FileBody fileBody = new FileBody(file, ContentType.DEFAULT_BINARY); //CSV File
-
-		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-		builder.addTextBody("siteID", site.id, ContentType.DEFAULT_TEXT);
-		builder.addPart("csvData", fileBody);
-		builder.addTextBody("description", "Test upload", ContentType.DEFAULT_TEXT);
-
-		// Authentication
-		CredentialsProvider provider = new BasicCredentialsProvider();
-		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials("jusbmx", "notagoodpass"); //Test account
-		provider.setCredentials(AuthScope.ANY, credentials);
-		HttpClient httpclient = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
-
-		HttpPost httppost = new HttpPost(UPLOAD_URL);
-		httppost.setEntity(builder.build());
-		try {
-			HttpResponse response = httpclient.execute(httppost);
-			System.out.println(response.getEntity().getContent());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		 String charset = "UTF-8";
+	 
+	        try {
+	            MultipartUtility multipart = new MultipartUtility(UPLOAD_URL, charset, "jusbmx","notagoodpass");
+	             
+	            multipart.addFormField("siteID", site.id);
+	            multipart.addFormField("description", "Test upload");
+	             
+	            multipart.addFilePart("csvData", file);
+	 
+	            List<String> response = multipart.finish();
+	             
+	            System.out.println("SERVER REPLIED:");
+	             
+	            for (String line : response) {
+	                System.out.println(line);
+	            }
+	        } catch (IOException ex) {
+	            System.err.println(ex);
+	        }
 
 	}
 

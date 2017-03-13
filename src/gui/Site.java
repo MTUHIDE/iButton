@@ -8,6 +8,7 @@ import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
+import javax.swing.JComboBox;
 
 public class Site extends JPanel{
 	public Site() {
@@ -52,6 +53,10 @@ public class Site extends JPanel{
 		JLabel lblDesrcpiton = new JLabel("Desrcpiton");
 		lblDesrcpiton.setBounds(95, 170, 64, 14);
 		add(lblDesrcpiton);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(99, 61, 60, 20);
+		add(comboBox);
 
 	}
 	private static final long serialVersionUID = 1L;

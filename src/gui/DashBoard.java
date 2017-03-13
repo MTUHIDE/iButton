@@ -30,6 +30,7 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 	private JTextArea info;
 	private Site[] sites;
 	private JButton btnAddSite, btnStartMission, btnStopMission, btnUpload, btnSettings, btnLogOut;
+	private JList<Site> lsmc;
 
 	public void setSites(Site[] sites) {
 		this.sites = sites;
@@ -101,6 +102,7 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 	public void valueChanged(ListSelectionEvent e) {
 		@SuppressWarnings("unchecked")
 		JList<Site> lsm = (JList<Site>) e.getSource();
+		lsmc = lsm;
 		info.setText(lsm.getSelectedValue().getInfo());
 	}
 
@@ -116,9 +118,9 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		if (action.getSource() == btnStopMission) {
 
 		}
-		if (action.getSource() == btnUpload) {
-			Upload.uploadFile(sites[0],
-					new File(FileHandler.DATA_FOLDER + "/" + "C600000033B2B141_1489122841000" + "_dat.csv"));
+		if (action.getActionCommand() == "Upload") {
+			Upload.uploadFile(lsmc.getSelectedValue(),
+					new File(FileHandler.DATA_FOLDER + "/" + "C600000033B2B141_1489439641000" + "_dat.csv"));
 		}
 		if (action.getSource() == btnSettings) {
 

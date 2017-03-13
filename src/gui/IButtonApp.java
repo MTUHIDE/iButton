@@ -67,8 +67,8 @@ public class IButtonApp extends JFrame {
 		}
 
 	}
-	
-	public static void logout(){
+
+	public static void logout() {
 		cardLayout.show(cards, "Login");
 	}
 
