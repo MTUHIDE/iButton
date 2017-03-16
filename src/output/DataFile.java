@@ -45,7 +45,7 @@ public class DataFile {
 	 *             If file could not be written.
 	 */
 	public void writeDataFile() throws IOException {
-		String head = "Temperatures,Time," + address + "\n";
+		String head = "dateTime,temperature" + System.lineSeparator();
 		FileHandler.writeToFile(head + samples.toString(), datFile, false);
 	}
 
