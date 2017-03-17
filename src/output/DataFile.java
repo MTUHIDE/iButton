@@ -16,9 +16,11 @@ import handlers.MissionSamples;
  */
 public class DataFile {
 
-	private final MissionSamples samples;
-	private final String address;
+	public final MissionSamples samples;
+	public final String address;
 	private File datFile;
+
+	public final String location;
 
 	/**
 	 * Creates a new file for storing mission data and other valuable
@@ -34,8 +36,8 @@ public class DataFile {
 	public DataFile(String address, MissionSamples samples) {
 		this.samples = samples;
 		this.address = address;
-		datFile = new File(
-				FileHandler.DATA_FOLDER + "/" + address + "_" + samples.getNewestSample().getTime() + "_dat.csv");
+		location = FileHandler.DATA_FOLDER + "/" + address + "_" + samples.getNewestSample().getTime() + "_dat.csv";
+		datFile = new File(location);
 	}
 
 	/**

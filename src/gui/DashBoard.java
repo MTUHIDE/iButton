@@ -6,31 +6,37 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import handlers.FileHandler;
+import com.dalsemi.onewire.OneWireException;
+import com.dalsemi.onewire.container.MissionContainer;
+
+import handlers.DeviceHandler;
+import handlers.MissionHandler;
 import network.Site;
 import network.Upload;
+import output.DataFile;
+import output.Logger;
 
 import java.awt.Color;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JComboBox;
 import javax.swing.border.EtchedBorder;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 public class DashBoard extends JPanel implements ListSelectionListener, ActionListener {
-	public DashBoard() {
-	}
 
 	private static final long serialVersionUID = 1L;
+
 	private JList<Site> list;
 	private JTextArea info;
 	private Site[] sites;
-	private JButton btnAddSite, btnStartMission, btnStopMission, btnUpload, btnSettings, btnLogOut;
-	private JList<Site> lsmc;
+	private JButton btnAddSite, btnUpload, btnSettings, btnLogOut;
+	private JComboBox<DeviceHandler> comboBox;
 
 	public void setSites(Site[] sites) {
 		this.sites = sites;
@@ -67,18 +73,6 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		btnAddSite.setBounds(634, 32, 89, 23);
 		add(btnAddSite);
 
-		btnStartMission = new JButton("Start Mission");
-		btnStartMission.addActionListener(this);
-		btnStartMission.setBackground(Color.LIGHT_GRAY);
-		btnStartMission.setBounds(634, 66, 89, 23);
-		add(btnStartMission);
-
-		btnStopMission = new JButton("Stop Mission");
-		btnStopMission.addActionListener(this);
-		btnStopMission.setBackground(Color.LIGHT_GRAY);
-		btnStopMission.setBounds(634, 100, 89, 23);
-		add(btnStopMission);
-
 		btnUpload = new JButton("Upload");
 		btnUpload.addActionListener(this);
 		btnUpload.setBackground(Color.LIGHT_GRAY);
@@ -96,37 +90,60 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		btnLogOut.setBackground(Color.LIGHT_GRAY);
 		btnLogOut.setBounds(634, 202, 89, 23);
 		add(btnLogOut);
+
+		comboBox = new JComboBox<DeviceHandler>();
+		comboBox.setBounds(696, 239, 86, 20);
+		comboBox.setEnabled(false);
+		add(comboBox);
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		@SuppressWarnings("unchecked")
 		JList<Site> lsm = (JList<Site>) e.getSource();
-		lsmc = lsm;
+
+
+		if (lsm.getSelectedValue().device == null) {
+			comboBox.removeAllItems();
+			comboBox.setEnabled(true);
+			for (DeviceHandler d : IButtonApp.getApaters()) {
+				comboBox.addItem(d);
+			}
+
+		}
+		
 		info.setText(lsm.getSelectedValue().getInfo());
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		System.out.println(action.getActionCommand());
-		if (action.getSource() == btnAddSite) {
-			
-		}
-		if (action.getSource() == btnStartMission) {
-
-		}
-		if (action.getSource() == btnStopMission) {
-
+		if (action.getActionCommand() == "Add Site") {
+			IButtonApp.showCard("Add Site");
 		}
 		if (action.getActionCommand() == "Upload") {
-			Upload.uploadFile(lsmc.getSelectedValue(),
-					new File(FileHandler.DATA_FOLDER + "/" + "C600000033B2B141_1489439641000" + "_dat.csv"));
+			Site site = list.getSelectedValue();
+			DeviceHandler device = site.device;
+			MissionContainer ms = (MissionContainer) device.device;
+			try {
+				try {
+					DataFile df = new DataFile(device.getAddress(),
+							MissionHandler.getMissonTemperatureData(device.adapter, ms));
+					df.writeDataFile();
+					Upload.uploadFile(site, new File(df.location));
+				} catch (IOException e) {
+					Logger.writeErrorToLog(e);
+				}
+				Logger.writeToLog("Wrote data");
+			} catch (OneWireException e) {
+				Logger.writeErrorToLog(e);
+			}
 		}
-		if (action.getSource() == btnSettings) {
-
+		if (action.getActionCommand() == "Settings") {
+			IButtonApp.showCard("Settings");
 		}
 		if (action.getActionCommand() == "Log Out") {
-			IButtonApp.logout();
+			IButtonApp.showCard("Login");
 		}
 	}
 }

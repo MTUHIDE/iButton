@@ -12,7 +12,7 @@ public class Site {
 	}
 	
 	public String getInfo() {
-		return "ID: " + id + ", Device Name: " + siteName + "\nDescription: " + siteDescription + "\nLocation: "
+		return "ID: " + id + "\nDevice Name: " + siteName + "\nDescription: " + siteDescription + "\nLocation: "
 				+ siteLatitude + ":" + siteLongitude + "\niButton: " + device;
 	}
 
