@@ -1,4 +1,4 @@
-package gui;
+package examples;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -15,30 +15,30 @@ import com.dalsemi.onewire.container.MissionContainer;
 
 import handlers.DeviceHandler;
 import handlers.MissionHandler;
-import output.DataFile;
+import output.TempData;
 import output.Logger;
 
 /**
- * Demos the current features so far program in a GUI.
+ * Demos the controls in a GUI.
  * 
  * @author Justin Havely
  *
  */
-public class MissonTempLog extends JFrame implements ActionListener {
+public class DeviceController extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private JTextArea log = new JTextArea(10, 40);
 	private JButton startMission = new JButton("Start Mission");
 	private JButton stopMission = new JButton("Stop Mission");
 	private JButton uploadData = new JButton("Upload Data");
-	
+
 	private List<DeviceHandler> devices;
 	private DeviceHandler activeDevice;
 
 	/**
 	 * Sets up the JFrame
 	 */
-	public MissonTempLog() {
+	public DeviceController() {
 		log.setEditable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new FlowLayout());
@@ -61,22 +61,20 @@ public class MissonTempLog extends JFrame implements ActionListener {
 	 *            Does nothing.
 	 */
 	public static void main(String[] args) {
-		MissonTempLog misson = new MissonTempLog();
+		DeviceController misson = new DeviceController();
 		misson.load();
 	}
 
-	public void load(){
+	public void load() {
 		try {
 			devices = DeviceHandler.getDevices(DeviceHandler.deviceDefaultName, DeviceHandler.adapterDefaultName);
 			activeDevice = devices.get(0);
-			Logger.writeToLog("Found adapters");
 			log.append("Found Adapters!\n");
 		} catch (OneWireException e) {
-			Logger.writeErrorToLog(e);
 			log.append("Could not Find Adapters!\n");
 		}
 	}
-	
+
 	/**
 	 * Listens for button clicks.
 	 */
@@ -88,7 +86,6 @@ public class MissonTempLog extends JFrame implements ActionListener {
 			log.append("Starting misson!\n");
 			try {
 				MissionHandler.startMission(activeDevice.adapter, ms);
-				Logger.writeToLog("Started new mission");
 			} catch (OneWireException e) {
 				Logger.writeErrorToLog(e);
 			}
@@ -97,7 +94,6 @@ public class MissonTempLog extends JFrame implements ActionListener {
 			log.append("Stoping misson!\n");
 			try {
 				MissionHandler.stopMission(activeDevice.adapter, ms);
-				Logger.writeToLog("Stop mission");
 			} catch (OneWireException e) {
 				Logger.writeErrorToLog(e);
 			}
@@ -108,12 +104,11 @@ public class MissonTempLog extends JFrame implements ActionListener {
 				log.append("Writting to file...\n");
 				try { // TODO Should be ran on a new thread so the GUI does not
 						// freeze.
-					new DataFile(activeDevice.getAddress(), MissionHandler.getMissonTemperatureData(activeDevice.adapter, ms))
-							.writeDataFile();
+					new TempData(activeDevice.getAddress(),
+							MissionHandler.getMissonTemperatureData(activeDevice.adapter, ms)).writeDataFile();
 				} catch (IOException e) {
 					Logger.writeErrorToLog(e);
 				}
-				Logger.writeToLog("Wrote data");
 				log.append("Done!\n");
 			} catch (OneWireException e) {
 				Logger.writeErrorToLog(e);

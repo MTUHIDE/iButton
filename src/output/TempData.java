@@ -14,7 +14,7 @@ import handlers.MissionSamples;
  * @author Justin Havely
  *
  */
-public class DataFile {
+public class TempData {
 
 	public final MissionSamples samples;
 	public final String address;
@@ -33,7 +33,7 @@ public class DataFile {
 	 * @param samples
 	 *            The Mission's temperature and time readings.
 	 */
-	public DataFile(String address, MissionSamples samples) {
+	public TempData(String address, MissionSamples samples) {
 		this.samples = samples;
 		this.address = address;
 		location = FileHandler.DATA_FOLDER + "/" + address + "_" + samples.getNewestSample().getTime() + "_dat.csv";

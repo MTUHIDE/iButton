@@ -11,7 +11,6 @@ import java.util.Base64;
 
 public class Authentication {
 
-	public static final String SITES_URL = "https://cocotemp.herokuapp.com/dashboard/sites.json";
 
 	public static InputStream authentication(String username, String password, URL url) throws IOException {
 

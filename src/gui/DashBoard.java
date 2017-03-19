@@ -13,20 +13,22 @@ import handlers.DeviceHandler;
 import handlers.MissionHandler;
 import network.Site;
 import network.Upload;
-import output.DataFile;
+import output.TempData;
 import output.Logger;
-
 import java.awt.Color;
+import java.awt.Desktop;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.border.EtchedBorder;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class DashBoard extends JPanel implements ListSelectionListener, ActionListener {
 
@@ -35,14 +37,14 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 	private JList<Site> list;
 	private JTextArea info;
 	private Site[] sites;
-	private JButton btnAddSite, btnUpload, btnSettings, btnLogOut;
-	private JComboBox<DeviceHandler> comboBox;
+	private JButton btnAddSite, btnUpload, btnSettings, btnLogOut, btnEditSite;
 
 	public void setSites(Site[] sites) {
 		this.sites = sites;
 	}
 
 	public void createAndShowGUI() {
+		// public DashBoard(){
 		DefaultListModel<Site> model = new DefaultListModel<Site>();
 		setBackground(Color.WHITE);
 		setLayout(null);
@@ -57,69 +59,84 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		list.setBounds(10, 28, 177, 400);
 		list.addListSelectionListener(this);
 
-		info = new JTextArea();
-		info.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, SystemColor.activeCaption));
-		info.setEditable(false);
-		info.setBackground(Color.WHITE);
-		info.setSize(427, 400);
-		info.setLocation(197, 28);
-
 		add(list);
-		add(info);
 
 		btnAddSite = new JButton("Add Site");
 		btnAddSite.addActionListener(this);
 		btnAddSite.setBackground(Color.LIGHT_GRAY);
-		btnAddSite.setBounds(634, 32, 89, 23);
+		btnAddSite.setBounds(755, 28, 89, 23);
 		add(btnAddSite);
-
-		btnUpload = new JButton("Upload");
-		btnUpload.addActionListener(this);
-		btnUpload.setBackground(Color.LIGHT_GRAY);
-		btnUpload.setBounds(634, 134, 89, 23);
-		add(btnUpload);
 
 		btnSettings = new JButton("Settings");
 		btnSettings.addActionListener(this);
 		btnSettings.setBackground(Color.LIGHT_GRAY);
-		btnSettings.setBounds(634, 168, 89, 23);
+		btnSettings.setBounds(755, 372, 89, 23);
 		add(btnSettings);
 
 		btnLogOut = new JButton("Log Out");
 		btnLogOut.addActionListener(this);
 		btnLogOut.setBackground(Color.LIGHT_GRAY);
-		btnLogOut.setBounds(634, 202, 89, 23);
+		btnLogOut.setBounds(755, 406, 89, 23);
 		add(btnLogOut);
+		// Panel
+		JPanel panel = new JPanel();
+		panel.setBounds(197, 28, 548, 400);
+		add(panel);
+		panel.setLayout(null);
 
-		comboBox = new JComboBox<DeviceHandler>();
-		comboBox.setBounds(696, 239, 86, 20);
-		comboBox.setEnabled(false);
-		add(comboBox);
+		info = new JTextArea();
+		info.setBounds(10, 11, 409, 378);
+		panel.add(info);
+		info.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, SystemColor.activeCaption));
+		info.setEditable(false);
+		info.setBackground(Color.WHITE);
+
+		btnUpload = new JButton("Upload");
+		btnUpload.setBounds(429, 12, 109, 23);
+		btnUpload.setEnabled(false);
+		panel.add(btnUpload);
+		btnUpload.addActionListener(this);
+		btnUpload.setBackground(Color.LIGHT_GRAY);
+
+		btnEditSite = new JButton("Edit Site");
+		btnEditSite.addActionListener(this);
+		btnEditSite.setEnabled(false);
+		btnEditSite.setBackground(Color.LIGHT_GRAY);
+		btnEditSite.setBounds(429, 46, 109, 23);
+		panel.add(btnEditSite);
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		@SuppressWarnings("unchecked")
 		JList<Site> lsm = (JList<Site>) e.getSource();
-
-
-		if (lsm.getSelectedValue().device == null) {
-			comboBox.removeAllItems();
-			comboBox.setEnabled(true);
-			for (DeviceHandler d : IButtonApp.getApaters()) {
-				comboBox.addItem(d);
-			}
-
-		}
-		
 		info.setText(lsm.getSelectedValue().getInfo());
+
+		if (list.getSelectedValue() != null) {
+			btnEditSite.setEnabled(true);
+			if (list.getSelectedValue().device != null) {
+				btnUpload.setEnabled(true);
+			} else {
+				btnUpload.setEnabled(false);
+			}
+		} else {
+			btnEditSite.setEnabled(false);
+			btnUpload.setEnabled(false);
+		}
 
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent action) {
+
 		if (action.getActionCommand() == "Add Site") {
-			IButtonApp.showCard("Add Site");
+			if (Desktop.isDesktopSupported()) {
+				try {
+					Desktop.getDesktop().browse(new URI("https://cocotemp.herokuapp.com/settings/new"));
+				} catch (IOException | URISyntaxException e) {
+					Logger.writeErrorToLog(e);
+				}
+			}
 		}
 		if (action.getActionCommand() == "Upload") {
 			Site site = list.getSelectedValue();
@@ -127,7 +144,7 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 			MissionContainer ms = (MissionContainer) device.device;
 			try {
 				try {
-					DataFile df = new DataFile(device.getAddress(),
+					TempData df = new TempData(device.getAddress(),
 							MissionHandler.getMissonTemperatureData(device.adapter, ms));
 					df.writeDataFile();
 					Upload.uploadFile(site, new File(df.location));
@@ -138,12 +155,18 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 			} catch (OneWireException e) {
 				Logger.writeErrorToLog(e);
 			}
+
 		}
 		if (action.getActionCommand() == "Settings") {
 			IButtonApp.showCard("Settings");
 		}
 		if (action.getActionCommand() == "Log Out") {
 			IButtonApp.showCard("Login");
+		}
+		if (action.getActionCommand() == "Edit Site") {
+
+			IButtonApp.editSite.setSite(list.getSelectedValue());
+			IButtonApp.showCard("Edit Site");
 		}
 	}
 }

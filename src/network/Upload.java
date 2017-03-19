@@ -21,13 +21,6 @@ public class Upload {
 
 			multipart.finish();
 
-			// List<String> response = multipart.finish();
-
-			// System.out.println("SERVER REPLIED:");
-
-			// for (String line : response) {
-			// System.out.println(line);
-			// }
 		} catch (IOException ex) {
 			System.err.println(ex);
 		}
