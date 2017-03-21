@@ -1,0 +1,2 @@
+candle 1-WireDrivers_x64.wxs -ext WixDifxAppExtension
+light .\1-WireDrivers_x64.wixobj -ext WixUIExtension -cultures:en-us -loc customstrings_en-us.wxl -ext WixDifxAppExtension "%WIX_HOME%\difxapp_x64.wixlib" -sw1076 -out .\install_1_wire_drivers_x64_v403.msi

@@ -6,15 +6,7 @@
 	<classpathentry kind="lib" path="APIs/RXTXcomm.jar"/>
 	<classpathentry kind="lib" path="APIs/OneWireAPI.jar" sourcepath="APIs/OneWireAPISource.jar"/>
 	<classpathentry kind="lib" path="APIs/gson-2.8.0.jar"/>
-	<classpathentry kind="lib" path="APIs/commons-codec-1.9.jar"/>
-	<classpathentry kind="lib" path="APIs/commons-logging-1.2.jar"/>
-	<classpathentry kind="lib" path="APIs/fluent-hc-4.5.3.jar"/>
-	<classpathentry kind="lib" path="APIs/httpclient-4.5.3.jar"/>
-	<classpathentry kind="lib" path="APIs/httpclient-cache-4.5.3.jar"/>
-	<classpathentry kind="lib" path="APIs/httpclient-win-4.5.3.jar"/>
-	<classpathentry kind="lib" path="APIs/httpcore-4.4.6.jar"/>
-	<classpathentry kind="lib" path="APIs/httpmime-4.5.3.jar"/>
-	<classpathentry kind="lib" path="APIs/jna-4.1.0.jar"/>
-	<classpathentry kind="lib" path="APIs/jna-platform-4.1.0.jar"/>
+	<classpathentry kind="lib" path="APIs/okhttp-3.6.0.jar"/>
+	<classpathentry kind="lib" path="APIs/okio-1.11.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

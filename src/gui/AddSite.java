@@ -5,10 +5,17 @@ import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.IOException;
 import javax.swing.JTextField;
 
+import com.dalsemi.onewire.OneWireException;
+import com.dalsemi.onewire.container.MissionContainer;
+
 import handlers.DeviceHandler;
+import handlers.MissionHandler;
+import network.Site;
+import okhttp3.Response;
+import output.SiteData;
 
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
@@ -92,9 +99,30 @@ public class AddSite extends JPanel implements ActionListener {
 			IButtonApp.showPreviousCard();
 		}
 		if (action.getActionCommand() == "Add") {
-			//network.Site.newSite(siteName.getText(), Double.parseDouble(lat.getText()),
-			//		Double.parseDouble(lon.getText()), description.getText());
-			devices.getSelectedItem();
+			Response response = Site.newSite(siteName.getText(), lat.getText(), lon.getText(), description.getText());
+			String siteID = response.request().url().queryParameterValue(0);
+			DeviceHandler device = devices.getItemAt(devices.getSelectedIndex());
+			if (device != null) {
+				MissionContainer ms = (MissionContainer) device.device;
+				SiteData.updateSite(siteID, device.getAddress());
+				try {
+					MissionHandler.startMission(device.adapter, ms);
+				} catch (OneWireException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				SiteData.updateSite(siteID, "null");
+			}
+
+			try {
+				IButtonApp.loadSites(IButtonApp.user, IButtonApp.pass);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			IButtonApp.showCard("Dashboard");
 		}
 	}
 }

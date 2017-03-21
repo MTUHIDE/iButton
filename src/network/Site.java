@@ -5,14 +5,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import com.google.gson.Gson;
 
+import gui.IButtonApp;
 import handlers.DeviceHandler;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Site {
 
 	public static final String SITES_URL = "https://cocotemp.herokuapp.com/dashboard/sites.json";
-	public static final String NEW_SITE_URL = "https://cocotemp.herokuapp.com/settings/site/update";
+	public static final String EDIT_SITE_URL = "https://cocotemp.herokuapp.com/settings/site/update";
 
 	public String id, siteName, siteDescription;
 	public float siteLatitude, siteLongitude;
@@ -38,59 +46,62 @@ public class Site {
 		return sites;
 	}
 
-	/*
-	 * public static boolean editSite(Site site) { String updateURL =
-	 * "https://cocotemp.herokuapp.com/settings/site/update?siteID=fa806ad8-a8bb-4524-932b-6c4e22d3bfd6";
-	 * 
-	 * String urlParameters =
-	 * "id=fa806ad8-a8bb-4524-932b-6c4e22d3bfd6&siteName=Test+Site+1&siteLatitude=0.0&siteLongitude=0.0&siteDescription=This+site+was+made+for+testing.";
-	 * byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8); int
-	 * postDataLength = postData.length;
-	 * 
-	 * String authString = IButtonApp.user + ":" + IButtonApp.pass; String
-	 * encodeString =
-	 * Base64.getEncoder().encodeToString(authString.getBytes(StandardCharsets.
-	 * UTF_8)); String authStringEnc = new String(encodeString);
-	 * 
-	 * try { URL url = new URL(updateURL); HttpURLConnection conn =
-	 * (HttpURLConnection) url.openConnection(); conn.setDoOutput(true);
-	 * 
-	 * conn.setRequestMethod("POST"); conn.setRequestProperty("Content-Type",
-	 * "application/x-www-form-urlencoded");
-	 * conn.setRequestProperty("Authorization", "Basic " + authStringEnc);
-	 * conn.setRequestProperty("Content-Length",
-	 * Integer.toString(postDataLength));
-	 * 
-	 * try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream()))
-	 * { wr.write(postData); }
-	 * 
-	 * System.out.println("Server returned: " + conn.getResponseCode()); return
-	 * true; } catch (IOException e) { return false; }
-	 * 
-	 * }
-	 * 
-	 * 
-	 * public static boolean newSite(String siteName, double latitude, double
-	 * longitude, String description) { String charset = "UTF-8";
-	 * MultipartUtility multipart; try { multipart = new
-	 * MultipartUtility(NEW_SITE_URL, charset, IButtonApp.user,
-	 * IButtonApp.pass);
-	 * 
-	 * multipart.addFormField("siteName", siteName);
-	 * multipart.addFormField("siteLatitude", Double.toString(latitude));
-	 * multipart.addFormField("siteLongitude", Double.toString(longitude));
-	 * multipart.addFormField("siteDescription", description);
-	 * 
-	 * List<String> response = multipart.finish();
-	 * 
-	 * System.out.println("SERVER REPLIED:");
-	 * 
-	 * for (String line : response) { System.out.println(line); } } catch
-	 * (IOException e) { e.printStackTrace(); }
-	 * 
-	 * return true;
-	 * 
-	 * }
-	 */
+	public static Response editSite(String siteid, String siteName, String siteLat, String siteLon,
+			String description) {
+
+		String authString = IButtonApp.user + ":" + IButtonApp.pass;
+		String encodeString = Base64.getEncoder().encodeToString(authString.getBytes(StandardCharsets.UTF_8));
+		String authStringEnc = new String(encodeString);
+
+		OkHttpClient client = new OkHttpClient();
+
+		MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+
+		RequestBody body = RequestBody.create(mediaType,
+				"id=" + siteid + "&siteName=" + siteName.replaceAll(" ", "%20") + "&siteLatitude=" + siteLat
+						+ "&siteLongitude=" + siteLon + "&siteDescription=" + description.replaceAll(" ", "%20"));
+
+		Request request = new Request.Builder().url("https://cocotemp.herokuapp.com/settings/site/update").post(body)
+				.addHeader("content-type", "application/x-www-form-urlencoded")
+				.addHeader("authorization", "Basic " + authStringEnc + "==").addHeader("cache-control", "no-cache")
+				.build();
+
+		try {
+			return client.newCall(request).execute();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static Response newSite(String siteName, String latitude, String longitude, String description) {
+
+		String authString = IButtonApp.user + ":" + IButtonApp.pass;
+		String encodeString = Base64.getEncoder().encodeToString(authString.getBytes(StandardCharsets.UTF_8));
+		String authStringEnc = new String(encodeString);
+
+		OkHttpClient client = new OkHttpClient();
+
+		MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+		
+		RequestBody body = RequestBody.create(mediaType,
+				"siteName=" + siteName.replaceAll(" ", "%20") + "&siteLatitude=" + latitude + "&siteLongitude="
+						+ longitude + "&siteDescription=" + description.replaceAll(" ", "%20"));
+		
+		Request request = new Request.Builder().url("https://cocotemp.herokuapp.com/settings/site/update").post(body)
+				.addHeader("authorization", "Basic " + authStringEnc + "==")
+				.addHeader("content-type", "application/x-www-form-urlencoded").addHeader("cache-control", "no-cache")
+				.build();
+
+		try {
+			return client.newCall(request).execute();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
 
 }

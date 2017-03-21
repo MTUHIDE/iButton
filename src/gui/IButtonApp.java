@@ -17,14 +17,14 @@ import output.SiteData;
 public class IButtonApp extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	public static final float version = 0.07f;
+	public static final float version = 0.08f;
 
 	private static JPanel cards = new JPanel();
 	private static Login login = new Login();
 	private static AddSite Addsite = new AddSite();
 	public static EditSite editSite = new EditSite();
 	private static Settings settings = new Settings();
-	private static DashBoard dashboard = new DashBoard();
+	public static DashBoard dashboard = new DashBoard();
 	private static CardLayout cardLayout;
 	private static String previousCard, currentCard;
 
@@ -66,37 +66,37 @@ public class IButtonApp extends JFrame {
 		return null;
 	}
 
+	public static void loadSites(String name, String password) throws IOException {
+		Site[] serverSites = Site.getSites(name, password);
+		List<DeviceHandler> devices = getApaters();
+
+		for (Site s : serverSites) {
+			if (SiteData.findSite(s.id) == null) {
+				SiteData.addSite(s.id, "null");
+			} else {
+				for (DeviceHandler d : devices) {
+					if (SiteData.findSite(s.id)[1].equals(d.getAddress())) {
+						s.device = d;
+						break;
+					}
+				}
+			}
+
+		}
+
+		dashboard.updateSiteList(serverSites);
+	}
+
 	public static boolean login(String name, String password) {
 		user = name;
 		pass = password;
 		try {
-
-			Site[] server = Site.getSites(name, password);
-			List<DeviceHandler> devices = getApaters();
-
-			for (Site s : server) {
-				if (SiteData.findSite(s.id) == null) {
-					SiteData.addSite(s.id, "null");
-				} else {
-					for (DeviceHandler d : devices) {
-						if (SiteData.findSite(s.id)[1].equals(d.getAddress())) {
-							s.device = d;
-							break;
-						}
-					}
-				}
-
-			}
-
-			dashboard.setSites(server);
-
-			dashboard.createAndShowGUI();
-			
-			showCard("Dashboard");
-			return true;
+			loadSites(name, pass);
 		} catch (IOException e) {
 			return false;
 		}
+		showCard("Dashboard");
+		return true;
 
 	}
 

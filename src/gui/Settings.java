@@ -16,11 +16,10 @@ public class Settings extends JPanel implements ActionListener {
 		setLayout(null);
 
 		// TODO Update About
-		JTextArea textArea = new JTextArea("About: Coco iButton App v" + IButtonApp.version
-				+ "\nAll your Base Belong to us!");
-		textArea.setEditable(false);
-		textArea.setBounds(24, 21, 416, 146);
-		add(textArea);
+		JTextArea txtrAboutCocoIbutton = new JTextArea("About: Coco iButton App v0.07\r\n\r\r\nThis application is for managing CoCoTemp sites that are connected to an iButton device (DS9094). \r\r\nMore information on CoCoTemp can be found here: Site Here. \r\r\nFor help on using CoCo iButton App go to: Site Name Here \r\r\nEmail problems to: Email Here");
+		txtrAboutCocoIbutton.setEditable(false);
+		txtrAboutCocoIbutton.setBounds(24, 21, 815, 146);
+		add(txtrAboutCocoIbutton);
 
 		JButton btnBack = new JButton("Back");
 		btnBack.setBackground(Color.LIGHT_GRAY);

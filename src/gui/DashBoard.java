@@ -11,15 +11,15 @@ import com.dalsemi.onewire.container.MissionContainer;
 
 import handlers.DeviceHandler;
 import handlers.MissionHandler;
+import handlers.MissionSamples;
 import network.Site;
 import network.Upload;
 import output.TempData;
 import output.Logger;
 import java.awt.Color;
-import java.awt.Desktop;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.border.EtchedBorder;
 import java.awt.SystemColor;
@@ -27,8 +27,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 public class DashBoard extends JPanel implements ListSelectionListener, ActionListener {
 
@@ -36,29 +34,19 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 
 	private JList<Site> list;
 	private JTextArea info;
-	private Site[] sites;
+	// private Site[] sites;
 	private JButton btnAddSite, btnUpload, btnSettings, btnLogOut, btnEditSite;
 
-	public void setSites(Site[] sites) {
-		this.sites = sites;
-	}
-
-	public void createAndShowGUI() {
-		// public DashBoard(){
-		DefaultListModel<Site> model = new DefaultListModel<Site>();
+	public DashBoard() {
 		setBackground(Color.WHITE);
 		setLayout(null);
-		for (Site d : sites) {
-			model.addElement(d);
-		}
 
-		list = new JList<Site>(model);
+		list = new JList<Site>();
 		list.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, SystemColor.activeCaption));
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setBackground(Color.WHITE);
 		list.setBounds(10, 28, 177, 400);
 		list.addListSelectionListener(this);
-
 		add(list);
 
 		btnAddSite = new JButton("Add Site");
@@ -106,10 +94,26 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		panel.add(btnEditSite);
 	}
 
+	public void updateSiteList(Site[] sites) {
+		DefaultListModel<Site> model = new DefaultListModel<Site>();
+
+		for (Site d : sites) {
+			model.addElement(d);
+		}
+
+		list.setModel(model);
+		info.setText("");
+
+	}
+
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
+
 		@SuppressWarnings("unchecked")
 		JList<Site> lsm = (JList<Site>) e.getSource();
+		if (lsm.getSelectedValue() == null) {
+			return;
+		}
 		info.setText(lsm.getSelectedValue().getInfo());
 
 		if (list.getSelectedValue() != null) {
@@ -130,13 +134,7 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 	public void actionPerformed(ActionEvent action) {
 
 		if (action.getActionCommand() == "Add Site") {
-			if (Desktop.isDesktopSupported()) {
-				try {
-					Desktop.getDesktop().browse(new URI("https://cocotemp.herokuapp.com/settings/new"));
-				} catch (IOException | URISyntaxException e) {
-					Logger.writeErrorToLog(e);
-				}
-			}
+			IButtonApp.showCard("Add Site");
 		}
 		if (action.getActionCommand() == "Upload") {
 			Site site = list.getSelectedValue();
@@ -144,10 +142,15 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 			MissionContainer ms = (MissionContainer) device.device;
 			try {
 				try {
-					TempData df = new TempData(device.getAddress(),
-							MissionHandler.getMissonTemperatureData(device.adapter, ms));
+					MissionSamples samples = MissionHandler.getMissonTemperatureData(device.adapter, ms);
+					if (samples.getLength() < 1) {
+						JOptionPane.showMessageDialog(this, "No temperatures taken. Please wait an hour.");
+						return;
+					}
+					TempData df = new TempData(device.getAddress(), samples);
 					df.writeDataFile();
 					Upload.uploadFile(site, new File(df.location));
+					JOptionPane.showMessageDialog(this, "Upload Successful");
 				} catch (IOException e) {
 					Logger.writeErrorToLog(e);
 				}

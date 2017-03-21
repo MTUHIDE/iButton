@@ -44,6 +44,9 @@ public class MissionSamples {
 	 * @return The oldest sample.
 	 */
 	public Sample getOldestSample() {
+		if (samples.length < 1) {
+			return null;
+		}
 		Sample oldest = samples[0];
 		for (Sample s : samples) {
 			if (s.getTime() < oldest.getTime()) {
@@ -59,13 +62,16 @@ public class MissionSamples {
 	 * @return The newest sample.
 	 */
 	public Sample getNewestSample() {
-		Sample oldest = samples[0];
+		if (samples.length < 1) {
+			return null;
+		}
+		Sample newest = samples[0];
 		for (Sample s : samples) {
-			if (s.getTime() > oldest.getTime()) {
-				oldest = s;
+			if (s.getTime() > newest.getTime()) {
+				newest = s;
 			}
 		}
-		return oldest;
+		return newest;
 	}
 
 	/**
