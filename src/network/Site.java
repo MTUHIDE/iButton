@@ -16,11 +16,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import output.Logger;
 
 public class Site {
-
-	public static final String SITES_URL = "https://cocotemp.herokuapp.com/dashboard/sites.json";
-	public static final String EDIT_SITE_URL = "https://cocotemp.herokuapp.com/settings/site/update";
 
 	public String id, siteName, siteDescription;
 	public float siteLatitude, siteLongitude;
@@ -31,19 +29,24 @@ public class Site {
 	}
 
 	public String getInfo() {
-		return "ID: " + id + "\nDevice Name: " + siteName + "\nDescription: " + siteDescription + "\nLocation: "
+		return "Site ID: " + id + "\nSite Name: " + siteName + "\nDescription: " + siteDescription + "\nLocation: "
 				+ siteLatitude + ":" + siteLongitude + "\niButton: " + device;
 	}
 
-	public static Site[] getSites(String name, String pass) throws IOException {
-		InputStream response = Authentication.authentication(name, pass, new URL(SITES_URL));
-		BufferedReader reader = new BufferedReader(new InputStreamReader(response));
+	public static Site[] getSites(String name, String pass) { //TODO Change to Okhttpclient and delete auth claass
+		try {
+			InputStream response = Authentication.authentication(name, pass, new URL(CoCoTempURLs.GET_SITES.url()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(response));
 
-		Gson gson = new Gson();
-		Site[] sites = gson.fromJson(reader, Site[].class);
-		reader.close();
+			Gson gson = new Gson();
+			Site[] sites = gson.fromJson(reader, Site[].class);
 
-		return sites;
+			reader.close();
+			return sites;
+		} catch (IOException e) {
+			Logger.writeErrorToLog(e);
+			return null;
+		}
 	}
 
 	public static Response editSite(String siteid, String siteName, String siteLat, String siteLon,
@@ -61,7 +64,7 @@ public class Site {
 				"id=" + siteid + "&siteName=" + siteName.replaceAll(" ", "%20") + "&siteLatitude=" + siteLat
 						+ "&siteLongitude=" + siteLon + "&siteDescription=" + description.replaceAll(" ", "%20"));
 
-		Request request = new Request.Builder().url("https://cocotemp.herokuapp.com/settings/site/update").post(body)
+		Request request = new Request.Builder().url(CoCoTempURLs.EDIT_SITE.url()).post(body)
 				.addHeader("content-type", "application/x-www-form-urlencoded")
 				.addHeader("authorization", "Basic " + authStringEnc + "==").addHeader("cache-control", "no-cache")
 				.build();
@@ -69,9 +72,10 @@ public class Site {
 		try {
 			return client.newCall(request).execute();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.writeErrorToLog(e);
+			return null;
 		}
-		return null;
+
 	}
 
 	public static Response newSite(String siteName, String latitude, String longitude, String description) {
@@ -83,12 +87,12 @@ public class Site {
 		OkHttpClient client = new OkHttpClient();
 
 		MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-		
+
 		RequestBody body = RequestBody.create(mediaType,
 				"siteName=" + siteName.replaceAll(" ", "%20") + "&siteLatitude=" + latitude + "&siteLongitude="
 						+ longitude + "&siteDescription=" + description.replaceAll(" ", "%20"));
-		
-		Request request = new Request.Builder().url("https://cocotemp.herokuapp.com/settings/site/update").post(body)
+
+		Request request = new Request.Builder().url(CoCoTempURLs.EDIT_SITE.url()).post(body)
 				.addHeader("authorization", "Basic " + authStringEnc + "==")
 				.addHeader("content-type", "application/x-www-form-urlencoded").addHeader("cache-control", "no-cache")
 				.build();
@@ -96,11 +100,9 @@ public class Site {
 		try {
 			return client.newCall(request).execute();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.writeErrorToLog(e);
+			return null;
 		}
-
-		return null;
 
 	}
 

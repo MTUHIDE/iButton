@@ -18,7 +18,7 @@ import output.SiteData;
 public class IButtonApp extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	public static final float version = 0.08f;
+	public static final String version = "0.9.3";
 	public static final ImageIcon img = new ImageIcon(IButtonApp.class.getResource("/iT_icon.jpg"));
 
 	private static JPanel cards = new JPanel();
@@ -63,7 +63,6 @@ public class IButtonApp extends JFrame {
 
 	public static List<DeviceHandler> getApaters() {
 		try {
-			Logger.writeToLog("Found adapters");
 			return DeviceHandler.getDevices(DeviceHandler.deviceDefaultName, DeviceHandler.adapterDefaultName);
 		} catch (OneWireException e) {
 			Logger.writeErrorToLog(e);
@@ -75,6 +74,10 @@ public class IButtonApp extends JFrame {
 		Site[] serverSites = Site.getSites(name, password);
 		List<DeviceHandler> devices = getApaters();
 
+		if(serverSites == null){
+			return;
+		}
+		
 		for (Site s : serverSites) {
 			if (SiteData.findSite(s.id) == null) {
 				SiteData.addSite(s.id, "null");
@@ -92,18 +95,6 @@ public class IButtonApp extends JFrame {
 		dashboard.updateSiteList(serverSites);
 	}
 
-	public static boolean login(String name, String password) {
-		user = name;
-		pass = password;
-		try {
-			loadSites(name, pass);
-		} catch (IOException e) {
-			return false;
-		}
-		showCard("Dashboard");
-		return true;
-
-	}
 
 	public static void showCard(String cardName) {
 		previousCard = currentCard;

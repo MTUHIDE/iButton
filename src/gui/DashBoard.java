@@ -29,12 +29,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class DashBoard extends JPanel implements ListSelectionListener, ActionListener {
-
 	private static final long serialVersionUID = 1L;
 
 	private JList<Site> list;
 	private JTextArea info;
-	// private Site[] sites;
 	private JButton btnAddSite, btnUpload, btnSettings, btnLogOut, btnEditSite;
 
 	public DashBoard() {
@@ -66,6 +64,7 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		btnLogOut.setBackground(Color.LIGHT_GRAY);
 		btnLogOut.setBounds(755, 406, 89, 23);
 		add(btnLogOut);
+
 		// Panel
 		JPanel panel = new JPanel();
 		panel.setBounds(197, 28, 548, 400);
@@ -74,17 +73,17 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 
 		info = new JTextArea();
 		info.setBounds(10, 11, 409, 378);
-		panel.add(info);
 		info.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, SystemColor.activeCaption));
 		info.setEditable(false);
 		info.setBackground(Color.WHITE);
+		panel.add(info);
 
 		btnUpload = new JButton("Upload");
 		btnUpload.setBounds(429, 12, 109, 23);
 		btnUpload.setEnabled(false);
-		panel.add(btnUpload);
 		btnUpload.addActionListener(this);
 		btnUpload.setBackground(Color.LIGHT_GRAY);
+		panel.add(btnUpload);
 
 		btnEditSite = new JButton("Edit Site");
 		btnEditSite.addActionListener(this);
@@ -96,47 +95,40 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 
 	public void updateSiteList(Site[] sites) {
 		DefaultListModel<Site> model = new DefaultListModel<Site>();
-
+		
 		for (Site d : sites) {
 			model.addElement(d);
 		}
-
+		
 		list.setModel(model);
 		info.setText("");
-
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-
-		@SuppressWarnings("unchecked")
-		JList<Site> lsm = (JList<Site>) e.getSource();
-		if (lsm.getSelectedValue() == null) {
-			return;
-		}
-		info.setText(lsm.getSelectedValue().getInfo());
-
-		if (list.getSelectedValue() != null) {
+		if (list.getSelectedValue() == null) {
+			btnEditSite.setEnabled(false);
+			btnUpload.setEnabled(false);
+		} else {
+			info.setText(list.getSelectedValue().getInfo());
 			btnEditSite.setEnabled(true);
+
 			if (list.getSelectedValue().device != null) {
 				btnUpload.setEnabled(true);
 			} else {
 				btnUpload.setEnabled(false);
 			}
-		} else {
-			btnEditSite.setEnabled(false);
-			btnUpload.setEnabled(false);
+			
 		}
-
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent action) {
-
 		if (action.getActionCommand() == "Add Site") {
 			IButtonApp.showCard("Add Site");
 		}
-		if (action.getActionCommand() == "Upload") {
+		
+		if (action.getActionCommand() == "Upload") { //TODO Clean up
 			Site site = list.getSelectedValue();
 			DeviceHandler device = site.device;
 			MissionContainer ms = (MissionContainer) device.device;
@@ -160,6 +152,7 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 			}
 
 		}
+		
 		if (action.getActionCommand() == "Settings") {
 			IButtonApp.showCard("Settings");
 		}
@@ -167,7 +160,6 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 			IButtonApp.showCard("Login");
 		}
 		if (action.getActionCommand() == "Edit Site") {
-
 			IButtonApp.editSite.setSite(list.getSelectedValue());
 			IButtonApp.showCard("Edit Site");
 		}

@@ -9,6 +9,7 @@ import java.awt.Desktop;
 
 import javax.swing.SwingConstants;
 
+import network.CoCoTempURLs;
 import output.Logger;
 
 import javax.swing.JButton;
@@ -21,7 +22,7 @@ import java.awt.Font;
 
 public class Login extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	
+
 	private JTextField username;
 	private JPasswordField passwordField;
 	private JButton btnLogin, btnRegister, btnSettings;
@@ -46,7 +47,7 @@ public class Login extends JPanel implements ActionListener {
 		lblPassword.setLabelFor(passwordField);
 		add(lblPassword);
 
-		JLabel lblversion = new JLabel("CoCo iButton App v" + IButtonApp.version);
+		JLabel lblversion = new JLabel("CoCo iTemp v" + IButtonApp.version);
 		lblversion.setBounds(707, 429, 137, 14);
 		add(lblversion);
 
@@ -90,26 +91,47 @@ public class Login extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getActionCommand() == "Login") {
-			if (!IButtonApp.login(username.getText(), new String(passwordField.getPassword()))) {
+			if (!login()) {
 				lblWrongCons.setEnabled(true);
 				lblWrongCons.setVisible(true);
 			} else {
 				Logger.writeToLog("User: " + username.getText() + " connected");
+				IButtonApp.showCard("Dashboard");
 				lblWrongCons.setEnabled(false);
 				lblWrongCons.setVisible(false);
 			}
 		}
 		if (action.getActionCommand() == "Register") {
-			if (Desktop.isDesktopSupported()) {
-				try {
-					Desktop.getDesktop().browse(new URI("https://cocotemp.herokuapp.com/register"));
-				} catch (IOException | URISyntaxException e) {
-					Logger.writeErrorToLog(e);
-				}
-			}
+			openRegisterInBrowser();
 		}
 		if (action.getActionCommand() == "Settings") {
 			IButtonApp.showCard("Settings");
 		}
 	}
+
+	private boolean login() {
+		IButtonApp.user = username.getText();
+		IButtonApp.pass = new String(passwordField.getPassword());
+		try {
+			IButtonApp.loadSites(IButtonApp.user, IButtonApp.pass);
+			return true;
+		} catch (IOException e) {
+			Logger.writeErrorToLog(e);
+			return false;
+		}
+	}
+
+	private boolean openRegisterInBrowser() {
+		if (Desktop.isDesktopSupported()) {
+			try {
+				Desktop.getDesktop().browse(new URI(CoCoTempURLs.LOGIN.url()));
+				return true;
+			} catch (IOException | URISyntaxException e) {
+				Logger.writeErrorToLog(e);
+				return false;
+			}
+		}
+		return false;
+	}
+
 }

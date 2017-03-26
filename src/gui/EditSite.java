@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.EtchedBorder;
 
 import com.dalsemi.onewire.OneWireException;
 import com.dalsemi.onewire.container.MissionContainer;
@@ -20,6 +21,7 @@ import handlers.MissionHandler;
 import network.Site;
 import output.SiteData;
 import java.awt.Font;
+import java.awt.SystemColor;
 
 public class EditSite extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -30,7 +32,6 @@ public class EditSite extends JPanel implements ActionListener {
 	private Site site;
 
 	public EditSite() {
-
 		setBackground(Color.WHITE);
 		setLayout(null);
 
@@ -54,8 +55,10 @@ public class EditSite extends JPanel implements ActionListener {
 
 		description = new JTextArea();
 		description.setToolTipText("The location of the device.");
-		description.setBackground(Color.LIGHT_GRAY);
+		description.setWrapStyleWord(true);
+		description.setLineWrap(true);
 		description.setBounds(296, 154, 261, 85);
+		description.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, SystemColor.activeCaption));
 		add(description);
 
 		JLabel lblSiteName = new JLabel("Site Name");
@@ -77,7 +80,6 @@ public class EditSite extends JPanel implements ActionListener {
 		JLabel lblDevice = new JLabel("Device");
 		lblDevice.setBounds(211, 253, 46, 14);
 		add(lblDevice);
-
 		devices = new JComboBox<DeviceHandler>();
 		for (DeviceHandler d : IButtonApp.getApaters()) {
 			devices.addItem(d);
@@ -96,8 +98,9 @@ public class EditSite extends JPanel implements ActionListener {
 		btnBack.addActionListener(this);
 		btnBack.setBounds(755, 412, 89, 23);
 		add(btnBack);
-		
-		JLabel lblWaringChangingA = new JLabel("Warning: Changing a site's device will reset its temperature readings!");
+
+		JLabel lblWaringChangingA = new JLabel(
+				"Warning: Changing a site's device will reset its temperature readings!");
 		lblWaringChangingA.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblWaringChangingA.setBounds(211, 330, 467, 14);
 		add(lblWaringChangingA);
@@ -116,8 +119,8 @@ public class EditSite extends JPanel implements ActionListener {
 		if (action.getActionCommand() == "Back") {
 			IButtonApp.showPreviousCard();
 		}
-		
-		if (action.getActionCommand() == "Update") {
+
+		if (action.getActionCommand() == "Update") { //TODO Clean up
 
 			try {
 				Site.editSite(site.id, siteName.getText(), lat.getText(), lon.getText(), description.getText());
@@ -140,15 +143,14 @@ public class EditSite extends JPanel implements ActionListener {
 				} else {
 					SiteData.updateSite(site.id, "null");
 				}
-				
+
 				IButtonApp.loadSites(IButtonApp.user, IButtonApp.pass);
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
-			IButtonApp.showCard("Dashboard");
 
+			IButtonApp.showCard("Dashboard");
 		}
 	}
 }

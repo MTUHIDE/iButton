@@ -3,10 +3,12 @@ package gui;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import javax.swing.JTextField;
+import javax.swing.border.EtchedBorder;
 
 import com.dalsemi.onewire.OneWireException;
 import com.dalsemi.onewire.container.MissionContainer;
@@ -33,22 +35,28 @@ public class AddSite extends JPanel implements ActionListener {
 		setLayout(null);
 
 		siteName = new JTextField();
+		siteName.setToolTipText("E.g My House");
 		siteName.setBounds(296, 61, 261, 20);
 		siteName.setColumns(10);
 		add(siteName);
 
 		lat = new JTextField();
+		lat.setToolTipText("E.g 11.22321");
 		lat.setBounds(296, 92, 86, 20);
 		lat.setColumns(10);
 		add(lat);
 
 		lon = new JTextField();
+		lon.setToolTipText("E.g 11.22321");
 		lon.setBounds(471, 92, 86, 20);
 		lon.setColumns(10);
 		add(lon);
 
 		description = new JTextArea();
-		description.setBackground(Color.LIGHT_GRAY);
+		description.setToolTipText("The location of the device.");
+		description.setWrapStyleWord(true);
+		description.setLineWrap(true);
+		description.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, SystemColor.activeCaption));
 		description.setBounds(296, 123, 261, 85);
 		add(description);
 
@@ -71,12 +79,11 @@ public class AddSite extends JPanel implements ActionListener {
 		JLabel lblDevice = new JLabel("Device");
 		lblDevice.setBounds(211, 222, 46, 14);
 		add(lblDevice);
-
 		devices = new JComboBox<DeviceHandler>();
 		for (DeviceHandler d : IButtonApp.getApaters()) {
 			devices.addItem(d);
 		}
-		devices.setBounds(296, 219, 86, 20);
+		devices.setBounds(296, 219, 125, 20);
 		add(devices);
 
 		JButton btnAdd = new JButton("Add");
@@ -98,7 +105,7 @@ public class AddSite extends JPanel implements ActionListener {
 		if (action.getActionCommand() == "Back") {
 			IButtonApp.showPreviousCard();
 		}
-		if (action.getActionCommand() == "Add") {
+		if (action.getActionCommand() == "Add") { //TODO Clean up
 			Response response = Site.newSite(siteName.getText(), lat.getText(), lon.getText(), description.getText());
 			String siteID = response.request().url().queryParameterValue(0);
 			DeviceHandler device = devices.getItemAt(devices.getSelectedIndex());
@@ -125,4 +132,5 @@ public class AddSite extends JPanel implements ActionListener {
 			IButtonApp.showCard("Dashboard");
 		}
 	}
+	
 }

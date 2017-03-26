@@ -4,15 +4,15 @@ import java.io.File;
 import java.io.IOException;
 
 import gui.IButtonApp;
+import output.Logger;
 
 public class Upload {
-	public static final String UPLOAD_URL = "https://cocotemp.herokuapp.com/upload";
-
-	public static void uploadFile(Site site, File file) {
+	
+	public static boolean uploadFile(Site site, File file) { //TODO change to Okhttpclient and add description
 		String charset = "UTF-8";
-
 		try {
-			MultipartUtility multipart = new MultipartUtility(UPLOAD_URL, charset, IButtonApp.user, IButtonApp.pass);
+			
+			MultipartUtility multipart = new MultipartUtility(CoCoTempURLs.UPLOAD_URL.url(), charset, IButtonApp.user, IButtonApp.pass);
 
 			multipart.addFormField("siteID", site.id);
 			multipart.addFormField("description", "Test upload");
@@ -20,11 +20,11 @@ public class Upload {
 			multipart.addFilePart("csvData", file);
 
 			multipart.finish();
-
-		} catch (IOException ex) {
-			System.err.println(ex);
+			return true;
+		} catch (IOException e) {
+			Logger.writeErrorToLog(e);
+			return false;
 		}
-
 	}
 
 }
