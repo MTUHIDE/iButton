@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -18,12 +19,13 @@ public class IButtonApp extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	public static final float version = 0.08f;
+	public static final ImageIcon img = new ImageIcon(IButtonApp.class.getResource("/iT_icon.jpg"));
 
 	private static JPanel cards = new JPanel();
-	private static Login login = new Login();
-	private static AddSite Addsite = new AddSite();
+	public static Login login = new Login();
+	public static AddSite Addsite = new AddSite();
 	public static EditSite editSite = new EditSite();
-	private static Settings settings = new Settings();
+	public static Settings settings = new Settings();
 	public static DashBoard dashboard = new DashBoard();
 	private static CardLayout cardLayout;
 	private static String previousCard, currentCard;
@@ -31,6 +33,8 @@ public class IButtonApp extends JFrame {
 	public static String user, pass;
 
 	public IButtonApp() {
+		super("Coco iTemp");
+
 		cards.setLayout(new CardLayout());
 		cards.add(login, "Login");
 		cards.add(dashboard, "Dashboard");
@@ -39,9 +43,10 @@ public class IButtonApp extends JFrame {
 		cards.add(settings, "Settings");
 		cardLayout = (CardLayout) cards.getLayout();
 
-		cardLayout.show(cards, "Login");
 		currentCard = "Login";
+		cardLayout.show(cards, "Login");
 
+		setIconImage(img.getImage());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setPreferredSize(new Dimension(854, 480));
 
