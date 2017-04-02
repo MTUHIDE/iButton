@@ -15,11 +15,14 @@ import com.dalsemi.onewire.container.MissionContainer;
 
 import handlers.DeviceHandler;
 import handlers.MissionHandler;
+import handlers.MissionSamples;
 import output.TempData;
 import output.Logger;
 
 /**
- * Demos the controls in a GUI.
+ * Demos how to use the handlers to communicate to a iButton in a GUI.
+ * Writes data to the data folder located at
+ *  C://Users/%user%/AppData/Roaming/iButtonData
  * 
  * @author Justin Havely
  *
@@ -30,7 +33,7 @@ public class DeviceController extends JFrame implements ActionListener {
 	private JTextArea log = new JTextArea(10, 40);
 	private JButton startMission = new JButton("Start Mission");
 	private JButton stopMission = new JButton("Stop Mission");
-	private JButton uploadData = new JButton("Upload Data");
+	private JButton readData = new JButton("Read Data");
 
 	private List<DeviceHandler> devices;
 	private DeviceHandler activeDevice;
@@ -44,11 +47,11 @@ public class DeviceController extends JFrame implements ActionListener {
 		this.setLayout(new FlowLayout());
 		startMission.addActionListener(this);
 		stopMission.addActionListener(this);
-		uploadData.addActionListener(this);
+		readData.addActionListener(this);
 		add(log);
 		add(startMission);
 		add(stopMission);
-		add(uploadData);
+		add(readData);
 		pack();
 		setVisible(true);
 	}
@@ -65,10 +68,14 @@ public class DeviceController extends JFrame implements ActionListener {
 		misson.load();
 	}
 
+	/**
+	 * Searches all ports for the default adapters and devices then sets the
+	 * first one found as the active device.
+	 */
 	public void load() {
 		try {
 			devices = DeviceHandler.getDevices(DeviceHandler.deviceDefaultName, DeviceHandler.adapterDefaultName);
-			activeDevice = devices.get(0);
+			activeDevice = devices.get(0); // Change 0 to set a different iButton, if multiple are plugged in.
 			log.append("Found Adapters!\n");
 		} catch (OneWireException e) {
 			log.append("Could not Find Adapters!\n");
@@ -81,7 +88,7 @@ public class DeviceController extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent a) {
 		MissionContainer ms = (MissionContainer) activeDevice.device;
-
+		// Starts a new mission with default settings.
 		if (a.getSource() == startMission) {
 			log.append("Starting misson!\n");
 			try {
@@ -90,6 +97,7 @@ public class DeviceController extends JFrame implements ActionListener {
 				Logger.writeErrorToLog(e);
 			}
 		}
+		// Stops the current mission
 		if (a.getSource() == stopMission) {
 			log.append("Stoping misson!\n");
 			try {
@@ -98,21 +106,17 @@ public class DeviceController extends JFrame implements ActionListener {
 				Logger.writeErrorToLog(e);
 			}
 		}
-		if (a.getSource() == uploadData) {
-			log.append("Loading Mission...\n");
+		// Writes mission samples into the data folder
+		if (a.getSource() == readData) {
 			try {
+				log.append("Loading Mission...\n");
+				MissionSamples samples = MissionHandler.getMissonTemperatureData(activeDevice.adapter, ms);
 				log.append("Writting to file...\n");
-				try { // TODO Should be ran on a new thread so the GUI does not
-						// freeze.
-					new TempData(activeDevice.getAddress(),
-							MissionHandler.getMissonTemperatureData(activeDevice.adapter, ms)).writeDataFile();
-				} catch (IOException e) {
-					Logger.writeErrorToLog(e);
-				}
-				log.append("Done!\n");
-			} catch (OneWireException e) {
+				new TempData(activeDevice.getAddress(), samples).writeDataFile();
+			} catch (IOException | OneWireException e) {
 				Logger.writeErrorToLog(e);
 			}
+			log.append("Done!\n");
 		}
 
 	}

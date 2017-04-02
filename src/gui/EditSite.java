@@ -19,10 +19,17 @@ import com.dalsemi.onewire.container.MissionContainer;
 import handlers.DeviceHandler;
 import handlers.MissionHandler;
 import network.Site;
+import output.Logger;
 import output.SiteData;
 import java.awt.Font;
 import java.awt.SystemColor;
 
+/**
+ * The GUI for editing a site. Call set site before showing this JPanel.
+ * 
+ * @author Justin Havely
+ *
+ */
 public class EditSite extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
@@ -31,30 +38,33 @@ public class EditSite extends JPanel implements ActionListener {
 	private JComboBox<DeviceHandler> devices;
 	private Site site;
 
+	/**
+	 * Adds all the components to the JPanel.
+	 */
 	public EditSite() {
 		setBackground(Color.WHITE);
 		setLayout(null);
 
 		siteName = new JTextField();
-		siteName.setToolTipText("E.g My House");
+		siteName.setToolTipText("E.g: My House");
 		siteName.setBounds(296, 61, 261, 20);
 		siteName.setColumns(10);
 		add(siteName);
 
 		lat = new JTextField();
-		lat.setToolTipText("E.g 11.22321");
+		lat.setToolTipText("E.g: 11.22321");
 		lat.setBounds(296, 92, 261, 20);
 		lat.setColumns(10);
 		add(lat);
 
 		lon = new JTextField();
-		lon.setToolTipText("E.g 11.22321");
+		lon.setToolTipText("E.g: 11.22321");
 		lon.setBounds(296, 123, 261, 20);
 		lon.setColumns(10);
 		add(lon);
 
 		description = new JTextArea();
-		description.setToolTipText("The location of the device.");
+		description.setToolTipText("I.e: The location of the device.");
 		description.setWrapStyleWord(true);
 		description.setLineWrap(true);
 		description.setBounds(296, 154, 261, 85);
@@ -81,7 +91,7 @@ public class EditSite extends JPanel implements ActionListener {
 		lblDevice.setBounds(211, 253, 46, 14);
 		add(lblDevice);
 		devices = new JComboBox<DeviceHandler>();
-		for (DeviceHandler d : IButtonApp.getApaters()) {
+		for (DeviceHandler d : IButtonApp.getDevices()) {
 			devices.addItem(d);
 		}
 		devices.setBounds(296, 250, 125, 20);
@@ -106,6 +116,12 @@ public class EditSite extends JPanel implements ActionListener {
 		add(lblWaringChangingA);
 	}
 
+	/**
+	 * Set the fields to the site current values
+	 * 
+	 * @param site
+	 *            The site to update
+	 */
 	public void setSite(Site site) {
 		this.site = site;
 		siteName.setText(site.siteName);
@@ -114,40 +130,49 @@ public class EditSite extends JPanel implements ActionListener {
 		description.setText(site.siteDescription);
 	}
 
+	/**
+	 * Listens for button clicks.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getActionCommand() == "Back") {
 			IButtonApp.showPreviousCard();
 		}
 
-		if (action.getActionCommand() == "Update") { //TODO Clean up
-
+		if (action.getActionCommand() == "Update") {
 			try {
+				// Updates server side.
 				Site.editSite(site.id, siteName.getText(), lat.getText(), lon.getText(), description.getText());
+
+				// Saves old and new devices and updates the site's device.
 				DeviceHandler deviceOld = site.device;
 				DeviceHandler deviceNew = (DeviceHandler) devices.getSelectedItem();
-
 				site.device = deviceNew;
 
 				if (deviceNew != null) {
+					// Load the device missionContanier and updates the local
+					// siteData file.
 					MissionContainer ms = (MissionContainer) deviceNew.device;
 					SiteData.updateSite(site.id, deviceNew.getAddress());
-					if (deviceOld == null || deviceNew.getAddress() != deviceOld.getAddress()) {
+
+					if (deviceOld == null || deviceNew.getAddress().equals(deviceOld.getAddress())) {
+						// Starts a new mission.
 						try {
 							MissionHandler.startMission(deviceNew.adapter, ms);
 						} catch (OneWireException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							Logger.writeErrorToLog(e);
 						}
 					}
+
 				} else {
 					SiteData.updateSite(site.id, "null");
 				}
 
+				// Reloads the sites to update the dashboard.
 				IButtonApp.loadSites(IButtonApp.user, IButtonApp.pass);
 
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.writeErrorToLog(e);
 			}
 
 			IButtonApp.showCard("Dashboard");

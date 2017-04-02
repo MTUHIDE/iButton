@@ -8,7 +8,8 @@ import handlers.FileHandler;
 
 /**
  * 
- * Will be used for logging errors and actions.
+ * Used for logging errors and actions. The log file can be found in the data
+ * folder. See FileHandler for that location.
  * 
  * @author Justin Havely
  *
@@ -16,6 +17,12 @@ import handlers.FileHandler;
 public class Logger {
 	public static final File LogFile = new File(FileHandler.DATA_FOLDER + "/log.txt");
 
+	/**
+	 * Logs a new line of text into the log file with the local time.
+	 * 
+	 * @param text
+	 *            The text to be log.
+	 */
 	public static void writeToLog(String text) {
 		try {
 			FileHandler.writeToFile(new Date() + "\t" + text + System.lineSeparator(), LogFile, true);
@@ -24,6 +31,12 @@ public class Logger {
 		}
 	}
 
+	/**
+	 * Logs a print out of the exception into the log file with the local time.
+	 * 
+	 * @param error
+	 *            The error to be log.
+	 */
 	public static void writeErrorToLog(Exception error) {
 		try {
 			FileHandler.writeToFile(new Date() + "\t" + "Error: " + error.toString() + System.lineSeparator(), LogFile,

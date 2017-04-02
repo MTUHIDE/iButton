@@ -20,6 +20,12 @@ import java.net.URISyntaxException;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 
+/**
+ * The GUI for logging in.
+ * 
+ * @author Justin Havely
+ *
+ */
 public class Login extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
@@ -28,6 +34,9 @@ public class Login extends JPanel implements ActionListener {
 	private JButton btnLogin, btnRegister, btnSettings;
 	private JLabel lblWrongCons;
 
+	/**
+	 * Adds all the components to the login JPanel.
+	 */
 	public Login() {
 		setBackground(Color.WHITE);
 		setLayout(null);
@@ -88,6 +97,9 @@ public class Login extends JPanel implements ActionListener {
 		add(lblWrongCons);
 	}
 
+	/**
+	 * Listens for button clicks.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getActionCommand() == "Login") {
@@ -109,6 +121,11 @@ public class Login extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * Checks if the user's sites could be loaded.
+	 * 
+	 * @return True if the sites were loaded, false if not.
+	 */
 	private boolean login() {
 		IButtonApp.user = username.getText();
 		IButtonApp.pass = new String(passwordField.getPassword());
@@ -121,6 +138,11 @@ public class Login extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * Opens the register page in a Internet browser.
+	 * 
+	 * @return True if the page was open, false if not.
+	 */
 	private boolean openRegisterInBrowser() {
 		if (Desktop.isDesktopSupported()) {
 			try {

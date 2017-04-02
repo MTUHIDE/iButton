@@ -28,6 +28,12 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The GUI for showing all of the users sites and functions.
+ * 
+ * @author Justin Havely
+ *
+ */
 public class DashBoard extends JPanel implements ListSelectionListener, ActionListener {
 	private static final long serialVersionUID = 1L;
 
@@ -35,6 +41,9 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 	private JTextArea info;
 	private JButton btnAddSite, btnUpload, btnSettings, btnLogOut, btnEditSite;
 
+	/**
+	 * Adds all the components to the JPanel.
+	 */
 	public DashBoard() {
 		setBackground(Color.WHITE);
 		setLayout(null);
@@ -65,7 +74,8 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		btnLogOut.setBounds(755, 406, 89, 23);
 		add(btnLogOut);
 
-		// Panel
+		// The subJPanel that contains info, edit, and upload components. Mainly
+		// for looks.
 		JPanel panel = new JPanel();
 		panel.setBounds(197, 28, 548, 400);
 		add(panel);
@@ -93,17 +103,27 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		panel.add(btnEditSite);
 	}
 
+	/**
+	 * Updates the sites list in the dashboard. This should be call when ever a
+	 * site is added or edited.
+	 * 
+	 * @param sites
+	 *            The array of sites to show on the dashboard.
+	 */
 	public void updateSiteList(Site[] sites) {
 		DefaultListModel<Site> model = new DefaultListModel<Site>();
-		
+
 		for (Site d : sites) {
 			model.addElement(d);
 		}
-		
+
 		list.setModel(model);
 		info.setText("");
 	}
 
+	/**
+	 * Listens for a change on the selected site.
+	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (list.getSelectedValue() == null) {
@@ -118,41 +138,55 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 			} else {
 				btnUpload.setEnabled(false);
 			}
-			
+
 		}
 	}
 
+	/**
+	 * Listen for button clicks.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getActionCommand() == "Add Site") {
 			IButtonApp.showCard("Add Site");
 		}
-		
-		if (action.getActionCommand() == "Upload") { //TODO Clean up
+
+		if (action.getActionCommand() == "Upload") {
+			// Gets the site, device, and the device mission container.
 			Site site = list.getSelectedValue();
 			DeviceHandler device = site.device;
 			MissionContainer ms = (MissionContainer) device.device;
+
 			try {
 				try {
+					// Temperature readings
 					MissionSamples samples = MissionHandler.getMissonTemperatureData(device.adapter, ms);
+
 					if (samples.getLength() < 1) {
+						// No readings to upload.
 						JOptionPane.showMessageDialog(this, "No temperatures taken. Please wait an hour.");
 						return;
 					}
-					TempData df = new TempData(device.getAddress(), samples);
-					df.writeDataFile();
-					Upload.uploadFile(site, new File(df.location));
+
+					// Creates local csv file.
+					TempData tempFile = new TempData(device.getAddress(), samples);
+					tempFile.writeDataFile();
+
+					// Uploads file to server.
+					Upload.uploadFile(site, new File(tempFile.location));
 					JOptionPane.showMessageDialog(this, "Upload Successful");
+
 				} catch (IOException e) {
 					Logger.writeErrorToLog(e);
 				}
 				Logger.writeToLog("Wrote data");
+
 			} catch (OneWireException e) {
 				Logger.writeErrorToLog(e);
 			}
 
 		}
-		
+
 		if (action.getActionCommand() == "Settings") {
 			IButtonApp.showCard("Settings");
 		}

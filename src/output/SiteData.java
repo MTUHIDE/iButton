@@ -8,13 +8,34 @@ import java.io.IOException;
 import gui.IButtonApp;
 import handlers.FileHandler;
 
+/**
+ * Creates a file in the data folder to save which iButton is assign to which
+ * site. The data folder location can be found in the FileHandler class. The
+ * name of the file is %user%_sites.
+ * 
+ * EX: f6148a49-d286-4057-9f26-fe11988828b2:8100000033B9B041
+ * 
+ * @author Justin Havely
+ *
+ */
 public class SiteData {
 	public static final File SITE_DATA = new File(FileHandler.DATA_FOLDER + "/" + IButtonApp.user + "_sites.txt");
 
+	/**
+	 * Adds a new site to the siteData file with an device's address value pair
+	 * with it.
+	 * 
+	 * @param siteID
+	 *            The site's ID
+	 * @param deviceID
+	 *            The device's address
+	 * @return True if site was added, or false if the site was not added.
+	 */
 	public static boolean addSite(String siteID, String deviceID) {
 		try {
-			if (findSite(siteID) == null)
+			if (findSite(siteID) == null) {
 				FileHandler.writeToFile(siteID + ":" + deviceID + System.lineSeparator(), SITE_DATA, true);
+			}
 			return true;
 		} catch (IOException e) {
 			Logger.writeErrorToLog(e);
@@ -22,6 +43,15 @@ public class SiteData {
 		}
 	}
 
+	/**
+	 * Updates a site's device.
+	 * 
+	 * @param siteID
+	 *            The ID of the site to be updated.
+	 * @param deviceID
+	 *            The new device address.
+	 * @return True if site was updated, or false if the site was not updated.
+	 */
 	public static boolean updateSite(String siteID, String deviceID) {
 		if (removeSite(siteID) && addSite(siteID, deviceID)) {
 			return true;
@@ -29,6 +59,13 @@ public class SiteData {
 		return false;
 	}
 
+	/**
+	 * Removes a site from the siteData file.
+	 * 
+	 * @param siteID
+	 *            The ID of the site to be removed.
+	 * @return True if the site was removed. False if the site was not removed.
+	 */
 	public static boolean removeSite(String siteID) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(SITE_DATA));
@@ -49,6 +86,14 @@ public class SiteData {
 		}
 	}
 
+	/**
+	 * Checks if a site is in the siteData file.
+	 * 
+	 * @param siteID
+	 *            The site's ID.
+	 * @return A String array with index zero being the ID of the site and index
+	 *         one being the device address assigned to it.
+	 */
 	public static String[] findSite(String siteID) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(SITE_DATA));

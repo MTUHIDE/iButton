@@ -9,6 +9,11 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+/**
+ * @deprecated This class is to be remove in the next update. Now using the OkHttp API.
+ * @author Justin Havely
+ *
+ */
 public class Authentication {
 
 

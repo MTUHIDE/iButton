@@ -17,12 +17,19 @@ import handlers.DeviceHandler;
 import handlers.MissionHandler;
 import network.Site;
 import okhttp3.Response;
+import output.Logger;
 import output.SiteData;
 
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 
+/**
+ * The GUI for adding a site.
+ * 
+ * @author Justin Havely
+ *
+ */
 public class AddSite extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
@@ -30,30 +37,33 @@ public class AddSite extends JPanel implements ActionListener {
 	private JTextArea description;
 	private JComboBox<DeviceHandler> devices;
 
+	/**
+	 * Adds all the components to the JPanel.
+	 */
 	public AddSite() {
 		setBackground(Color.WHITE);
 		setLayout(null);
 
 		siteName = new JTextField();
-		siteName.setToolTipText("E.g My House");
+		siteName.setToolTipText("E.g: My House");
 		siteName.setBounds(296, 61, 261, 20);
 		siteName.setColumns(10);
 		add(siteName);
 
 		lat = new JTextField();
-		lat.setToolTipText("E.g 11.22321");
+		lat.setToolTipText("E.g: 11.22321");
 		lat.setBounds(296, 92, 86, 20);
 		lat.setColumns(10);
 		add(lat);
 
 		lon = new JTextField();
-		lon.setToolTipText("E.g 11.22321");
+		lon.setToolTipText("E.g: 11.22321");
 		lon.setBounds(471, 92, 86, 20);
 		lon.setColumns(10);
 		add(lon);
 
 		description = new JTextArea();
-		description.setToolTipText("The location of the device.");
+		description.setToolTipText("I.e: The location of the device.");
 		description.setWrapStyleWord(true);
 		description.setLineWrap(true);
 		description.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, SystemColor.activeCaption));
@@ -80,7 +90,7 @@ public class AddSite extends JPanel implements ActionListener {
 		lblDevice.setBounds(211, 222, 46, 14);
 		add(lblDevice);
 		devices = new JComboBox<DeviceHandler>();
-		for (DeviceHandler d : IButtonApp.getApaters()) {
+		for (DeviceHandler d : IButtonApp.getDevices()) {
 			devices.addItem(d);
 		}
 		devices.setBounds(296, 219, 125, 20);
@@ -100,37 +110,47 @@ public class AddSite extends JPanel implements ActionListener {
 
 	}
 
+	/**
+	 * Listens for button clicks.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getActionCommand() == "Back") {
 			IButtonApp.showPreviousCard();
 		}
-		if (action.getActionCommand() == "Add") { //TODO Clean up
+		if (action.getActionCommand() == "Add") {
+			// Creates a new site (server side) and gets the site's ID.
 			Response response = Site.newSite(siteName.getText(), lat.getText(), lon.getText(), description.getText());
 			String siteID = response.request().url().queryParameterValue(0);
+
+			// Gets the selected iButton.
 			DeviceHandler device = devices.getItemAt(devices.getSelectedIndex());
+
 			if (device != null) {
+				// Load the device missionContanier and updates the local
+				// siteData file.
 				MissionContainer ms = (MissionContainer) device.device;
 				SiteData.updateSite(siteID, device.getAddress());
+
 				try {
+					// Starts a new mission.
 					MissionHandler.startMission(device.adapter, ms);
 				} catch (OneWireException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Logger.writeErrorToLog(e);
 				}
 			} else {
 				SiteData.updateSite(siteID, "null");
 			}
 
 			try {
+				// Reloads the sites to update the dashboard.
 				IButtonApp.loadSites(IButtonApp.user, IButtonApp.pass);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Logger.writeErrorToLog(e);
 			}
 
 			IButtonApp.showCard("Dashboard");
 		}
 	}
-	
+
 }

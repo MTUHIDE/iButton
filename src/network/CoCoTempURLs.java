@@ -1,5 +1,10 @@
 package network;
 
+/**
+ * All of the URL end points for communicating with the server.
+ * @author Justin Havely
+ *
+ */
 public enum CoCoTempURLs {
 	LOGIN("https://hci-dev.cs.mtu.edu:8103/cocotemp/register"),
 	SITE("https://hci-dev.cs.mtu.edu:8103/cocotemp/"),

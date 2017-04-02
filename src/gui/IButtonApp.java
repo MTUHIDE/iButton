@@ -15,20 +15,27 @@ import network.Site;
 import output.Logger;
 import output.SiteData;
 
+/**
+ * The main CoCo iTemp App.
+ * 
+ * @author Justin Havely
+ *
+ */
 public class IButtonApp extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	public static final String version = "0.9.3";
+	public static final String version = "0.9.4";
 	public static final ImageIcon img = new ImageIcon(IButtonApp.class.getResource("/iT_icon.jpg"));
 
 	private static JPanel cards = new JPanel();
+	private static CardLayout cardLayout;
+	private static String previousCard, currentCard;
+
 	public static Login login = new Login();
 	public static AddSite Addsite = new AddSite();
 	public static EditSite editSite = new EditSite();
 	public static Settings settings = new Settings();
 	public static DashBoard dashboard = new DashBoard();
-	private static CardLayout cardLayout;
-	private static String previousCard, currentCard;
 
 	public static String user, pass;
 
@@ -61,7 +68,13 @@ public class IButtonApp extends JFrame {
 		new IButtonApp();
 	}
 
-	public static List<DeviceHandler> getApaters() {
+	/**
+	 * Gets all of the iButton devices connected through USB.
+	 * 
+	 * @return Null if no devices are found. Else, a list of all found devices
+	 *         will be return.
+	 */
+	public static List<DeviceHandler> getDevices() {
 		try {
 			return DeviceHandler.getDevices(DeviceHandler.deviceDefaultName, DeviceHandler.adapterDefaultName);
 		} catch (OneWireException e) {
@@ -70,19 +83,34 @@ public class IButtonApp extends JFrame {
 		return null;
 	}
 
+	/**
+	 * Loads the sites from the server, updates the local siteData file with new
+	 * sites, assigns device to sites, and updates the dashboard.
+	 * 
+	 * @param name
+	 *            Username of the user
+	 * @param password
+	 *            Password of the user
+	 * @throws IOException
+	 *             If username and password are not correct.
+	 */
 	public static void loadSites(String name, String password) throws IOException {
+		// Get sites from server.
 		Site[] serverSites = Site.getSites(name, password);
-		List<DeviceHandler> devices = getApaters();
+		List<DeviceHandler> devices = getDevices();
 
-		if(serverSites == null){
-			return;
+		// Wrong username or password.
+		if (serverSites == null) {
+			throw new IOException();
 		}
-		
+
 		for (Site s : serverSites) {
+			// Checks if site is not in siteData file.
 			if (SiteData.findSite(s.id) == null) {
 				SiteData.addSite(s.id, "null");
 			} else {
 				for (DeviceHandler d : devices) {
+					// Checks if that site has a device assign to it.
 					if (SiteData.findSite(s.id)[1].equals(d.getAddress())) {
 						s.device = d;
 						break;
@@ -95,13 +123,21 @@ public class IButtonApp extends JFrame {
 		dashboard.updateSiteList(serverSites);
 	}
 
-
+	/**
+	 * Shows a new JPanel.
+	 * 
+	 * @param cardName
+	 *            The JPanel to render.
+	 */
 	public static void showCard(String cardName) {
 		previousCard = currentCard;
 		currentCard = cardName;
 		cardLayout.show(cards, cardName);
 	}
 
+	/**
+	 * Shows the last render JPanel
+	 */
 	public static void showPreviousCard() {
 		showCard(previousCard);
 	}

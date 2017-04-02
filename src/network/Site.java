@@ -35,7 +35,9 @@ public class Site {
 
 	public static Site[] getSites(String name, String pass) { //TODO Change to Okhttpclient and delete auth claass
 		try {
+			@SuppressWarnings("deprecation")
 			InputStream response = Authentication.authentication(name, pass, new URL(CoCoTempURLs.GET_SITES.url()));
+			
 			BufferedReader reader = new BufferedReader(new InputStreamReader(response));
 
 			Gson gson = new Gson();

@@ -144,8 +144,10 @@ public class MissionSamples {
 
 		/**
 		 * A text representation of a sample. Formatted for a CSV file. First
-		 * column: Temperature to two decimal places. Second column: Time the
+		 * column: Temperature to zero decimal places. Second column: Time the
 		 * sample was taken in milliseconds since 1970, UTC.
+		 * 
+		 * EX: 2017-04-1 04:45:31,25
 		 * 
 		 * @return CSV formatted string of a sample.
 		 */

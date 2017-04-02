@@ -18,7 +18,7 @@ public class Settings extends JPanel implements ActionListener {
 		setBackground(Color.WHITE);
 		setLayout(null);
 
-		// TODO Update About
+		// TODO Update to have settings
 		JTextArea txtAboutCocoiTemp = new JTextArea("About: Coco iTemp version: " + IButtonApp.version
 				+ "\n"
 				+ "\nThis application is for managing CoCo Temp sites that are connected to an iButton device."

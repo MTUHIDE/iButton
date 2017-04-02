@@ -7,7 +7,7 @@ import java.io.IOException;
 
 /**
  * Used to write files into the data folder.
- * (%user%/Appdata/Roaming/iButtonData)
+ * (%user%/AppData/Roaming/iButtonData)
  * 
  * @author Justin Havely
  *
@@ -15,11 +15,10 @@ import java.io.IOException;
 public class FileHandler {
 	public static final String DATA_FOLDER = System.getProperty("user.home") + "/AppData/Roaming/iButtonData";
 
-
 	/**
 	 * 
-	 * Check for the data folder exists and make one if it does not. Writes the
-	 * file to the data folder.(%user%/Appdata/Roaming/iButtonData)
+	 * Checks if the data folder exists. If it doesn't, one is made. Writes the
+	 * file to the data folder.(%user%/AppData/Roaming/iButtonData)
 	 * 
 	 * @param text
 	 *            The text to be written into the file.
@@ -38,7 +37,6 @@ public class FileHandler {
 		FileWriter fw = new FileWriter(file, append);
 		BufferedWriter bw = new BufferedWriter(fw);
 		bw.write(text);
-		//bw.append(text);
 		bw.close();
 		fw.close();
 

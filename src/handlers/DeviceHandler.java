@@ -6,11 +6,10 @@ import java.util.List;
 import com.dalsemi.onewire.OneWireAccessProvider;
 import com.dalsemi.onewire.OneWireException;
 import com.dalsemi.onewire.adapter.DSPortAdapter;
-import com.dalsemi.onewire.adapter.OneWireIOException;
 import com.dalsemi.onewire.container.OneWireContainer;
 
 /**
- * This class handles communication with the iButton and the iButton adapter.
+ * This class handles communication with the One Wire devices and adapters.
  * 
  * @author Justin Havely
  *
@@ -22,19 +21,23 @@ public class DeviceHandler {
 	public DSPortAdapter adapter;
 	public OneWireContainer device;
 
+	/**
+	 * Creates a new OneWire device and adapter pair.
+	 * 
+	 * @param adapter
+	 *            The adapter the One Wire device is on.
+	 * @param device
+	 *            The One Wire device.
+	 */
 	private DeviceHandler(DSPortAdapter adapter, OneWireContainer device) {
 		this.adapter = adapter;
 		this.device = device;
 	}
-	
+
 	/**
-	 * Gets the default iButton adapter that is plugged into the computer.
+	 * Gets the adapters that are connected.
 	 * 
-	 * @return The default adapter.
-	 * @throws OneWireIOException
-	 *             If no adapter could be found.
-	 * @throws OneWireException
-	 *             If no adapter could be found.
+	 * @return The a list of adapters.
 	 */
 	public static List<DSPortAdapter> getAdapters(String adapterName) {
 		List<DSPortAdapter> aps = new ArrayList<DSPortAdapter>();
@@ -51,13 +54,10 @@ public class DeviceHandler {
 	}
 
 	/**
-	 * Get the containers for the iButton named "Thermochron8k" also known as
-	 * DS1923.
+	 * Get all of the OneWire devices connected through a port type.
 	 * 
-	 * @return Null if no iButton named "Thermochron8k" is found. Else, the
-	 *         containers for the iButton.
-	 * @throws OneWireIOException
-	 *             If no adapter could be found.
+	 * @return Null if no One wire devices are found. Else, a list of all found
+	 *         devices will be return.
 	 * @throws OneWireException
 	 *             If no adapter could be found.
 	 */
@@ -84,6 +84,9 @@ public class DeviceHandler {
 	 * Gets the address of the iButton. This is a 16 char unique identification
 	 * number for the iButton.
 	 * 
+	 * @param device
+	 *            The device to get the address of.
+	 * 
 	 * @return Text version the address for the iButton.
 	 */
 	public static String getAddress(OneWireContainer device) {
@@ -100,9 +103,12 @@ public class DeviceHandler {
 		return device.getAddressAsString();
 	}
 
-	public String toString(){
+	/**
+	 * @return the device and adapter information in string form.
+	 */
+	public String toString() {
 		return device + ": " + adapter;
-		
+
 	}
-	
+
 }
