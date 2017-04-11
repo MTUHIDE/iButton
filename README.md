@@ -8,11 +8,11 @@ Email problems to: jmh628@nau.edu
 
 The CoCo iTemp installer can be download here: 
 #### Windows 10, 8.1, 7 
-	- 32-bit: <https://www.dropbox.com/s/s0yjmqgmtnn0blr/CoCoiTemp_x86.msi?dl=0>
-	- 64-bit: <https://www.dropbox.com/s/wm7chhfdh651iko/CoCoiTemp_x64.msi?dl=0>
+- 32-bit: <https://www.dropbox.com/s/s0yjmqgmtnn0blr/CoCoiTemp_x86.msi?dl=0>
+- 64-bit: <https://www.dropbox.com/s/wm7chhfdh651iko/CoCoiTemp_x64.msi?dl=0>
 
 ## To Do list
-- Clean networking code to use one API.
+- ~~Clean networking code to use one API.~~
 - Progress Bars for uploading, editing, and adding sites.
 - Use Google's API to find Latitude and Longitude.
 - Update Theme to match CoCo Temp site's theme.
@@ -23,7 +23,7 @@ The CoCo iTemp installer can be download here:
 - Only allow one device to be assign to one site.*
 - Check edit and add site field for correct text.*
 
-** = Important
+- "*" = Important
 
 
 ## Helpful Tips
