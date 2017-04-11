@@ -188,7 +188,7 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		}
 
 		if (action.getActionCommand() == "Settings") {
-			IButtonApp.showCard("Settings");
+			IButtonApp.showCard("Settings");		
 		}
 		if (action.getActionCommand() == "Log Out") {
 			IButtonApp.showCard("Login");

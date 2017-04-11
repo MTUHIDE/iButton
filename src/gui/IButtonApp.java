@@ -94,9 +94,9 @@ public class IButtonApp extends JFrame {
 	 * @throws IOException
 	 *             If username and password are not correct.
 	 */
-	public static void loadSites(String name, String password) throws IOException {
+	public static void loadSites() throws IOException {
 		// Get sites from server.
-		Site[] serverSites = Site.getSites(name, password);
+		Site[] serverSites = Site.getSites();
 		List<DeviceHandler> devices = getDevices();
 
 		// Wrong username or password.

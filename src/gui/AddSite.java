@@ -144,7 +144,7 @@ public class AddSite extends JPanel implements ActionListener {
 
 			try {
 				// Reloads the sites to update the dashboard.
-				IButtonApp.loadSites(IButtonApp.user, IButtonApp.pass);
+				IButtonApp.loadSites();
 			} catch (IOException e) {
 				Logger.writeErrorToLog(e);
 			}

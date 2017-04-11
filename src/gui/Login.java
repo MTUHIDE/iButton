@@ -130,7 +130,7 @@ public class Login extends JPanel implements ActionListener {
 		IButtonApp.user = username.getText();
 		IButtonApp.pass = new String(passwordField.getPassword());
 		try {
-			IButtonApp.loadSites(IButtonApp.user, IButtonApp.pass);
+			IButtonApp.loadSites();
 			return true;
 		} catch (IOException e) {
 			Logger.writeErrorToLog(e);
@@ -146,7 +146,7 @@ public class Login extends JPanel implements ActionListener {
 	private boolean openRegisterInBrowser() {
 		if (Desktop.isDesktopSupported()) {
 			try {
-				Desktop.getDesktop().browse(new URI(CoCoTempURLs.LOGIN.url()));
+				Desktop.getDesktop().browse(new URI(CoCoTempURLs.REGISTER.url()));
 				return true;
 			} catch (IOException | URISyntaxException e) {
 				Logger.writeErrorToLog(e);

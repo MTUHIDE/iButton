@@ -2,9 +2,7 @@ package network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import com.google.gson.Gson;
@@ -33,12 +31,28 @@ public class Site {
 				+ siteLatitude + ":" + siteLongitude + "\niButton: " + device;
 	}
 
-	public static Site[] getSites(String name, String pass) { //TODO Change to Okhttpclient and delete auth claass
+	public static Site[] getSites() {
 		try {
-			@SuppressWarnings("deprecation")
-			InputStream response = Authentication.authentication(name, pass, new URL(CoCoTempURLs.GET_SITES.url()));
+			String authString = IButtonApp.user + ":" + IButtonApp.pass;
+			String encodeString = Base64.getEncoder().encodeToString(authString.getBytes(StandardCharsets.UTF_8));
+			String authStringEnc = new String(encodeString);
 			
-			BufferedReader reader = new BufferedReader(new InputStreamReader(response));
+			OkHttpClient client = new OkHttpClient();
+
+			Request request = new Request.Builder()
+			  .url(CoCoTempURLs.GET_SITES.url())
+			  .post(RequestBody.create(null, new byte[0]))
+			  .addHeader("authorization", "Basic " + authStringEnc + "==")
+			  .addHeader("cache-control", "no-cache")
+			  .build();
+
+			Response response = client.newCall(request).execute();
+			
+			if(!response.isSuccessful()){
+				return null;
+			}
+						
+			BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()));
 
 			Gson gson = new Gson();
 			Site[] sites = gson.fromJson(reader, Site[].class);
@@ -66,9 +80,11 @@ public class Site {
 				"id=" + siteid + "&siteName=" + siteName.replaceAll(" ", "%20") + "&siteLatitude=" + siteLat
 						+ "&siteLongitude=" + siteLon + "&siteDescription=" + description.replaceAll(" ", "%20"));
 
-		Request request = new Request.Builder().url(CoCoTempURLs.EDIT_SITE.url()).post(body)
+		Request request = new Request.Builder().url(CoCoTempURLs.EDIT_SITE.url())
+				.post(body)
 				.addHeader("content-type", "application/x-www-form-urlencoded")
-				.addHeader("authorization", "Basic " + authStringEnc + "==").addHeader("cache-control", "no-cache")
+				.addHeader("authorization", "Basic " + authStringEnc + "==")
+				.addHeader("cache-control", "no-cache")
 				.build();
 
 		try {
@@ -94,9 +110,11 @@ public class Site {
 				"siteName=" + siteName.replaceAll(" ", "%20") + "&siteLatitude=" + latitude + "&siteLongitude="
 						+ longitude + "&siteDescription=" + description.replaceAll(" ", "%20"));
 
-		Request request = new Request.Builder().url(CoCoTempURLs.EDIT_SITE.url()).post(body)
+		Request request = new Request.Builder().url(CoCoTempURLs.NEW_SITE.url())
+				.post(body)
 				.addHeader("authorization", "Basic " + authStringEnc + "==")
-				.addHeader("content-type", "application/x-www-form-urlencoded").addHeader("cache-control", "no-cache")
+				.addHeader("content-type", "application/x-www-form-urlencoded")
+				.addHeader("cache-control", "no-cache")
 				.build();
 
 		try {

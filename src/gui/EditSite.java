@@ -169,7 +169,7 @@ public class EditSite extends JPanel implements ActionListener {
 				}
 
 				// Reloads the sites to update the dashboard.
-				IButtonApp.loadSites(IButtonApp.user, IButtonApp.pass);
+				IButtonApp.loadSites();
 
 			} catch (IOException e) {
 				Logger.writeErrorToLog(e);
