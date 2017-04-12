@@ -33,7 +33,7 @@ public class SiteData {
 	 */
 	public static boolean addSite(String siteID, String deviceID) {
 		try {
-			if (findSite(siteID) == null) {
+			if (findSiteBySite(siteID) == null) {
 				FileHandler.writeToFile(siteID + ":" + deviceID + System.lineSeparator(), SITE_DATA, true);
 			}
 			return true;
@@ -94,13 +94,41 @@ public class SiteData {
 	 * @return A String array with index zero being the ID of the site and index
 	 *         one being the device address assigned to it.
 	 */
-	public static String[] findSite(String siteID) {
+	public static String[] findSiteBySite(String siteID) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(SITE_DATA));
 			String site;
 			while ((site = br.readLine()) != null) {
 				String[] siteinfo = site.split(":");
 				if (siteinfo[0].equals(siteID)) {
+					br.close();
+					return siteinfo;
+				}
+			}
+			br.close();
+			return null;
+		} catch (IOException e) {
+			Logger.writeErrorToLog(e);
+			return null;
+		}
+
+	}
+
+	/**
+	 * Checks if a site is in the siteData file.
+	 * 
+	 * @param deviceAdress
+	 *            The device Address connected to the site.
+	 * @return A String array with index zero being the ID of the site and index
+	 *         one being the device address assigned to it.
+	 */
+	public static String[] findSiteByDevice(String deviceAddress) {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(SITE_DATA));
+			String site;
+			while ((site = br.readLine()) != null) {
+				String[] siteinfo = site.split(":");
+				if (siteinfo[1].equals(deviceAddress)) {
 					br.close();
 					return siteinfo;
 				}

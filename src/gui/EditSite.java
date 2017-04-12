@@ -147,15 +147,22 @@ public class EditSite extends JPanel implements ActionListener {
 				// Saves old and new devices and updates the site's device.
 				DeviceHandler deviceOld = site.device;
 				DeviceHandler deviceNew = (DeviceHandler) devices.getSelectedItem();
-				site.device = deviceNew;
-
+		
 				if (deviceNew != null) {
 					// Load the device missionContanier and updates the local
 					// siteData file.
 					MissionContainer ms = (MissionContainer) deviceNew.device;
+					
+					// Checks if another site has this device assigned to it
+					String[] siteCheck = SiteData.findSiteByDevice(deviceNew.getAddress());
+					if (siteCheck != null) {
+						// Set old site's device to null
+						SiteData.updateSite(siteCheck[0], "null");
+					}
+					
 					SiteData.updateSite(site.id, deviceNew.getAddress());
 
-					if (deviceOld == null || deviceNew.getAddress().equals(deviceOld.getAddress())) {
+					if (deviceOld == null || !deviceNew.getAddress().equals(deviceOld.getAddress())) {
 						// Starts a new mission.
 						try {
 							MissionHandler.startMission(deviceNew.adapter, ms);

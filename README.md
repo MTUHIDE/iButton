@@ -11,6 +11,13 @@ The CoCo iTemp installer can be download here:
 - 32-bit: <https://www.dropbox.com/s/s0yjmqgmtnn0blr/CoCoiTemp_x86.msi?dl=0>
 - 64-bit: <https://www.dropbox.com/s/wm7chhfdh651iko/CoCoiTemp_x64.msi?dl=0>
 
+## Helpful Tips
+One Wire Drives are require if you did not used the installer: <https://www.maximintegrated.com/en/products/ibutton/software/tmex/download_drivers.cfm>
+
+For an example on using the handlers to communicate with One Wire devices run the DeviceControll class in the example package.
+
+The main method is in the IButtonApp class in the gui package.
+
 ## To Do list
 - ~~Clean networking code to use one API.~~
 - Progress Bars for uploading, editing, and adding sites.
@@ -20,15 +27,7 @@ The CoCo iTemp installer can be download here:
 - Add desktop icon to installer.
 - ~~32 bit installer.*~~
 - Add Device status (Not assign, Not plugged in) to dashboard.*
-- Only allow one device to be assign to one site.*
-- Check edit and add site field for correct text.*
+- ~~Only allow one device to be assign to one site.*~~
+- Checkbox for device edit and check "add/edit site" fields for correct text.*
 
-- "*" = Important
-
-
-## Helpful Tips
-One Wire Drives are require if you did not used the installer: <https://www.maximintegrated.com/en/products/ibutton/software/tmex/download_drivers.cfm>
-
-For an example on using the handlers to communicate with One Wire devices run the DeviceControll class in the example package.
-
-The main method is in the IButtonApp class in the gui package.
+* "*" = Important

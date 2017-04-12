@@ -106,12 +106,12 @@ public class IButtonApp extends JFrame {
 
 		for (Site s : serverSites) {
 			// Checks if site is not in siteData file.
-			if (SiteData.findSite(s.id) == null) {
+			if (SiteData.findSiteBySite(s.id) == null) {
 				SiteData.addSite(s.id, "null");
 			} else {
 				for (DeviceHandler d : devices) {
 					// Checks if that site has a device assign to it.
-					if (SiteData.findSite(s.id)[1].equals(d.getAddress())) {
+					if (SiteData.findSiteBySite(s.id)[1].equals(d.getAddress())) {
 						s.device = d;
 						break;
 					}

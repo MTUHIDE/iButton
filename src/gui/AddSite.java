@@ -124,13 +124,22 @@ public class AddSite extends JPanel implements ActionListener {
 			String siteID = response.request().url().queryParameterValue(0);
 
 			// Gets the selected iButton.
-			DeviceHandler device = devices.getItemAt(devices.getSelectedIndex());
+			DeviceHandler device = (DeviceHandler) devices.getSelectedItem();
 
 			if (device != null) {
 				// Load the device missionContanier and updates the local
 				// siteData file.
 				MissionContainer ms = (MissionContainer) device.device;
-				SiteData.updateSite(siteID, device.getAddress());
+
+				// Checks if another site has this device assigned to it
+				String[] siteCheck = SiteData.findSiteByDevice(device.getAddress());
+
+				if (siteCheck != null) {
+					// Set old site's device to null
+					SiteData.updateSite(siteCheck[0], "null");
+				}
+
+				SiteData.addSite(siteID, device.getAddress());
 
 				try {
 					// Starts a new mission.
@@ -139,7 +148,7 @@ public class AddSite extends JPanel implements ActionListener {
 					Logger.writeErrorToLog(e);
 				}
 			} else {
-				SiteData.updateSite(siteID, "null");
+				SiteData.addSite(siteID, "null");
 			}
 
 			try {
