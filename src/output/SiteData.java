@@ -92,7 +92,8 @@ public class SiteData {
 	 * @param siteID
 	 *            The site's ID.
 	 * @return A String array with index zero being the ID of the site and index
-	 *         one being the device address assigned to it.
+	 *         one being the device address assigned to it. Null, if no site is
+	 *         found.
 	 */
 	public static String[] findSiteBySite(String siteID) {
 		try {

@@ -172,14 +172,17 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 					TempData tempFile = new TempData(device.getAddress(), samples);
 					tempFile.writeDataFile();
 
-					// Uploads file to server.
-					Upload.uploadFile(site, new File(tempFile.location));
-					JOptionPane.showMessageDialog(this, "Upload Successful");
+					// Uploads file to server and logs the data.
+					if(Upload.uploadFile(site, new File(tempFile.location))){
+						JOptionPane.showMessageDialog(this, "Upload Successful");
+						Logger.writeToLog("Wrote data to:" + site.getInfo() + "from: " + device.getAddress());
+					} else {
+						JOptionPane.showMessageDialog(this, "Upload Failed");
+					}
 
 				} catch (IOException e) {
 					Logger.writeErrorToLog(e);
 				}
-				Logger.writeToLog("Wrote data");
 
 			} catch (OneWireException e) {
 				Logger.writeErrorToLog(e);

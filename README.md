@@ -18,6 +18,8 @@ For an example on using the handlers to communicate with One Wire devices run th
 
 The main method is in the IButtonApp class in the gui package.
 
+The URL endpoints are in the enum CocoTempURLs class.
+
 ## To Do list
 - ~~Clean networking code to use one API.~~
 - Progress Bars for uploading, editing, and adding sites.
@@ -26,7 +28,7 @@ The main method is in the IButtonApp class in the gui package.
 - Register page in the CoCo iTemp app.
 - Add desktop icon to installer.
 - ~~32 bit installer.*~~
-- Add Device status (Not assign, Not plugged in) to dashboard.*
+- ~~Add Device status (Not assign, Not plugged in) to dashboard.*~~
 - ~~Only allow one device to be assign to one site.*~~
 - Checkbox for device edit and check "add/edit site" fields for correct text.*
 

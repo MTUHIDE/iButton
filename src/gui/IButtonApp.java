@@ -24,7 +24,7 @@ import output.SiteData;
 public class IButtonApp extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	public static final String version = "0.9.4";
+	public static final String version = "0.9.5";
 	public static final ImageIcon img = new ImageIcon(IButtonApp.class.getResource("/iT_icon.jpg"));
 
 	private static JPanel cards = new JPanel();
