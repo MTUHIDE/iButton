@@ -17,12 +17,9 @@ import handlers.DeviceHandler;
 import handlers.MissionHandler;
 import handlers.MissionSamples;
 import output.TempData;
-import output.Logger;
 
 /**
- * Demos how to use the handlers to communicate to a iButton in a GUI.
- * Writes data to the data folder located at
- *  C://Users/%user%/AppData/Roaming/iButtonData
+ * Demos how to use handlers to communicate with a iButton device.
  * 
  * @author Justin Havely
  *
@@ -30,42 +27,46 @@ import output.Logger;
 public class DeviceController extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
-	private JTextArea log = new JTextArea(10, 40);
+	private JTextArea log = new JTextArea(10, 40); // Displays helpful
+													// information
 	private JButton startMission = new JButton("Start Mission");
 	private JButton stopMission = new JButton("Stop Mission");
 	private JButton readData = new JButton("Read Data");
 
-	private List<DeviceHandler> devices;
-	private DeviceHandler activeDevice;
+	private List<DeviceHandler> devices; // All connected iButton devices
+	private DeviceHandler activeDevice; // The current iButton device being read
 
 	/**
-	 * Sets up the JFrame
+	 * Sets up the JFrame and components
 	 */
 	public DeviceController() {
+		setLayout(new FlowLayout());
+
 		log.setEditable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout(new FlowLayout());
 		startMission.addActionListener(this);
 		stopMission.addActionListener(this);
 		readData.addActionListener(this);
+
 		add(log);
 		add(startMission);
 		add(stopMission);
 		add(readData);
+
 		pack();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
 
 	/**
 	 * 
-	 * Creates GUI and checks for an iButton adapter.
+	 * Creates GUI and checks for an iButton devices.
 	 * 
 	 * @param args
 	 *            Does nothing.
 	 */
 	public static void main(String[] args) {
-		DeviceController misson = new DeviceController();
-		misson.load();
+		DeviceController dc = new DeviceController();
+		dc.load();
 	}
 
 	/**
@@ -75,7 +76,9 @@ public class DeviceController extends JFrame implements ActionListener {
 	public void load() {
 		try {
 			devices = DeviceHandler.getDevices(DeviceHandler.deviceDefaultName, DeviceHandler.adapterDefaultName);
-			activeDevice = devices.get(0); // Change 0 to set a different iButton, if multiple are plugged in.
+			activeDevice = devices.get(0); // Change the value '0' to set a
+											// different iButton, if multiple
+											// iButtons are plugged in
 			log.append("Found Adapters!\n");
 		} catch (OneWireException e) {
 			log.append("Could not Find Adapters!\n");
@@ -83,40 +86,41 @@ public class DeviceController extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * Listens for button clicks.
+	 * Listens for mouse clicks.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent a) {
 		MissionContainer ms = (MissionContainer) activeDevice.device;
-		// Starts a new mission with default settings.
+		// Starts a new mission with default settings
 		if (a.getSource() == startMission) {
-			log.append("Starting misson!\n");
+			log.append("Starting misson\n");
 			try {
 				MissionHandler.startMission(activeDevice.adapter, ms);
 			} catch (OneWireException e) {
-				Logger.writeErrorToLog(e);
+				log.append("Failed to start misson!\n");
 			}
 		}
 		// Stops the current mission
 		if (a.getSource() == stopMission) {
-			log.append("Stoping misson!\n");
+			log.append("Stoping misson\n");
 			try {
 				MissionHandler.stopMission(activeDevice.adapter, ms);
 			} catch (OneWireException e) {
-				Logger.writeErrorToLog(e);
+				log.append("Failed to stop misson!\n");
 			}
 		}
 		// Writes mission samples into the data folder
+		// (C://user/AppData/Roaming/iButtonData)
 		if (a.getSource() == readData) {
 			try {
 				log.append("Loading Mission...\n");
 				MissionSamples samples = MissionHandler.getMissonTemperatureData(activeDevice.adapter, ms);
 				log.append("Writting to file...\n");
 				new TempData(activeDevice.getAddress(), samples).writeDataFile();
+				log.append("Done!\n");
 			} catch (IOException | OneWireException e) {
-				Logger.writeErrorToLog(e);
+				log.append("Failed to stop misson!\n");
 			}
-			log.append("Done!\n");
 		}
 
 	}

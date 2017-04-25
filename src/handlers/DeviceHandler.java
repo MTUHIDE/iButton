@@ -9,7 +9,7 @@ import com.dalsemi.onewire.adapter.DSPortAdapter;
 import com.dalsemi.onewire.container.OneWireContainer;
 
 /**
- * This class handles communication with the One Wire devices and adapters.
+ * This class handles communication with the iButton devices and adapters.
  * 
  * @author Justin Havely
  *
@@ -22,12 +22,12 @@ public class DeviceHandler {
 	public OneWireContainer device;
 
 	/**
-	 * Creates a new OneWire device and adapter pair.
+	 * Creates a new iButton device and adapter pair.
 	 * 
 	 * @param adapter
-	 *            The adapter the One Wire device is on.
+	 *            The adapter the iButton device is on.
 	 * @param device
-	 *            The One Wire device.
+	 *            The iButton device.
 	 */
 	private DeviceHandler(DSPortAdapter adapter, OneWireContainer device) {
 		this.adapter = adapter;
@@ -35,7 +35,7 @@ public class DeviceHandler {
 	}
 
 	/**
-	 * Gets the adapters that are connected.
+	 * Gets the adapters that are connected through the USB ports.
 	 * 
 	 * @return The a list of adapters.
 	 */
@@ -54,12 +54,12 @@ public class DeviceHandler {
 	}
 
 	/**
-	 * Get all of the OneWire devices connected through a port type.
+	 * Gets all of the iButton devices connected through a port type.
 	 * 
-	 * @return Null if no One wire devices are found. Else, a list of all found
+	 * @return Null if no iButton devices are found. Else, a list of all found iButton
 	 *         devices will be return.
 	 * @throws OneWireException
-	 *             If no adapter could be found.
+	 *             If no iButton device could be found.
 	 */
 	public static List<DeviceHandler> getDevices(String deviceName, String adapterName) throws OneWireException {
 		List<DeviceHandler> devices = new ArrayList<DeviceHandler>();
@@ -85,9 +85,9 @@ public class DeviceHandler {
 	 * number for the iButton.
 	 * 
 	 * @param device
-	 *            The device to get the address of.
+	 *            The iButton device to get the address from.
 	 * 
-	 * @return Text version the address for the iButton.
+	 * @return String representation of the address for the iButton.
 	 */
 	public static String getAddress(OneWireContainer device) {
 		return device.getAddressAsString();
@@ -104,7 +104,7 @@ public class DeviceHandler {
 	}
 
 	/**
-	 * @return the device and adapter information in string form.
+	 * @return The device and adapter information in string form.
 	 */
 	public String toString() {
 		return device + ": " + adapter;

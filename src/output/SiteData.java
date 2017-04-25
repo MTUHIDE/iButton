@@ -9,11 +9,11 @@ import gui.IButtonApp;
 import handlers.FileHandler;
 
 /**
- * Creates a file in the data folder to save which iButton is assign to which
- * site. The data folder location can be found in the FileHandler class. The
+ * A file in the data folder to save which iButton is assign to which site. The
  * name of the file is %user%_sites.
  * 
- * EX: f6148a49-d286-4057-9f26-fe11988828b2:8100000033B9B041
+ * 
+ * (Site:iButton_address): f6148a49-d286-4057-9f26-fe11988828b2:8100000033B9B041
  * 
  * @author Justin Havely
  *
@@ -22,13 +22,13 @@ public class SiteData {
 	public static final File SITE_DATA = new File(FileHandler.DATA_FOLDER + "/" + IButtonApp.user + "_sites.txt");
 
 	/**
-	 * Adds a new site to the siteData file with an device's address value pair
-	 * with it.
+	 * Adds a new site to the siteData file with an iButton device's address
+	 * value pair with it.
 	 * 
 	 * @param siteID
 	 *            The site's ID
 	 * @param deviceID
-	 *            The device's address
+	 *            The iButton device's address
 	 * @return True if site was added, or false if the site was not added.
 	 */
 	public static boolean addSite(String siteID, String deviceID) {
@@ -44,12 +44,12 @@ public class SiteData {
 	}
 
 	/**
-	 * Updates a site's device.
+	 * Updates a site's iButton device.
 	 * 
 	 * @param siteID
 	 *            The ID of the site to be updated.
 	 * @param deviceID
-	 *            The new device address.
+	 *            The new iButton device address.
 	 * @return True if site was updated, or false if the site was not updated.
 	 */
 	public static boolean updateSite(String siteID, String deviceID) {
@@ -71,6 +71,9 @@ public class SiteData {
 			BufferedReader br = new BufferedReader(new FileReader(SITE_DATA));
 			String site;
 			String temp = "";
+
+			// Searches the siteData file for all sites that do not match siteID
+			// and appends them to the temp string.
 			while ((site = br.readLine()) != null) {
 				String[] siteinfo = site.split(":");
 				if (!siteinfo[0].equals(siteID)) {
@@ -78,6 +81,8 @@ public class SiteData {
 				}
 			}
 			br.close();
+
+			// Writes over old siteData file
 			FileHandler.writeToFile(temp, SITE_DATA, false);
 			return true;
 		} catch (IOException e) {
@@ -99,6 +104,7 @@ public class SiteData {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(SITE_DATA));
 			String site;
+			// Searches the siteData file for siteID
 			while ((site = br.readLine()) != null) {
 				String[] siteinfo = site.split(":");
 				if (siteinfo[0].equals(siteID)) {

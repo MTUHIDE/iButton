@@ -1,7 +1,7 @@
 package network;
 
 /**
- * All of the URL end points for communicating with the server.
+ * All of the URL end points for communicating with the CoCo Temp server.
  * @author Justin Havely
  *
  */
@@ -15,10 +15,18 @@ public enum CoCoTempURLs {
 
 	private String url;
 
+	/**
+	 * Creates a new URL.
+	 * @param url String representation of the URL
+	 */
 	CoCoTempURLs(String url) {
 		this.url = url;
 	}
 
+	/**
+	 * 
+	 * @return String representation of the URL
+	 */
 	public String url() {
 		return url;
 	}

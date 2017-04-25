@@ -23,7 +23,7 @@ import ntp.NTPMessage;
 public class ClockHandler {
 
 	/**
-	 * Used to get the clock container of the iButton. This container is require
+	 * Used to get the clock container of the iButton. This container is required
 	 * to read and write clock related data.
 	 * 
 	 * @param adapter

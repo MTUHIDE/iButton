@@ -11,25 +11,35 @@ import network.CoCoTempURLs;
 
 import javax.swing.JButton;
 
+/**
+ * The JPanel for the settings GUI. This JPanel displays basic information about
+ * the CoCoiTemp. Such as, the User Guide location and the CoCo Temp site.
+ * 
+ * @author Justin Havely
+ */
 public class Settings extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Creates and adds all of the components to this JPanel.
+	 */
 	public Settings() {
 		setBackground(Color.WHITE);
 		setLayout(null);
 
-		// TODO Update to have settings
-		JTextArea txtAboutCocoiTemp = new JTextArea("About: Coco iTemp version: " + IButtonApp.version
-				+ "\n"
+		// About text area
+		JTextArea txtAboutCocoiTemp = new JTextArea("About: Coco iTemp version: " + IButtonApp.version + "\n"
 				+ "\nThis application is for managing CoCo Temp sites that are connected to an iButton device."
 				+ "\nThe CoCo Temp website can be found here: " + CoCoTempURLs.SITE.url()
-				+ "\n\nFor help on using CoCo iTemp App go to:"
-				+ "\nhttps://www.dropbox.com/s/aktgj9itxcry05i/CoCoiButtonAppUserGuide.pdf?dl=0"
-				+ "\n\nEmail problems to: jmh628@nau.edu");
+				+ "\n\nFor help on using CoCo iTemp App see the CoCo iButton User Guide in Start -> "
+				+ "\nCoCoiTemp -> CoCoiButtonAppUserGuide.pdf"
+				+ "\n\nThe open source code for the CoCo iTemp App can be found here:"
+				+ "\nhttps://github.com/MTUHIDE/iButton");
 		txtAboutCocoiTemp.setEditable(false);
-		txtAboutCocoiTemp.setBounds(24, 21, 815, 146);
+		txtAboutCocoiTemp.setBounds(24, 21, 815, 261);
 		add(txtAboutCocoiTemp);
 
+		// Back button
 		JButton btnBack = new JButton("Back");
 		btnBack.setBackground(Color.LIGHT_GRAY);
 		btnBack.addActionListener(this);
@@ -37,8 +47,12 @@ public class Settings extends JPanel implements ActionListener {
 		add(btnBack);
 	}
 
+	/**
+	 * Listens for mouse clicks.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
+		// Shows the last JPanel
 		if (action.getActionCommand() == "Back") {
 			IButtonApp.showPreviousCard();
 		}

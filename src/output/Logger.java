@@ -8,8 +8,8 @@ import handlers.FileHandler;
 
 /**
  * 
- * Used for logging errors and actions. The log file can be found in the data
- * folder. See FileHandler for that location.
+ * Used for logging errors and user actions. The log file can be found in the
+ * data folder (C://user/AppData/Roaming/iButtonData).
  * 
  * @author Justin Havely
  *
@@ -35,7 +35,7 @@ public class Logger {
 	 * Logs a print out of the exception into the log file with the local time.
 	 * 
 	 * @param error
-	 *            The error to be log.
+	 *            The exception to be log.
 	 */
 	public static void writeErrorToLog(Exception error) {
 		try {

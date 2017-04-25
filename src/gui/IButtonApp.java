@@ -4,7 +4,6 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.util.List;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,7 +15,7 @@ import output.Logger;
 import output.SiteData;
 
 /**
- * The main CoCo iTemp App.
+ * The launching point for the CoCo iTemp application.
  * 
  * @author Justin Havely
  *
@@ -24,7 +23,7 @@ import output.SiteData;
 public class IButtonApp extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	public static final String version = "0.9.5";
+	public static final String version = "1.0.1"; // Current build
 	public static final ImageIcon img = new ImageIcon(IButtonApp.class.getResource("/iT_icon.jpg"));
 
 	private static JPanel cards = new JPanel();
@@ -39,9 +38,14 @@ public class IButtonApp extends JFrame {
 
 	public static String user, pass;
 
+	/**
+	 * Creates and adds all the components to the JFrame. Uses the cardlayout to
+	 * show and hide JPanels.
+	 */
 	public IButtonApp() {
 		super("Coco iTemp");
 
+		// cards (JPanels)
 		cards.setLayout(new CardLayout());
 		cards.add(login, "Login");
 		cards.add(dashboard, "Dashboard");
@@ -50,16 +54,16 @@ public class IButtonApp extends JFrame {
 		cards.add(settings, "Settings");
 		cardLayout = (CardLayout) cards.getLayout();
 
+		// Shows the login JPanel
 		currentCard = "Login";
 		cardLayout.show(cards, "Login");
 
+		// Sets the application icon and other JFrame settings
 		setIconImage(img.getImage());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setPreferredSize(new Dimension(854, 480));
-
 		add(cards);
 		pack();
-
 		setVisible(true);
 		setResizable(false);
 	}
@@ -69,7 +73,7 @@ public class IButtonApp extends JFrame {
 	}
 
 	/**
-	 * Gets all of the iButton devices connected through USB.
+	 * Gets all of the iButton devices connected through USB ports.
 	 * 
 	 * @return Null if no devices are found. Else, a list of all found devices
 	 *         will be return.
@@ -84,8 +88,9 @@ public class IButtonApp extends JFrame {
 	}
 
 	/**
-	 * Loads the sites from the server, updates the local siteData file with new
-	 * sites, assigns device to sites, and updates the dashboard.
+	 * Loads the user's sites from the server, updates the local siteData file
+	 * with new sites, assigns iButton device to sites, and updates the
+	 * dashboard.
 	 * 
 	 * @param name
 	 *            Username of the user
@@ -97,6 +102,7 @@ public class IButtonApp extends JFrame {
 	public static void loadSites() throws IOException {
 		// Get sites from server.
 		Site[] serverSites = Site.getSites();
+		// Get iButton devices.
 		List<DeviceHandler> devices = getDevices();
 
 		// Wrong username or password.
@@ -110,7 +116,7 @@ public class IButtonApp extends JFrame {
 				SiteData.addSite(s.id, "null");
 			} else {
 				for (DeviceHandler d : devices) {
-					// Checks if that site has a device assign to it.
+					// Checks if the site has a device assign to it.
 					if (SiteData.findSiteBySite(s.id)[1].equals(d.getAddress())) {
 						s.device = d;
 						break;

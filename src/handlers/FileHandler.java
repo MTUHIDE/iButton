@@ -6,8 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Used to write files into the data folder.
- * (%user%/AppData/Roaming/iButtonData)
+ * Used to write files into the data folder
+ * (C://user/AppData/Roaming/iButtonData).
  * 
  * @author Justin Havely
  *
@@ -17,13 +17,17 @@ public class FileHandler {
 
 	/**
 	 * 
-	 * Checks if the data folder exists. If it doesn't, one is made. Writes the
-	 * file to the data folder.(%user%/AppData/Roaming/iButtonData)
+	 * Checks if the data folder exists. If it doesn't, one is made. Writes a
+	 * text file to the data folder (C://user/AppData/Roaming/iButtonData). If
+	 * another file exists with the same name and the parameter append is set to
+	 * false the file will be over written.
 	 * 
 	 * @param text
 	 *            The text to be written into the file.
 	 * @param file
 	 *            The file to be written into the data folder.
+	 * @param append
+	 *            False to write over old file. True to append data to old file.
 	 * @throws IOException
 	 *             If the file could not be written.
 	 */

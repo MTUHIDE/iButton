@@ -46,7 +46,7 @@ public class MissionHandler {
 	}
 
 	/**
-	 * Gets the temperatures and time sample for the current mission.
+	 * Gets the temperatures and time samples for the current mission.
 	 * 
 	 * @param adapter
 	 *            The adapter the iButton is connected to.
@@ -102,9 +102,9 @@ public class MissionHandler {
 	}
 
 	/**
-	 * Starts a new mission and clears old mission samples. The iButton time is
-	 * set to UTC time using a NTP server. Sets sample rate to one hour and Roll
-	 * over to true.
+	 * Starts a new mission and removes old mission samples. The iButton time is
+	 * set to UTC time using a NTP server. Sets sampling rate to one hour and
+	 * Roll over to true.
 	 * 
 	 * @param adapter
 	 *            The adapter the iButton is connected to.

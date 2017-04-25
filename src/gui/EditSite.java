@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -19,13 +20,16 @@ import com.dalsemi.onewire.container.MissionContainer;
 import handlers.DeviceHandler;
 import handlers.MissionHandler;
 import network.Site;
+import okhttp3.Response;
 import output.Logger;
 import output.SiteData;
 import java.awt.Font;
 import java.awt.SystemColor;
 
 /**
- * The GUI for editing a site. Call set site before showing this JPanel.
+ * The JPanel for the editing a site GUI. This JPanel displays all of the
+ * required fields for editing a site. (name, latitude, longitude, and
+ * description) As well a field to assign a iButton device to a site.
  * 
  * @author Justin Havely
  *
@@ -39,30 +43,34 @@ public class EditSite extends JPanel implements ActionListener {
 	private Site site;
 
 	/**
-	 * Adds all the components to the JPanel.
+	 * Creates and adds all the components to the JPanel.
 	 */
 	public EditSite() {
 		setBackground(Color.WHITE);
 		setLayout(null);
 
+		// name field
 		siteName = new JTextField();
 		siteName.setToolTipText("E.g: My House");
 		siteName.setBounds(296, 61, 261, 20);
 		siteName.setColumns(10);
 		add(siteName);
 
+		// latitude field
 		lat = new JTextField();
 		lat.setToolTipText("E.g: 11.22321");
 		lat.setBounds(296, 92, 261, 20);
 		lat.setColumns(10);
 		add(lat);
 
+		// longitude field
 		lon = new JTextField();
 		lon.setToolTipText("E.g: 11.22321");
 		lon.setBounds(296, 123, 261, 20);
 		lon.setColumns(10);
 		add(lon);
 
+		// description field
 		description = new JTextArea();
 		description.setToolTipText("I.e: The location of the device.");
 		description.setWrapStyleWord(true);
@@ -71,6 +79,7 @@ public class EditSite extends JPanel implements ActionListener {
 		description.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, SystemColor.activeCaption));
 		add(description);
 
+		// labels for the fields
 		JLabel lblSiteName = new JLabel("Site Name");
 		lblSiteName.setBounds(211, 64, 64, 14);
 		add(lblSiteName);
@@ -90,25 +99,31 @@ public class EditSite extends JPanel implements ActionListener {
 		JLabel lblDevice = new JLabel("Device");
 		lblDevice.setBounds(211, 253, 46, 14);
 		add(lblDevice);
+
+		// Drop down box of plugged in iButton devices
 		devices = new JComboBox<DeviceHandler>();
+		// Add iButton devices to drop down box
 		for (DeviceHandler d : IButtonApp.getDevices()) {
 			devices.addItem(d);
 		}
 		devices.setBounds(296, 250, 125, 20);
 		add(devices);
 
+		// Update site button
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.setBackground(Color.LIGHT_GRAY);
 		btnUpdate.addActionListener(this);
 		btnUpdate.setBounds(656, 412, 89, 23);
 		add(btnUpdate);
 
+		// Back button
 		JButton btnBack = new JButton("Back");
 		btnBack.setBackground(Color.LIGHT_GRAY);
 		btnBack.addActionListener(this);
 		btnBack.setBounds(755, 412, 89, 23);
 		add(btnBack);
 
+		// Warning text
 		JLabel lblWaringChangingA = new JLabel(
 				"Warning: Changing a site's device will reset its temperature readings!");
 		lblWaringChangingA.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -117,7 +132,8 @@ public class EditSite extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Set the fields to the site current values
+	 * Updates the fields to the site's current values. This should always be
+	 * call before showing this JPanel.
 	 * 
 	 * @param site
 	 *            The site to update
@@ -131,35 +147,45 @@ public class EditSite extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Listens for button clicks.
+	 * Listens for mouse clicks and contain the logic to update a site.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
+		// Shows the last JPanel
 		if (action.getActionCommand() == "Back") {
 			IButtonApp.showPreviousCard();
 		}
-
 		if (action.getActionCommand() == "Update") {
 			try {
 				// Updates server side.
-				Site.editSite(site.id, siteName.getText(), lat.getText(), lon.getText(), description.getText());
+				Response response = Site.editSite(site.id, siteName.getText(), lat.getText(), lon.getText(),
+						description.getText());
+
+				// Checks if HTTP request was valid
+				if (response.isSuccessful()) {
+					response.close();
+				} else {
+					JOptionPane.showMessageDialog(this, "Could not update site. Please check your entries.");
+					response.close();
+					return;
+				}
 
 				// Saves old and new devices and updates the site's device.
 				DeviceHandler deviceOld = site.device;
 				DeviceHandler deviceNew = (DeviceHandler) devices.getSelectedItem();
-		
+
 				if (deviceNew != null) {
 					// Load the device missionContanier and updates the local
 					// siteData file.
 					MissionContainer ms = (MissionContainer) deviceNew.device;
-					
+
 					// Checks if another site has this device assigned to it
 					String[] siteCheck = SiteData.findSiteByDevice(deviceNew.getAddress());
 					if (siteCheck != null) {
 						// Set old site's device to null
 						SiteData.updateSite(siteCheck[0], "null");
 					}
-					
+
 					SiteData.updateSite(site.id, deviceNew.getAddress());
 
 					if (deviceOld == null || !deviceNew.getAddress().equals(deviceOld.getAddress())) {

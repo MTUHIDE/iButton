@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 
 /**
- * The GUI for logging in.
+ * The JPanel for the login GUI. This JPanel displays the login fields.
  * 
  * @author Justin Havely
  *
@@ -35,12 +35,13 @@ public class Login extends JPanel implements ActionListener {
 	private JLabel lblWrongCons;
 
 	/**
-	 * Adds all the components to the login JPanel.
+	 * Creates and adds all of the components to this JPanel.
 	 */
 	public Login() {
 		setBackground(Color.WHITE);
 		setLayout(null);
 
+		// labels for the fields
 		JLabel lblWelcome = new JLabel("Welcome");
 		lblWelcome.setBounds(393, 94, 64, 14);
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
@@ -60,33 +61,39 @@ public class Login extends JPanel implements ActionListener {
 		lblversion.setBounds(707, 429, 137, 14);
 		add(lblversion);
 
+		// Username field
 		username = new JTextField();
 		username.setBounds(275, 153, 300, 23);
 		add(username);
 		username.setColumns(25);
 
+		// Password field
 		passwordField = new JPasswordField();
 		passwordField.setBounds(275, 204, 300, 23);
 		add(passwordField);
 
+		// Login button
 		btnLogin = new JButton("Login");
 		btnLogin.setBounds(380, 242, 89, 23);
 		btnLogin.addActionListener(this);
 		btnLogin.setBackground(Color.LIGHT_GRAY);
 		add(btnLogin);
 
+		// Register button
 		btnRegister = new JButton("Register");
 		btnRegister.setBounds(380, 276, 89, 23);
 		btnRegister.addActionListener(this);
 		btnRegister.setBackground(Color.LIGHT_GRAY);
 		add(btnRegister);
 
+		// Settings button
 		btnSettings = new JButton("Settings");
 		btnSettings.setBounds(10, 420, 89, 23);
 		btnSettings.addActionListener(this);
 		btnSettings.setBackground(Color.LIGHT_GRAY);
 		add(btnSettings);
 
+		// Wrong pass or username text
 		lblWrongCons = new JLabel("Wrong Password or Username");
 		lblWrongCons.setEnabled(false);
 		lblWrongCons.setVisible(false);
@@ -98,31 +105,42 @@ public class Login extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Listens for button clicks.
+	 * Listens for mouse clicks and contain the logic for logging in.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getActionCommand() == "Login") {
-			if (!login()) {
-				lblWrongCons.setEnabled(true);
-				lblWrongCons.setVisible(true);
-			} else {
-				Logger.writeToLog("User: " + username.getText() + " connected");
-				IButtonApp.showCard("Dashboard");
-				lblWrongCons.setEnabled(false);
-				lblWrongCons.setVisible(false);
+			// Will try to connect four times (fixes problem with the server not
+			// accepting HTTP request the first few times)
+			for (int i = 0; i < 4; i++) {
+				if (!login()) {
+					if (i == 3) {
+						lblWrongCons.setEnabled(true);
+						lblWrongCons.setVisible(true);
+					}
+				} else {
+					// Login worked
+					Logger.writeToLog("User: " + username.getText() + " connected");
+					IButtonApp.showCard("Dashboard");
+					lblWrongCons.setEnabled(false);
+					lblWrongCons.setVisible(false);
+					return;
+				}
 			}
+
 		}
+		// opens up a Internet browser to the registration page
 		if (action.getActionCommand() == "Register") {
 			openRegisterInBrowser();
 		}
+		// Shows the settings JPanel
 		if (action.getActionCommand() == "Settings") {
 			IButtonApp.showCard("Settings");
 		}
 	}
 
 	/**
-	 * Checks if the user's sites could be loaded.
+	 * Try's to load a user's sites.
 	 * 
 	 * @return True if the sites were loaded, false if not.
 	 */
@@ -139,7 +157,7 @@ public class Login extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Opens the register page in a Internet browser.
+	 * Opens the registration page in a Internet browser.
 	 * 
 	 * @return True if the page was open, false if not.
 	 */
