@@ -44,7 +44,7 @@ public class Upload {
 
 			// HTTP request body
 			RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-					.addFormDataPart("siteID", site.id).addFormDataPart("description", "Test upload")
+					.addFormDataPart("siteID", site.id).addFormDataPart("description", "Uploaded from CoCo iTemp App")
 					.addFormDataPart("csvData", file.getName(), RequestBody.create(MediaType.parse("text/csv"), file))
 					.build();
 
