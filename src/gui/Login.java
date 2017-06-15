@@ -110,22 +110,17 @@ public class Login extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getActionCommand() == "Login") {
-			// Will try to connect four times (fixes problem with the server not
-			// accepting HTTP request the first few times)
-			for (int i = 0; i < 4; i++) {
-				if (!login()) {
-					if (i == 3) {
-						lblWrongCons.setEnabled(true);
-						lblWrongCons.setVisible(true);
-					}
-				} else {
-					// Login worked
-					Logger.writeToLog("User: " + username.getText() + " connected");
-					IButtonApp.showCard("Dashboard");
-					lblWrongCons.setEnabled(false);
-					lblWrongCons.setVisible(false);
-					return;
-				}
+
+			if (!login()) {
+				lblWrongCons.setEnabled(true);
+				lblWrongCons.setVisible(true);
+			} else {
+				// Login worked
+				Logger.writeToLog("User: " + username.getText() + " connected");
+				IButtonApp.showCard("Dashboard");
+				lblWrongCons.setEnabled(false);
+				lblWrongCons.setVisible(false);
+				return;
 			}
 
 		}

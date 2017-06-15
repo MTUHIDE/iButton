@@ -46,8 +46,8 @@ public class Site {
 	 *         location, and the iButton assigned to it.
 	 */
 	public String getInfo() {
-		return "Site ID: " + id + "\nSite Name: " + siteName + "\nDescription: " + siteDescription + "\nLocation: "
-				+ siteLatitude + ":" + siteLongitude + "\niButton: " + getDevice();
+		return "Site ID: " + id + "\nSite Name: " + siteName + "\nDescription: " + siteDescription + "\nLatitude: "
+				+ siteLatitude + "\nLongitude: " + siteLongitude + "\niButton: " + getDevice();
 	}
 
 	/**
@@ -96,11 +96,13 @@ public class Site {
 	public static Site[] getSites() {
 		try {
 			// HTTP request with an empty body
-			Request request = new Request.Builder().url(CoCoTempURLs.GET_SITES.url())
+			Request request = new Request.Builder()
+					.url(CoCoTempURLs.GET_SITES.url())
 					.post(RequestBody.create(null, new byte[0]))
-					.addHeader("authorization", "Basic " + authStringEnc() + "==")
-					.addHeader("cache-control", "no-cache").build();
-
+					.addHeader("authorization", "Basic " + authStringEnc())
+					.addHeader("cache-control", "no-cache")
+					.build();
+			
 			// Sends HTTP request
 			Response response = client.newCall(request).execute();
 
@@ -158,7 +160,7 @@ public class Site {
 			// HTTP request headers and builds the request
 			Request request = new Request.Builder().url(CoCoTempURLs.EDIT_SITE.url()).post(body)
 					.addHeader("content-type", "application/x-www-form-urlencoded")
-					.addHeader("authorization", "Basic " + authStringEnc() + "==")
+					.addHeader("authorization", "Basic " + authStringEnc())
 					.addHeader("cache-control", "no-cache").build();
 
 			// Sends HTTP request
@@ -197,7 +199,7 @@ public class Site {
 
 			// HTTP request headers and builds the request
 			Request request = new Request.Builder().url(CoCoTempURLs.NEW_SITE.url()).post(body)
-					.addHeader("authorization", "Basic " + authStringEnc() + "==")
+					.addHeader("authorization", "Basic " + authStringEnc())
 					.addHeader("content-type", "application/x-www-form-urlencoded")
 					.addHeader("cache-control", "no-cache").build();
 

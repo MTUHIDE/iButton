@@ -6,8 +6,8 @@ package network;
  *
  */
 public enum CoCoTempURLs {
-	REGISTER("https://hci-dev.cs.mtu.edu:8103/cocotemp/register"),
 	SITE("https://hci-dev.cs.mtu.edu:8103/cocotemp/"),
+	REGISTER("https://hci-dev.cs.mtu.edu:8103/cocotemp/register"),
 	GET_SITES("https://hci-dev.cs.mtu.edu:8103/cocotemp/dashboard/sites.json"),
 	EDIT_SITE("https://hci-dev.cs.mtu.edu:8103/cocotemp/settings/site/update"),
 	NEW_SITE("https://hci-dev.cs.mtu.edu:8103/cocotemp/settings/site/update"),
@@ -30,4 +30,5 @@ public enum CoCoTempURLs {
 	public String url() {
 		return url;
 	}
+	
 }

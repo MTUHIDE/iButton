@@ -51,7 +51,7 @@ public class Upload {
 			// HTTP request headers and builds the request
 			Request request = new Request.Builder().url(CoCoTempURLs.UPLOAD_URL.url()).post(body)
 					.addHeader("content-type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW")
-					.addHeader("authorization", "Basic " + authStringEnc + "==").addHeader("cache-control", "no-cache")
+					.addHeader("authorization", "Basic " + authStringEnc).addHeader("cache-control", "no-cache")
 					.build();
 
 			// Sends HTTP request
