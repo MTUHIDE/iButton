@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-import handlers.FileHandler;
-
 /**
  * 
  * Used for logging errors and user actions. The log file can be found in the

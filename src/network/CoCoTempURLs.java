@@ -9,9 +9,11 @@ public enum CoCoTempURLs {
 	SITE("https://hci-dev.cs.mtu.edu:8103/cocotemp/"),
 	REGISTER("https://hci-dev.cs.mtu.edu:8103/cocotemp/register"),
 	GET_SITES("https://hci-dev.cs.mtu.edu:8103/cocotemp/dashboard/sites.json"),
+	GET_DEVICES("https://hci-dev.cs.mtu.edu:8103/cocotemp/dashboard/devices.json"),
 	EDIT_SITE("https://hci-dev.cs.mtu.edu:8103/cocotemp/settings/site/update"),
 	NEW_SITE("https://hci-dev.cs.mtu.edu:8103/cocotemp/settings/site/update"),
-	UPLOAD_URL("https://hci-dev.cs.mtu.edu:8103/cocotemp/upload");
+	UPLOAD("https://hci-dev.cs.mtu.edu:8103/cocotemp/upload"),
+	DASHBOARD("https://hci-dev.cs.mtu.edu:8103/cocotemp/dashboard");
 
 	private String url;
 

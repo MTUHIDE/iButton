@@ -9,8 +9,13 @@ import java.awt.Desktop;
 
 import javax.swing.SwingConstants;
 
+import app.IButtonApp;
 import network.CoCoTempURLs;
+import network.LoginController;
+import network.SiteController;
 import output.Logger;
+import user.Site;
+import user.User;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -26,7 +31,7 @@ import java.awt.Font;
  * @author Justin Havely
  *
  */
-public class Login extends JPanel implements ActionListener {
+public class Login extends GUI {
 	private static final long serialVersionUID = 1L;
 
 	private JTextField username;
@@ -38,6 +43,7 @@ public class Login extends JPanel implements ActionListener {
 	 * Creates and adds all of the components to this JPanel.
 	 */
 	public Login() {
+	    super("Login");
 		setBackground(Color.WHITE);
 		setLayout(null);
 
@@ -57,9 +63,9 @@ public class Login extends JPanel implements ActionListener {
 		lblPassword.setLabelFor(passwordField);
 		add(lblPassword);
 
-		JLabel lblversion = new JLabel("CoCo iTemp v" + IButtonApp.version);
-		lblversion.setBounds(707, 429, 137, 14);
-		add(lblversion);
+		JLabel lblVersion = new JLabel("CoCo iTemp v" + IButtonApp.version);
+		lblVersion.setBounds(707, 429, 137, 14);
+		add(lblVersion);
 
 		// Username field
 		username = new JTextField();
@@ -110,19 +116,19 @@ public class Login extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getActionCommand() == "Login") {
-
-			if (!login()) {
+			if (!LoginController.login(username.getText(), new String(passwordField.getPassword()))) {
+				// Login Failed
 				lblWrongCons.setEnabled(true);
 				lblWrongCons.setVisible(true);
 			} else {
 				// Login worked
 				Logger.writeToLog("User: " + username.getText() + " connected");
-				IButtonApp.showCard("Dashboard");
+				//Shows and updates the dashboard
+				IButtonApp.showCard(GUI.dashboard);
+                //Hides the wrong password text
 				lblWrongCons.setEnabled(false);
 				lblWrongCons.setVisible(false);
-				return;
 			}
-
 		}
 		// opens up a Internet browser to the registration page
 		if (action.getActionCommand() == "Register") {
@@ -130,24 +136,7 @@ public class Login extends JPanel implements ActionListener {
 		}
 		// Shows the settings JPanel
 		if (action.getActionCommand() == "Settings") {
-			IButtonApp.showCard("Settings");
-		}
-	}
-
-	/**
-	 * Try's to load a user's sites.
-	 * 
-	 * @return True if the sites were loaded, false if not.
-	 */
-	private boolean login() {
-		IButtonApp.user = username.getText();
-		IButtonApp.pass = new String(passwordField.getPassword());
-		try {
-			IButtonApp.loadSites();
-			return true;
-		} catch (IOException e) {
-			Logger.writeErrorToLog(e);
-			return false;
+			IButtonApp.showCard(GUI.settings);
 		}
 	}
 

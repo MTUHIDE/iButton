@@ -6,16 +6,20 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import app.IButtonApp;
 import com.dalsemi.onewire.OneWireException;
 import com.dalsemi.onewire.container.MissionContainer;
 
-import handlers.DeviceHandler;
-import handlers.MissionHandler;
-import handlers.MissionSamples;
-import network.Site;
-import network.Upload;
-import output.TempData;
+import ibutton.MissionHandler;
+import ibutton.MissionSamples;
+import network.LoginController;
+import network.NetworkController;
+import network.UploadController;
+import output.TemperatureData;
 import output.Logger;
+import user.Device;
+import user.Site;
+
 import java.awt.Color;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -35,7 +39,7 @@ import java.io.IOException;
  * @author Justin Havely
  *
  */
-public class DashBoard extends JPanel implements ListSelectionListener, ActionListener {
+public class DashBoard extends GUI implements ListSelectionListener {
 	private static final long serialVersionUID = 1L;
 
 	private JList<Site> list; // All of the user's sites
@@ -46,6 +50,7 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 	 * Creates and adds all of the components to the JPanel.
 	 */
 	public DashBoard() {
+		super("Dashboard");
 		setBackground(Color.WHITE);
 		setLayout(null);
 
@@ -58,7 +63,7 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		list.addListSelectionListener(this);
 		add(list);
 
-		// Add Site Button
+		// Add SiteController Button
 		btnAddSite = new JButton("Add Site");
 		btnAddSite.addActionListener(this);
 		btnAddSite.setBackground(Color.LIGHT_GRAY);
@@ -73,7 +78,7 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		add(btnSettings);
 
 		// Logout Button
-		btnLogOut = new JButton("Log Out");
+		btnLogOut = new JButton("Logout");
 		btnLogOut.addActionListener(this);
 		btnLogOut.setBackground(Color.LIGHT_GRAY);
 		btnLogOut.setBounds(755, 406, 89, 23);
@@ -94,7 +99,7 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		info.setBackground(Color.WHITE);
 		panel.add(info);
 
-		// Upload Button
+		// UploadController Button
 		btnUpload = new JButton("Upload");
 		btnUpload.setBounds(429, 12, 109, 23);
 		btnUpload.setEnabled(false);
@@ -102,7 +107,7 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		btnUpload.setBackground(Color.LIGHT_GRAY);
 		panel.add(btnUpload);
 
-		// Edit Site Button
+		// Edit SiteController Button
 		btnEditSite = new JButton("Edit Site");
 		btnEditSite.addActionListener(this);
 		btnEditSite.setEnabled(false);
@@ -112,21 +117,19 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 	}
 
 	/**
-	 * Updates the sites list in the dashboard. This should be call when ever a
+	 * Updates the siteControllers list in the dashboard. This should be call when ever a
 	 * site is added or edited.
-	 * 
-	 * @param sites
-	 *            The array of sites to show on the dashboard.
+	 *
 	 */
-	public void updateSiteList(Site[] sites) {
+	public void update() {
 		DefaultListModel<Site> model = new DefaultListModel<Site>();
+		Site[] sites = NetworkController.currentLoggedInUser.getSites();
 
 		for (Site d : sites) {
 			model.addElement(d);
 		}
 
 		list.setModel(model);
-		info.setText("");
 	}
 
 	/**
@@ -138,12 +141,13 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		if (list.getSelectedValue() == null) {
 			btnEditSite.setEnabled(false);
 			btnUpload.setEnabled(false);
+			info.setText("");
 		} else {
 			info.setText(list.getSelectedValue().getInfo());
 			btnEditSite.setEnabled(true);
 
-			// Enables the upload button if site has a iButton device
-			if (list.getSelectedValue().device != null) {
+			// Enables the upload button if site has a iButton iButton
+			if (list.getSelectedValue().devices != null) {
 				btnUpload.setEnabled(true);
 			} else {
 				btnUpload.setEnabled(false);
@@ -153,20 +157,20 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 
 	/**
 	 * Listen for mouse clicks and contains the logic for uploading data from an
-	 * iButton device.
+	 * iButton iButton.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		// Shows Add Site JPanel
+		// Shows Add SiteController JPanel
 		if (action.getActionCommand() == "Add Site") {
-			IButtonApp.showCard("Add Site");
+			IButtonApp.showCard(GUI.Addsite);
 		}
 
 		if (action.getActionCommand() == "Upload") {
-			// Gets the site, device, and the device mission container.
+			// Gets the siteController, iButton, and the iButton mission container.
 			Site site = list.getSelectedValue();
-			DeviceHandler device = site.device;
-			MissionContainer ms = (MissionContainer) device.device;
+			Device device = site.devices[0];
+			MissionContainer ms = (MissionContainer) device.iButton;
 
 			try {
 				try {
@@ -180,11 +184,11 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 					}
 
 					// Creates local CSV file with temperature data.
-					TempData tempFile = new TempData(device.getAddress(), samples);
+					TemperatureData tempFile = new TemperatureData(device.getAddress(), samples);
 					tempFile.writeDataFile();
 
 					// Uploads file to server and logs the action.
-					if (Upload.uploadFile(site, new File(tempFile.location))) {
+					if (UploadController.uploadFile(site, new File(tempFile.location))) {
 						JOptionPane.showMessageDialog(this, "Upload Successful");
 						Logger.writeToLog("Wrote data to:" + site.getInfo() + "from: " + device.getAddress());
 					} else {
@@ -202,16 +206,17 @@ public class DashBoard extends JPanel implements ListSelectionListener, ActionLi
 		}
 		// Shows settings JPanel
 		if (action.getActionCommand() == "Settings") {
-			IButtonApp.showCard("Settings");
+			IButtonApp.showCard(GUI.settings);
 		}
 		// Shows login JPanel
-		if (action.getActionCommand() == "Log Out") {
-			IButtonApp.showCard("Login");
+		if (action.getActionCommand() == "Logout") {
+			LoginController.logout();
+			IButtonApp.showCard(GUI.login);
 		}
 		// Shows edit site JPanel
 		if (action.getActionCommand() == "Edit Site") {
-			IButtonApp.editSite.setSite(list.getSelectedValue());
-			IButtonApp.showCard("Edit Site");
+			GUI.editSite.setSite(list.getSelectedValue());
+			IButtonApp.showCard(GUI.editSite);
 		}
 	}
 }

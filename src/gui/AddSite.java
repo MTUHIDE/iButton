@@ -6,19 +6,20 @@ import java.awt.Color;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
+import app.IButtonApp;
 import com.dalsemi.onewire.OneWireException;
 import com.dalsemi.onewire.container.MissionContainer;
 
-import handlers.DeviceHandler;
-import handlers.MissionHandler;
-import network.Site;
+import ibutton.MissionHandler;
+import network.DeviceController;
+import network.NetworkController;
+import network.SiteController;
 import okhttp3.Response;
 import output.Logger;
-import output.SiteData;
+import user.Device;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,22 +29,23 @@ import javax.swing.JComboBox;
 /**
  * The JPanel for the adding a site GUI. This JPanel displays all of the
  * required fields for adding a site. (name, latitude, longitude, and
- * description) As well a field to assign a iButton device to a site.
+ * description) As well a field to assign a iButton iButton to a site.
  * 
  * @author Justin Havely
  *
  */
-public class AddSite extends JPanel implements ActionListener {
+public class AddSite extends GUI {
 	private static final long serialVersionUID = 1L;
 
 	private JTextField siteName, lat, lon;
 	private JTextArea description;
-	private JComboBox<DeviceHandler> devices;
+	private JComboBox<Device> devices;
 
 	/**
 	 * Create and adds all the components to the JPanel.
 	 */
 	public AddSite() {
+	    super("Add Site");
 		setBackground(Color.WHITE);
 		setLayout(null);
 
@@ -70,7 +72,7 @@ public class AddSite extends JPanel implements ActionListener {
 
 		// description field
 		description = new JTextArea();
-		description.setToolTipText("I.e: The location of the device.");
+		description.setToolTipText("I.e: The location of the iButton.");
 		description.setWrapStyleWord(true);
 		description.setLineWrap(true);
 		description.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, SystemColor.activeCaption));
@@ -90,22 +92,17 @@ public class AddSite extends JPanel implements ActionListener {
 		lblLon.setBounds(405, 95, 69, 14);
 		add(lblLon);
 
-		JLabel lblDesrcpiton = new JLabel("Description");
-		lblDesrcpiton.setBounds(211, 128, 75, 14);
-		add(lblDesrcpiton);
+		JLabel lblDescription = new JLabel("Description");
+		lblDescription.setBounds(211, 128, 75, 14);
+		add(lblDescription);
 
 		JLabel lblDevice = new JLabel("Device");
 		lblDevice.setBounds(211, 222, 46, 14);
 		add(lblDevice);
 
 		// Drop down box of plugged in iButton devices
-		devices = new JComboBox<DeviceHandler>();
-		// Add iButton devices to drop down box
-		for (DeviceHandler d : IButtonApp.getDevices()) {
-			devices.addItem(d);
-		}
-		devices.setBounds(296, 219, 125, 20);
-		add(devices);
+		devices = new JComboBox<Device>();
+        add(devices);
 
 		// Add site button
 		JButton btnAdd = new JButton("Add");
@@ -122,6 +119,16 @@ public class AddSite extends JPanel implements ActionListener {
 		add(btnBack);
 	}
 
+
+	public void update(){
+	    devices.removeAllItems();
+        // Add iButton devices to drop down box
+        for (Device d : NetworkController.currentLoggedInUser.getDevices()) {
+            devices.addItem(d);
+        }
+        devices.setBounds(296, 219, 125, 20);
+    }
+
 	/**
 	 * Listens for mouse clicks and contains the logic for adding a new site.
 	 */
@@ -133,11 +140,13 @@ public class AddSite extends JPanel implements ActionListener {
 		}
 		if (action.getActionCommand() == "Add") {
 			// Creates a new site (server side) and gets the site's ID.
-			Response response = Site.newSite(siteName.getText(), lat.getText(), lon.getText(), description.getText());
+			Response response = SiteController.newSite(siteName.getText(), lat.getText(), lon.getText(), description.getText());
 			String siteID;
 			// Checks if HTTP request was valid
 			if (response.isSuccessful()) {
-				siteID = response.request().url().queryParameterValue(0);
+				//Creates a local
+			    siteID = response.request().url().queryParameterValue(0);
+
 				response.close();
 			} else {
 				JOptionPane.showMessageDialog(this, "Could not create site. Please check your entries.");
@@ -145,18 +154,18 @@ public class AddSite extends JPanel implements ActionListener {
 				return;
 			}
 
-			// Gets the selected iButton device from the drop down box.
-			DeviceHandler device = (DeviceHandler) devices.getSelectedItem();
+			// Gets the selected iButton iButton from the drop down box.
+			Device device = (Device) devices.getSelectedItem();
 
-			if (device != null) {
-				// Loads the iButton device's missionContanier
-				MissionContainer ms = (MissionContainer) device.device;
+		/*	if (device != null) {
+				// Loads the iButton iButton's missionContanier
+				MissionContainer ms = (MissionContainer) device.iButton;
 
-				// Checks if another site has this iButton device assigned to it
+				// Checks if another site has this iButton iButton assigned to it
 				String[] siteCheck = SiteData.findSiteByDevice(device.getAddress());
 
 				if (siteCheck != null) {
-					// Set old site's device to null
+					// Set old site's iButton to null
 					SiteData.updateSite(siteCheck[0], "null");
 				}
 
@@ -172,14 +181,8 @@ public class AddSite extends JPanel implements ActionListener {
 				SiteData.addSite(siteID, "null");
 			}
 
-			try {
-				// Reloads the sites to update the dashboard.
-				IButtonApp.loadSites();
-			} catch (IOException e) {
-				Logger.writeErrorToLog(e);
-			}
-
-			IButtonApp.showCard("Dashboard");
+*/
+			IButtonApp.showCard(GUI.dashboard);
 		}
 	}
 
