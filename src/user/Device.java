@@ -10,30 +10,19 @@ public class Device {
 
     public String id, manufacture_num, type, siteID;
 
-    public DSPortAdapter adapter;
     public OneWireContainer iButton;
 
     /**
-     * Creates a new iButton iButton and adapter pair.
+     * Creates a new iButton device.
      *
-     * @param adapter
-     *            The adapter the iButton iButton is on.
      * @param iButton
      *            The iButton iButton.
      */
-    public Device(DSPortAdapter adapter, OneWireContainer iButton) {
-        this.adapter = adapter;
+    public Device(OneWireContainer iButton) {
         this.iButton = iButton;
-    }
-
-    /**
-     * Gets the address of the iButton. This is a 16 char unique identification
-     * number for the iButton.
-     *
-     * @return Text version the address for the iButton.
-     */
-    public String getAddress() {
-        return iButton.getAddressAsString();
+        type = "iButton";
+        manufacture_num = iButton.getAddressAsString();
+        siteID = "";
     }
 
     /**
@@ -44,4 +33,5 @@ public class Device {
         return type + ": " + manufacture_num;
 
     }
+
 }

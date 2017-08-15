@@ -9,7 +9,6 @@ import java.io.IOException;
  * Created by Justin Havely
  */
 public class LoginController extends NetworkController {
-    private static OkHttpClient client = new OkHttpClient();
 
     public static boolean login(String username, String password) {
         try {

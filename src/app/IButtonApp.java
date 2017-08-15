@@ -15,32 +15,31 @@ import gui.*;
 public class IButtonApp extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	public static final String version = "1.1.0"; // Current build
-	public static final ImageIcon img = new ImageIcon(IButtonApp.class.getResource("/iT_icon.jpg"));
+	public static final String version = "1.1.1"; // Current build
+
+	private static final ImageIcon img = new ImageIcon(IButtonApp.class.getResource("/iT_icon.jpg")); // IT Logo
 
 	private static JPanel cards = new JPanel();
 	private static CardLayout cardLayout;
 	private static GUI previousCard, currentCard;
 
 	/**
-	 * Creates and adds all the components to the JFrame. Uses the cardlayout to
+	 * Creates and adds all the JPanels to the JFrame. CoCo iTemp uses the card layout to
 	 * show and hide JPanels.
 	 */
 	public IButtonApp() {
 		super("Coco iTemp");
 
-		// cards (JPanels)
+		// Cards (JPanels)
         cards.setLayout(new CardLayout());
         cards.add(GUI.login, GUI.login.cardName);
         cards.add(GUI.dashboard, GUI.dashboard.cardName);
-        cards.add(GUI.Addsite, GUI.Addsite.cardName);
-        cards.add(GUI.editSite, GUI.editSite.cardName);
-        cards.add(GUI.settings, GUI.settings.cardName);
+        cards.add(GUI.about, GUI.about.cardName);
 		cardLayout = (CardLayout) cards.getLayout();
 
 		// Shows the login JPanel
 		currentCard = GUI.login;
-		cardLayout.show(cards, "Login");
+		cardLayout.show(cards, GUI.login.cardName);
 
 		// Sets the application icon and other JFrame settings
 		setIconImage(img.getImage());
@@ -57,7 +56,7 @@ public class IButtonApp extends JFrame {
 	}
 
 	/**
-	 * Shows a new JPanel.
+	 * Shows a new JPanel and calls the <code>update<code> method.
 	 * 
 	 * @param card
 	 *            The JPanel to render.
@@ -65,12 +64,13 @@ public class IButtonApp extends JFrame {
 	public static void showCard(GUI card) {
 		previousCard = currentCard;
 		currentCard = card;
-		card.update();
+		//Updates the JPanel ('card')
+        currentCard.update();
 		cardLayout.show(cards, card.cardName);
 	}
 
 	/**
-	 * Shows the last render JPanel
+	 * Shows the last rendered JPanel
 	 */
 	public static void showPreviousCard() {
 		showCard(previousCard);

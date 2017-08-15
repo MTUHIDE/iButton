@@ -5,15 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by jmh62 on 7/12/2017.
+ * Created by Justin Havely
  */
 public class GUI extends JPanel implements ActionListener {
     public final String cardName;
 
     public static Login login = new Login();
-    public static AddSite Addsite = new AddSite();
-    public static EditSite editSite = new EditSite();
-    public static Settings settings = new Settings();
+    public static About about = new About();
     public static DashBoard dashboard = new DashBoard();
 
     public GUI(String cardName){

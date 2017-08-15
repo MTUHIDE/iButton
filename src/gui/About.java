@@ -1,9 +1,7 @@
 package gui;
 
-import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JTextArea;
 
@@ -18,28 +16,28 @@ import javax.swing.JButton;
  * 
  * @author Justin Havely
  */
-public class Settings extends GUI{
+public class About extends GUI{
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Creates and adds all of the components to this JPanel.
 	 */
-	public Settings() {
-		super("Settings");
+	public About() {
+		super("About");
 		setBackground(Color.WHITE);
 		setLayout(null);
 
 		// About text area
-		JTextArea txtAboutCocoiTemp = new JTextArea("About: Coco iTemp version: " + IButtonApp.version + "\n"
+		JTextArea txtAboutCoCoiTemp = new JTextArea("About: Coco iTemp version: " + IButtonApp.version + "\n"
 				+ "\nThis application is for managing CoCo Temp sites that use an iButton for temperature collection."
 				+ "\nThe CoCo Temp website can be found here: " + CoCoTempURLs.SITE.url()
 				+ "\n\nFor help on using CoCo iTemp App see the CoCo iButton user guide in Start -> "
 				+ "\nCoCoiTemp -> CoCoiButtonAppUserGuide.pdf"
 				+ "\n\nThe open source code for the CoCo iTemp App can be found here:"
 				+ "\nhttps://github.com/MTUHIDE/iButton");
-		txtAboutCocoiTemp.setEditable(false);
-		txtAboutCocoiTemp.setBounds(24, 21, 815, 261);
-		add(txtAboutCocoiTemp);
+		txtAboutCoCoiTemp.setEditable(false);
+		txtAboutCoCoiTemp.setBounds(24, 21, 815, 261);
+		add(txtAboutCoCoiTemp);
 
 		// Back button
 		JButton btnBack = new JButton("Back");

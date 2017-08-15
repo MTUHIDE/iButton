@@ -1,6 +1,5 @@
 package gui;
 
-import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -12,13 +11,9 @@ import javax.swing.SwingConstants;
 import app.IButtonApp;
 import network.CoCoTempURLs;
 import network.LoginController;
-import network.SiteController;
 import output.Logger;
-import user.Site;
-import user.User;
 
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,7 +31,7 @@ public class Login extends GUI {
 
 	private JTextField username;
 	private JPasswordField passwordField;
-	private JButton btnLogin, btnRegister, btnSettings;
+	private JButton btnLogin, btnRegister, btnAbout;
 	private JLabel lblWrongCons;
 
 	/**
@@ -64,14 +59,14 @@ public class Login extends GUI {
 		add(lblPassword);
 
 		JLabel lblVersion = new JLabel("CoCo iTemp v" + IButtonApp.version);
-		lblVersion.setBounds(707, 429, 137, 14);
+		lblVersion.setBounds(730, 429, 137, 14);
 		add(lblVersion);
 
 		// Username field
 		username = new JTextField();
 		username.setBounds(275, 153, 300, 23);
+        username.setColumns(25);
 		add(username);
-		username.setColumns(25);
 
 		// Password field
 		passwordField = new JPasswordField();
@@ -93,11 +88,11 @@ public class Login extends GUI {
 		add(btnRegister);
 
 		// Settings button
-		btnSettings = new JButton("Settings");
-		btnSettings.setBounds(10, 420, 89, 23);
-		btnSettings.addActionListener(this);
-		btnSettings.setBackground(Color.LIGHT_GRAY);
-		add(btnSettings);
+		btnAbout = new JButton("About");
+		btnAbout.setBounds(10, 420, 89, 23);
+		btnAbout.addActionListener(this);
+		btnAbout.setBackground(Color.LIGHT_GRAY);
+		add(btnAbout);
 
 		// Wrong pass or username text
 		lblWrongCons = new JLabel("Wrong Password or Username");
@@ -115,9 +110,9 @@ public class Login extends GUI {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		if (action.getActionCommand() == "Login") {
+		if (action.getActionCommand().equals("Login")) {
 			if (!LoginController.login(username.getText(), new String(passwordField.getPassword()))) {
-				// Login Failed
+				// Login failed
 				lblWrongCons.setEnabled(true);
 				lblWrongCons.setVisible(true);
 			} else {
@@ -131,12 +126,12 @@ public class Login extends GUI {
 			}
 		}
 		// opens up a Internet browser to the registration page
-		if (action.getActionCommand() == "Register") {
+		if (action.getActionCommand().equals("Register")) {
 			openRegisterInBrowser();
 		}
 		// Shows the settings JPanel
-		if (action.getActionCommand() == "Settings") {
-			IButtonApp.showCard(GUI.settings);
+		if (action.getActionCommand().equals("About")) {
+			IButtonApp.showCard(GUI.about);
 		}
 	}
 

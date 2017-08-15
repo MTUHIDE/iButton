@@ -11,8 +11,6 @@ import java.text.SimpleDateFormat;
  */
 public class MissionSamples {
 
-	//TODO Fix time (from 12 to 24 hours)
-
 	private Sample[] samples;
 	private int count = 0;
 
@@ -110,7 +108,7 @@ public class MissionSamples {
 	public class Sample {
 		private double temperature;
 		private long time;
-		private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		/**
 		 * Creates a connection between a time and temperature.

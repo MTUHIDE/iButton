@@ -26,7 +26,7 @@ public class UploadController extends NetworkController {
 	 * @param site
 	 *            The siteController that the temperature readings came from.
 	 * @param file
-	 *            The CSV formated TemperatureData file.
+	 *            The CSV formatted TemperatureData file.
 	 * @return True if upload was successful. False if it was not successful.
 	 */
 	public static boolean uploadFile(Site site, File file) {
@@ -49,13 +49,8 @@ public class UploadController extends NetworkController {
 			Response response = client.newCall(request).execute();
 
 			// Checks if the request failed
-			if (response.isSuccessful()) {
-				response.body().close();
-				return true;
-			} else {
-				response.body().close();
-				return false;
-			}
+			response.body().close();
+			return response.isSuccessful();
 
 		} catch (IOException e) {
 			Logger.writeErrorToLog(e);

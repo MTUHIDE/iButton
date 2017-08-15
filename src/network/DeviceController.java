@@ -1,12 +1,12 @@
 package network;
 
 import com.google.gson.Gson;
+import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import output.Logger;
 import user.Device;
-import user.Site;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,11 +55,53 @@ public class DeviceController extends NetworkController {
         }
     }
 
-    public static void addDevice(){
+    public static boolean addDevice(String siteID, String type, String manufacture_num){
+
+        try {
+            MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+
+            // HTTP request body
+            RequestBody body = RequestBody.create(mediaType,
+                    "siteID=" + siteID.replaceAll(" ", "%20") + "&type="
+                            + type + "&manufacture_num=" + manufacture_num);
+
+            // HTTP request headers and builds the request
+            Request request = new Request.Builder().url(CoCoTempURLs.NEW_DEVICE.url()).post(body)
+                    .addHeader("authorization", authStringEnc())
+                    .addHeader("content-type", "application/x-www-form-urlencoded")
+                    .addHeader("cache-control", "no-cache").build();
+
+            // Sends HTTP request
+            Response response = client.newCall(request).execute();
+            return response.isSuccessful();
+        } catch (IOException e) {
+            Logger.writeErrorToLog(e);
+            return false;
+        }
 
     }
 
-    public static void editDevice(){
+    public static boolean editDevice(String deviceID, String siteID, String type, String manufacture_num){
+        try {
+            MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 
+            // HTTP request body
+            RequestBody body = RequestBody.create(mediaType,
+                    "id=" + deviceID + "&siteID=" + siteID + "&type=" + type
+                            + "&manufacture_num=" + manufacture_num + "&update=update");
+
+            // HTTP request headers and builds the request
+            Request request = new Request.Builder().url(CoCoTempURLs.EDIT_DEVICE.url()).post(body)
+                    .addHeader("content-type", "application/x-www-form-urlencoded")
+                    .addHeader("authorization", authStringEnc())
+                    .addHeader("cache-control", "no-cache").build();
+
+            // Sends HTTP request
+            Response response = client.newCall(request).execute();
+            return response.isSuccessful();
+        } catch (IOException e) {
+            Logger.writeErrorToLog(e);
+            return false;
+        }
     }
 }

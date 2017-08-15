@@ -10,7 +10,6 @@ import com.dalsemi.onewire.OneWireException;
 import com.dalsemi.onewire.adapter.DSPortAdapter;
 import com.dalsemi.onewire.adapter.OneWireIOException;
 import com.dalsemi.onewire.container.ClockContainer;
-import com.dalsemi.onewire.container.OneWireContainer;
 
 import ntp.NTPMessage;
 
@@ -23,48 +22,16 @@ import ntp.NTPMessage;
 public class ClockHandler {
 
 	/**
-	 * Used to get the clock container of the iButton. This container is required
-	 * to read and write clock related data.
-	 * 
-	 * @param adapter
-	 *            The adapter the iButton is plugged into.
-	 * @return Null if no clock container could be found.
-	 * @throws OneWireIOException
-	 *             If no iButton could be found.
-	 * @throws OneWireException
-	 *             If no iButton could be found.
-	 */
-	public static ClockContainer getClockContainer(DSPortAdapter adapter) throws OneWireIOException, OneWireException {
-		boolean device = adapter.findFirstDevice();
-
-		while (device) {
-			OneWireContainer owc = adapter.getDeviceContainer();
-			device = adapter.findNextDevice();
-			ClockContainer container;
-			try {
-				container = (ClockContainer) owc;
-				return container;
-			} catch (Exception e) {
-				continue;
-			}
-
-		}
-		return null;
-	}
-
-	/**
 	 * Sets the real time clock of the iButton to UTC using a NTP server.
 	 * 
 	 * @param adapter
 	 *            The adapter the iButton is plugged into.
-	 * @return Null if no clock container could be found.
 	 * @throws OneWireIOException
 	 *             If no iButton could be found.
 	 * @throws OneWireException
 	 *             If no iButton could be found.
 	 */
-	public static void setClock(DSPortAdapter adapter, ClockContainer container)
-			throws OneWireIOException, OneWireException {
+	public static void setClock(DSPortAdapter adapter, ClockContainer container) throws OneWireException {
 		adapter.beginExclusive(true);
 		byte[] state = container.readDevice();
 		try {

@@ -6,23 +6,29 @@ package network;
  *
  */
 public enum CoCoTempURLs {
-	SITE("https://hci-dev.cs.mtu.edu:8103/cocotemp/"),
-	REGISTER("https://hci-dev.cs.mtu.edu:8103/cocotemp/register"),
-	GET_SITES("https://hci-dev.cs.mtu.edu:8103/cocotemp/dashboard/sites.json"),
-	GET_DEVICES("https://hci-dev.cs.mtu.edu:8103/cocotemp/dashboard/devices.json"),
-	EDIT_SITE("https://hci-dev.cs.mtu.edu:8103/cocotemp/settings/site/update"),
-	NEW_SITE("https://hci-dev.cs.mtu.edu:8103/cocotemp/settings/site/update"),
-	UPLOAD("https://hci-dev.cs.mtu.edu:8103/cocotemp/upload"),
-	DASHBOARD("https://hci-dev.cs.mtu.edu:8103/cocotemp/dashboard");
+	SITE(""),
+	REGISTER("register"),
+	GET_SITES("dashboard/sites.json"),
+	GET_DEVICES("dashboard/devices.json"),
+	EDIT_SITE("settings/site/update"),
+	NEW_SITE("settings/site/update"),
+    NEW_DEVICE("settings/device/new"),
+	EDIT_DEVICE("settings/device"),
+	UPLOAD("upload"),
+	DASHBOARD("dashboard");
 
 	private String url;
 
+	//(Live) https://hci-dev.cs.mtu.edu:8103/cocotemp/
+    //(Local) http://localhost:8080/cocotemp/
+	public static final String HOST = "https://hci-dev.cs.mtu.edu:8103/cocotemp/";
+
 	/**
 	 * Creates a new URL.
-	 * @param url String representation of the URL
+	 * @param page String representation of the URL
 	 */
-	CoCoTempURLs(String url) {
-		this.url = url;
+	CoCoTempURLs(String page) {
+		this.url = HOST + page;
 	}
 
 	/**

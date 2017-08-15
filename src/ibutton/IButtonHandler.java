@@ -9,7 +9,6 @@ import com.dalsemi.onewire.OneWireAccessProvider;
 import com.dalsemi.onewire.OneWireException;
 import com.dalsemi.onewire.adapter.DSPortAdapter;
 import com.dalsemi.onewire.container.OneWireContainer;
-import user.Device;
 
 /**
  * This class handles communication with the iButton devices and adapters.
@@ -18,15 +17,15 @@ import user.Device;
  *
  */
 public class IButtonHandler {
-	public static final String adapterDefaultName = "{DS9490}";
-	public static final String deviceDefaultName = "Thermochron8k";
+	public static final String ADAPTER_DEFAULT_NAME = "{DS9490}";
+	public static final String[] DEVICE_DEFAULT_NAMES = {"Thermochron8k"};
 
 	/**
 	 * Gets the adapters that are connected through the USB ports.
 	 * 
 	 * @return The a list of adapters.
 	 */
-	public static Set<DSPortAdapter> getAdapters(String adapterName) {
+	private static Set<DSPortAdapter> getAdapters(String adapterName) {
 		Set<DSPortAdapter> aps = new HashSet<DSPortAdapter>();
 
 		for (int portNum = 2; portNum <= 15; portNum++) {
@@ -48,7 +47,7 @@ public class IButtonHandler {
 	 * @throws OneWireException
 	 *             If no iButton iButton could be found.
 	 */
-	public static List<OneWireContainer> getIButtons(String name, String adapterName) throws OneWireException {
+	public static List<OneWireContainer> getIButtons(String[] names, String adapterName) throws OneWireException {
 		List<OneWireContainer> iButtons = new ArrayList<OneWireContainer>();
 		Set<DSPortAdapter> aps = getAdapters(adapterName);
 
@@ -57,10 +56,13 @@ public class IButtonHandler {
 
 			while (isiButton) {
 				OneWireContainer owc = a.getDeviceContainer();
-				if (owc.getAlternateNames() == name) {
-					iButtons.add(owc);
-					break;
+				for (String name: names) {
+					if (owc.getAlternateNames().equals(name)) {
+						iButtons.add(owc);
+						break;
+					}
 				}
+
                 isiButton = a.findNextDevice();
 			}
 

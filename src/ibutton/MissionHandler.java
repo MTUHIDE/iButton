@@ -2,9 +2,7 @@ package ibutton;
 
 import com.dalsemi.onewire.OneWireException;
 import com.dalsemi.onewire.adapter.DSPortAdapter;
-import com.dalsemi.onewire.adapter.OneWireIOException;
 import com.dalsemi.onewire.container.MissionContainer;
-import com.dalsemi.onewire.container.OneWireContainer;
 
 /**
  * This class handles communication with the iButton that deals with missions.
@@ -13,37 +11,6 @@ import com.dalsemi.onewire.container.OneWireContainer;
  *
  */
 public class MissionHandler {
-
-	/**
-	 * Used to get the mission container of the iButton. This container is
-	 * require to load mission related data.
-	 * 
-	 * @param adapter
-	 *            The adapter the iButton is plugged into.
-	 * @return Null if no mission container could be found.
-	 * @throws OneWireIOException
-	 *             If no iButton could be found.
-	 * @throws OneWireException
-	 *             If no iButton could be found.
-	 */
-	public static MissionContainer getMissionContainer(DSPortAdapter adapter)
-			throws OneWireIOException, OneWireException {
-		boolean device = adapter.findFirstDevice();
-
-		while (device) {
-			OneWireContainer owc = adapter.getDeviceContainer();
-			device = adapter.findNextDevice();
-			MissionContainer container;
-			try {
-				container = (MissionContainer) owc;
-				return container;
-			} catch (Exception e) {
-				continue;
-			}
-
-		}
-		return null;
-	}
 
 	/**
 	 * Gets the temperatures and time samples for the current mission.
@@ -57,7 +24,7 @@ public class MissionHandler {
 	 * @throws OneWireException
 	 *             If the iButton could not be reached.
 	 */
-	public static MissionSamples getMissonTemperatureData(DSPortAdapter adapter, MissionContainer container)
+	public static MissionSamples getMissionTemperatureData(DSPortAdapter adapter, MissionContainer container)
 			throws OneWireException {
 		adapter.beginExclusive(true);
 

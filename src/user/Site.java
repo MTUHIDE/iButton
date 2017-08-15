@@ -1,5 +1,6 @@
 package user;
 
+
 /**
  * Created by jmh62 on 7/10/2017.
  */
@@ -7,7 +8,6 @@ public class Site {
 
     public String id, siteName, siteDescription;
     public float siteLatitude, siteLongitude;
-    public Device[] devices;
 
     /**
      * @return The site's name given by the user.
@@ -23,7 +23,7 @@ public class Site {
      */
     public String getInfo() {
         return "Site ID: " + id + "\nSite Name: " + siteName + "\nDescription: " + siteDescription + "\nLatitude: "
-                + siteLatitude + "\nLongitude: " + siteLongitude + "\nDevices: ";
+                + siteLatitude + "\nLongitude: " + siteLongitude;
     }
 
 }
