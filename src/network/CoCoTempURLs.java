@@ -12,7 +12,7 @@ public enum CoCoTempURLs {
 	GET_DEVICES("dashboard/devices.json"),
 	EDIT_SITE("settings/site/update"),
 	NEW_SITE("settings/site/update"),
-    NEW_DEVICE("settings/device/new"),
+    NEW_DEVICE("/device/new"),
 	EDIT_DEVICE("settings/device"),
 	UPLOAD("upload"),
 	DASHBOARD("dashboard");
@@ -20,7 +20,7 @@ public enum CoCoTempURLs {
 	private String url;
 
 	//(Live) https://hci-dev.cs.mtu.edu:8103/cocotemp/
-    //(Local) http://localhost:8080/cocotemp/
+    //(Local) http://localhost:4040/cocotemp/
 	public static final String HOST = "https://hci-dev.cs.mtu.edu:8103/cocotemp/";
 
 	/**

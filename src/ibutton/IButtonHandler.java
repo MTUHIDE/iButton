@@ -12,17 +12,17 @@ import com.dalsemi.onewire.container.OneWireContainer;
 
 /**
  * This class handles communication with the iButton devices and adapters.
- * 
+ *
  * @author Justin Havely
  *
  */
 public class IButtonHandler {
 	public static final String ADAPTER_DEFAULT_NAME = "{DS9490}";
-	public static final String[] DEVICE_DEFAULT_NAMES = {"Thermochron8k"};
+	public static final String[] DEVICE_DEFAULT_NAMES = {"Thermochron"};
 
 	/**
 	 * Gets the adapters that are connected through the USB ports.
-	 * 
+	 *
 	 * @return The a list of adapters.
 	 */
 	private static Set<DSPortAdapter> getAdapters(String adapterName) {
@@ -41,7 +41,7 @@ public class IButtonHandler {
 
 	/**
 	 * Gets all of the iButtons connected through a port type.
-	 * 
+	 *
 	 * @return Null if no iButton devices are found. Else, a list of all found iButton
 	 *         devices will be return.
 	 * @throws OneWireException
@@ -63,7 +63,7 @@ public class IButtonHandler {
 					}
 				}
 
-                isiButton = a.findNextDevice();
+				isiButton = a.findNextDevice();
 			}
 
 		}

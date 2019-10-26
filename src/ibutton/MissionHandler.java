@@ -3,6 +3,7 @@ package ibutton;
 import com.dalsemi.onewire.OneWireException;
 import com.dalsemi.onewire.adapter.DSPortAdapter;
 import com.dalsemi.onewire.container.MissionContainer;
+import com.dalsemi.onewire.container.OneWireContainer21;
 
 /**
  * This class handles communication with the iButton that deals with missions.
@@ -48,33 +49,23 @@ public class MissionHandler {
 
 	/**
 	 * Stops the current mission.
-	 * 
-	 * @param adapter
-	 *            The adapter the iButton is connected to.
+	 *
 	 * @param container
 	 *            The mission container of the iButton.
 	 * @return True if the mission was stop. False if the mission was not stop.
 	 * @throws OneWireException
 	 *             If the iButton could not be reached.
 	 */
-	public static boolean stopMission(DSPortAdapter adapter, MissionContainer container) throws OneWireException {
-		adapter.beginExclusive(true);
-		if (container.isMissionRunning()) {
-			container.stopMission();
-			adapter.endExclusive();
-			return true;
-		}
-		adapter.endExclusive();
-		return false;
+	public static boolean stopMission(OneWireContainer21 container) throws OneWireException {
+			container.disableMission();
+		return true;
 	}
 
 	/**
 	 * Starts a new mission and removes old mission samples. The iButton time is
 	 * set to UTC time using a NTP server. Sets sampling rate to one hour and
 	 * Roll over to true.
-	 * 
-	 * @param adapter
-	 *            The adapter the iButton is connected to.
+	 *
 	 * @param container
 	 *            The mission container of the iButton.
 	 * @return True if the mission was started. False if the mission was not
@@ -82,19 +73,12 @@ public class MissionHandler {
 	 * @throws OneWireException
 	 *             If the iButton could not be reached.
 	 */
-	public static boolean startMission(DSPortAdapter adapter, MissionContainer container) throws OneWireException {
-		adapter.beginExclusive(true);
-		if (container.isMissionRunning()) {
-			if (!stopMission(adapter, container)) {
-				return false;
-			}
-		}
-		ClockHandler.setClock(adapter, container);
-		container.clearMissionResults();
-		container.setMissionResolution(0, .5);
-		container.startNewMission(60 * 60, 0, true, false, new boolean[] { true, false });
-		adapter.endExclusive();
-
+	public static boolean startMission(OneWireContainer21 container) throws OneWireException {
+		byte [] state = container.readDevice();
+		container.disableMission();
+		container.setClock(System.currentTimeMillis(),state);
+		container.clearMemory();
+		container.enableMission(1);
 		return true;
 	}
 

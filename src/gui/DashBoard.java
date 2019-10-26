@@ -10,6 +10,7 @@ import app.IButtonApp;
 import com.dalsemi.onewire.OneWireException;
 import com.dalsemi.onewire.container.MissionContainer;
 
+import com.dalsemi.onewire.container.OneWireContainer21;
 import ibutton.MissionHandler;
 import ibutton.MissionSamples;
 import network.DeviceController;
@@ -31,6 +32,7 @@ import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -165,12 +167,26 @@ public class DashBoard extends GUI implements ListSelectionListener {
 			// Gets the siteController, iButton, and the iButton mission container.
 			Site site = NetworkController.currentLoggedInUser.getSite(list.getSelectedValue().siteID);
 			Device device = list.getSelectedValue();
-			MissionContainer ms = (MissionContainer) device.iButton;
-
+			byte [] state =null;
+			OneWireContainer21 ms = (OneWireContainer21) device.iButton;
+			try {
+				state = ms.readDevice();
+			} catch (OneWireException e) {
+				Logger.writeErrorToLog(e);
+			}
 			try {
 				try {
 					// Gets temperature readings
-					MissionSamples samples = MissionHandler.getMissionTemperatureData(device.iButton.getAdapter(), ms);
+					byte [] tempLog = ms.getTemperatureLog(state);
+					MissionSamples samples = new MissionSamples(tempLog.length);
+					Calendar time_stamp = ms.getMissionTimeStamp(state);
+					int sample_rate = ms.getSampleRate(state);
+					long time = time_stamp.getTime().getTime()+ms.getFirstLogOffset(state);
+					for(int i=0;i<tempLog.length;i++){
+						samples.addSample(ms.decodeTemperature(tempLog[i]),time);
+						time+=sample_rate*60*1000;
+					}
+
 
 					if (samples.getLength() < 1) {
 						// No readings to upload.
@@ -212,7 +228,7 @@ public class DashBoard extends GUI implements ListSelectionListener {
 		if (action.getActionCommand().equals("Edit Site")) {
 
             Device device = list.getSelectedValue();
-            MissionContainer ms = (MissionContainer) device.iButton;
+            OneWireContainer21 owc = (OneWireContainer21) device.iButton;
 
             Site site = (Site) JOptionPane.showInputDialog(this, "Pick a site",
                     "", JOptionPane.QUESTION_MESSAGE, null,
@@ -224,19 +240,19 @@ public class DashBoard extends GUI implements ListSelectionListener {
             }
 
             if(device.id != null) {
-                try {
-                    MissionHandler.startMission(device.iButton.getAdapter(), ms);
+//                try {
+//                    MissionHandler.startMission(device.iButton.getAdapter(), ms);
                     DeviceController.editDevice(device.id, site.id, device.type, device.manufacture_num);
-                } catch (OneWireException e) {
-                    Logger.writeErrorToLog(e);
-                }
+//                } catch (OneWireException e) {
+//                    Logger.writeErrorToLog(e);
+//                }
             } else {
-                try {
-                    MissionHandler.startMission(device.iButton.getAdapter(), ms);
+//                try {
+//                    MissionHandler.startMission(device.iButton.getAdapter(), ms);
                     DeviceController.addDevice(site.id, device.type, device.manufacture_num);
-                } catch (OneWireException e) {
-                    Logger.writeErrorToLog(e);
-                }
+//                } catch (OneWireException e) {
+//                    Logger.writeErrorToLog(e);
+//                }
             }
             update();
 		}

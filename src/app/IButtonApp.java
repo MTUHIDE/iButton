@@ -48,7 +48,7 @@ public class IButtonApp extends JFrame {
 		add(cards);
 		pack();
 		setVisible(true);
-		setResizable(false);
+		setResizable(true);
 	}
 
 	public static void main(String[] args) {
