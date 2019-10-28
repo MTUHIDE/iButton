@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dd922be7-84f6-4908-bf32-f90066e61abe" name="Default" comment="">
+    <list default="true" id="dd922be7-84f6-4908-bf32-f90066e61abe" name="Default" comment="Collin Palmer 10/16/19 CoCoItemp app now functions what is deemed correct from inital conversations with pastel, The demo app can not read data , start and stop missions now as well.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/app/IButtonApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/app/IButtonApp.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/examples/IButtonExample.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/examples/IButtonExample.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/gui/DashBoard.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/DashBoard.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ibutton/IButtonHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ibutton/IButtonHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/ibutton/MissionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ibutton/MissionHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/network/CoCoTempURLs.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/network/CoCoTempURLs.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/IButtonApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/IButtonApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/ibutton/MissionSamples$Sample.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ibutton/MissionSamples$Sample.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/ibutton/MissionSamples.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ibutton/MissionSamples.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/examples/IButtonExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/examples/IButtonExample.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gui/DashBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/DashBoard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ibutton/IButtonHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ibutton/IButtonHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ibutton/MissionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ibutton/MissionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/network/CoCoTempURLs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/network/CoCoTempURLs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ibutton/MissionSamples.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ibutton/MissionSamples.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/output/TemperatureData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/output/TemperatureData.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -47,6 +45,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProjectId" id="1SnW2dVP53pK7ePuktHfQucDoAe" />
   <component name="PropertiesComponent">
     <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -241,11 +240,38 @@
       <workItem from="1502671061664" duration="366000" />
       <workItem from="1502671647829" duration="344000" />
       <workItem from="1502736727396" duration="17470000" />
+      <workItem from="1572199634538" duration="2160000" />
+      <workItem from="1572301383726" duration="1405000" />
     </task>
+    <task id="LOCAL-00001" summary="Collin Palmer 10/16/19 CoCoItemp app now functions what is deemed correct from inital conversations with pastel, The demo app can not read data , start and stop missions now as well.">
+      <created>1572130448702</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1572130448702</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Collin Palmer 10/16/19 CoCoItemp app now functions what is deemed correct from inital conversations with pastel, The demo app can not read data , start and stop missions now as well." />
+    <option name="LAST_COMMIT_MESSAGE" value="Collin Palmer 10/16/19 CoCoItemp app now functions what is deemed correct from inital conversations with pastel, The demo app can not read data , start and stop missions now as well." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -257,13 +283,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/gui/DashBoard.java</url>
-          <line>244</line>
+          <line>245</line>
           <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/gui/DashBoard.java</url>
-          <line>251</line>
+          <line>252</line>
           <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/gui/DashBoard.java</url>
+          <line>199</line>
+          <option name="timeStamp" value="24" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

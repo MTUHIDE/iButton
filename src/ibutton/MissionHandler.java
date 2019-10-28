@@ -39,7 +39,7 @@ public class MissionHandler {
 		MissionSamples ms = new MissionSamples(numOfSamples);
 
 		for (int i = 0; i < numOfSamples; i++) {
-			ms.addSample(container.getMissionSample(0, i), container.getMissionSampleTimeStamp(0, i));
+			ms.addSample(container.getMissionSample(0, i), 'C',container.getMissionSampleTimeStamp(0, i));
 		}
 
 		adapter.endExclusive();
@@ -78,7 +78,7 @@ public class MissionHandler {
 		container.disableMission();
 		container.setClock(System.currentTimeMillis(),state);
 		container.clearMemory();
-		container.enableMission(1);
+		container.enableMission(60);
 		return true;
 	}
 

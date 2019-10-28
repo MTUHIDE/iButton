@@ -34,8 +34,8 @@ public class MissionSamples {
 	 *            The time the temperature reading was taken since 1970 UTC in
 	 *            milliseconds.
 	 */
-	public void addSample(double temperature, long time) {
-		samples[count++] = new Sample(temperature, time);
+	public void addSample(double temperature, char temperature_standard, long time) {
+		samples[count++] = new Sample(temperature, temperature_standard,time);
 	}
 
 	/**
@@ -108,6 +108,7 @@ public class MissionSamples {
 	public class Sample {
 		private double temperature;
 		private long time;
+		private char temperature_standard;
 		private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		/**
@@ -119,9 +120,10 @@ public class MissionSamples {
 		 *            The time the temperature reading was taken since 1970 UTC
 		 *            in milliseconds.
 		 */
-		public Sample(double temperature, long time) {
+		public Sample(double temperature, char temperature_standard, long time) {
 			this.temperature = temperature;
 			this.time = time;
+			this.temperature_standard=temperature_standard;
 		}
 
 		/**
@@ -153,7 +155,7 @@ public class MissionSamples {
 		 */
 		public String toString() {
 			Date date = new Date(time);
-			return format.format(date) + "," + String.format("%.0f", temperature);
+			return format.format(date) + ","+temperature_standard+"," + String.format("%.0f", temperature);
 		}
 
 	}

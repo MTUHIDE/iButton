@@ -46,7 +46,7 @@ public class TemperatureData {
 	 *             If file could not be written.
 	 */
 	public void writeDataFile() throws IOException {
-		String head = "dateTime,temperature" + System.lineSeparator();
+		String head = "dateTime,temp_standard,temperature" + System.lineSeparator();
 		FileHandler.writeToFile(head + samples.toString(), datFile, false);
 	}
 

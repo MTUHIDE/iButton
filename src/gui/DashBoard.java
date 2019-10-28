@@ -182,8 +182,9 @@ public class DashBoard extends GUI implements ListSelectionListener {
 					Calendar time_stamp = ms.getMissionTimeStamp(state);
 					int sample_rate = ms.getSampleRate(state);
 					long time = time_stamp.getTime().getTime()+ms.getFirstLogOffset(state);
+					char temp_standard= 'C';
 					for(int i=0;i<tempLog.length;i++){
-						samples.addSample(ms.decodeTemperature(tempLog[i]),time);
+						samples.addSample(ms.decodeTemperature(tempLog[i]),temp_standard,time);
 						time+=sample_rate*60*1000;
 					}
 

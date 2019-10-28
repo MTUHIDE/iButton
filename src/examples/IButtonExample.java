@@ -136,14 +136,18 @@ public class IButtonExample extends JFrame implements ActionListener {
 						Calendar time_stamp = activeDevice.getMissionTimeStamp(state);
 						int sample_rate = activeDevice.getSampleRate(state);
 						long time = time_stamp.getTime().getTime() + activeDevice.getFirstLogOffset(state);
+						char temp_standard = 'C';
 						for (int i = 0; i < tempLog.length; i++) {
-							samples.addSample(activeDevice.decodeTemperature(tempLog[i]), time);
+							samples.addSample(activeDevice.decodeTemperature(tempLog[i]),temp_standard, time);
 							time += sample_rate * 60 * 1000;
 						}
 						if(samples.getLength()>0) {
 							log.append("Writing to file...\n");
 							new TemperatureData(activeDevice.getAddressAsString(), samples).writeDataFile();
 							log.append("Done! File location: C://user/AppData/Roaming/iButtonData\n");
+						}
+						else{
+							log.append("No data available yet\n");
 						}
 					} catch (IOException | OneWireException e) {
 						log.append("Failed to read data!\n");
