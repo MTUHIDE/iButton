@@ -12,6 +12,7 @@ public class GUI extends JPanel implements ActionListener {
 
     public static Login login = new Login();
     public static About about = new About();
+    public static MissionControl missionControl = new MissionControl();
     public static DashBoard dashboard = new DashBoard();
 
     public GUI(String cardName){

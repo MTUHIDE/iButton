@@ -21,7 +21,7 @@ public enum CoCoTempURLs {
 
 	//(Live) https://hci-dev.cs.mtu.edu:8103/cocotemp/
     //(Local) http://localhost:4040/cocotemp/
-	public static final String HOST = "https://hci-dev.cs.mtu.edu:8103/cocotemp/";
+	public static final String HOST = "http://localhost:4040/cocotemp/";
 
 	/**
 	 * Creates a new URL.

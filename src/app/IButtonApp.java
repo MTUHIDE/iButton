@@ -1,7 +1,6 @@
 package app;
 
-import java.awt.CardLayout;
-import java.awt.Dimension;
+import java.awt.*;
 import javax.swing.*;
 
 import gui.*;
@@ -35,8 +34,8 @@ public class IButtonApp extends JFrame {
         cards.add(GUI.login, GUI.login.cardName);
         cards.add(GUI.dashboard, GUI.dashboard.cardName);
         cards.add(GUI.about, GUI.about.cardName);
+        cards.add(GUI.missionControl,GUI.missionControl.cardName);
 		cardLayout = (CardLayout) cards.getLayout();
-
 		// Shows the login JPanel
 		currentCard = GUI.login;
 		cardLayout.show(cards, GUI.login.cardName);
@@ -44,11 +43,11 @@ public class IButtonApp extends JFrame {
 		// Sets the application icon and other JFrame settings
 		setIconImage(img.getImage());
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setPreferredSize(new Dimension(854, 480));
+		setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
 		add(cards);
-		pack();
 		setVisible(true);
 		setResizable(true);
+		pack();
 	}
 
 	public static void main(String[] args) {

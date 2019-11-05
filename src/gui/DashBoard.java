@@ -8,7 +8,6 @@ import javax.swing.event.ListSelectionListener;
 
 import app.IButtonApp;
 import com.dalsemi.onewire.OneWireException;
-import com.dalsemi.onewire.container.MissionContainer;
 
 import com.dalsemi.onewire.container.OneWireContainer21;
 import ibutton.MissionHandler;
@@ -47,7 +46,7 @@ public class DashBoard extends GUI implements ListSelectionListener {
 
 	private JList<Device> list; // All of the user's sites
 	private JTextArea info; // Displays information about the selected site
-	private JButton btnUpload, btnAbout, btnLogOut, btnEditSite;
+	private JButton btnUpload, btnAbout, btnLogOut, btnEditSite,btnMission;
 
 	/**
 	 * Creates and adds all of the components to the JPanel.
@@ -70,8 +69,14 @@ public class DashBoard extends GUI implements ListSelectionListener {
 		btnAbout = new JButton("About");
 		btnAbout.addActionListener(this);
 		btnAbout.setBackground(Color.LIGHT_GRAY);
-		btnAbout.setBounds(755, 372, 89, 23);
+		btnAbout.setBounds(755, 338, 89, 23);
 		add(btnAbout);
+
+		btnMission = new JButton("Mission");
+		btnMission.addActionListener(this);
+		btnMission.setBackground(Color.LIGHT_GRAY);
+		btnMission.setBounds(755, 372, 100, 23);
+		add(btnMission);
 
 		// Logout Button
 		btnLogOut = new JButton("Logout");
@@ -220,6 +225,9 @@ public class DashBoard extends GUI implements ListSelectionListener {
 		if (action.getActionCommand().equals("About")) {
 			IButtonApp.showCard(GUI.about);
 		}
+		if(action.getActionCommand().equals("Mission")){
+			IButtonApp.showCard(GUI.missionControl);
+		}
 		// Shows login JPanel
 		if (action.getActionCommand().equals("Logout")) {
 			LoginController.logout();
@@ -241,19 +249,21 @@ public class DashBoard extends GUI implements ListSelectionListener {
             }
 
             if(device.id != null) {
-//                try {
-//                    MissionHandler.startMission(device.iButton.getAdapter(), ms);
-                    DeviceController.editDevice(device.id, site.id, device.type, device.manufacture_num);
-//                } catch (OneWireException e) {
-//                    Logger.writeErrorToLog(e);
-//                }
+				OneWireContainer21 ms = (OneWireContainer21) device.iButton;
+				try {
+					MissionHandler.startMission(ms);
+					DeviceController.editDevice(device.id, site.id, device.type, device.manufacture_num);
+				} catch (OneWireException e) {
+                    Logger.writeErrorToLog(e);
+                }
             } else {
-//                try {
-//                    MissionHandler.startMission(device.iButton.getAdapter(), ms);
+				OneWireContainer21 ms = (OneWireContainer21) device.iButton;
+                try {
+                    MissionHandler.startMission(ms);
                     DeviceController.addDevice(site.id, device.type, device.manufacture_num);
-//                } catch (OneWireException e) {
-//                    Logger.writeErrorToLog(e);
-//                }
+                } catch (OneWireException e) {
+                    Logger.writeErrorToLog(e);
+                }
             }
             update();
 		}
