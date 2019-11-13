@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dd922be7-84f6-4908-bf32-f90066e61abe" name="Default" comment="Collin Palmer 10/16/19 CoCoItemp app now functions what is deemed correct from inital conversations with pastel, The demo app can not read data , start and stop missions now as well.">
-      <change afterPath="$PROJECT_DIR$/src/gui/MissionControl.java" afterDir="false" />
+    <list default="true" id="dd922be7-84f6-4908-bf32-f90066e61abe" name="Default" comment="Collin Palmer 11/04/19 Mission Control app integrated into cocoItemp but UI still sucks">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/app/IButtonApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/app/IButtonApp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/DashBoard.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/DashBoard.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/Login.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/Login.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/network/CoCoTempURLs.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/network/CoCoTempURLs.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/IButtonApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/IButtonApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/About.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/About.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/DashBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/DashBoard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/GUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/Login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/network/CoCoTempURLs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/network/CoCoTempURLs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/ibutton/MissionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ibutton/MissionHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gui/MissionControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/MissionControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ibutton/MissionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ibutton/MissionHandler.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -244,7 +235,11 @@
       <workItem from="1502736727396" duration="17470000" />
       <workItem from="1572199634538" duration="2160000" />
       <workItem from="1572301383726" duration="1405000" />
-      <workItem from="1572888352753" duration="7979000" />
+      <workItem from="1572888352753" duration="8220000" />
+      <workItem from="1573079759653" duration="2542000" />
+      <workItem from="1573251153172" duration="664000" />
+      <workItem from="1573257479412" duration="650000" />
+      <workItem from="1573683387275" duration="3513000" />
     </task>
     <task id="LOCAL-00001" summary="Collin Palmer 10/16/19 CoCoItemp app now functions what is deemed correct from inital conversations with pastel, The demo app can not read data , start and stop missions now as well.">
       <created>1572130448702</created>
@@ -253,7 +248,14 @@
       <option name="project" value="LOCAL" />
       <updated>1572130448702</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Collin Palmer 11/04/19 Mission Control app integrated into cocoItemp but UI still sucks">
+      <created>1572917436392</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1572917436393</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -274,7 +276,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Collin Palmer 10/16/19 CoCoItemp app now functions what is deemed correct from inital conversations with pastel, The demo app can not read data , start and stop missions now as well." />
-    <option name="LAST_COMMIT_MESSAGE" value="Collin Palmer 10/16/19 CoCoItemp app now functions what is deemed correct from inital conversations with pastel, The demo app can not read data , start and stop missions now as well." />
+    <MESSAGE value="Collin Palmer 11/04/19 Mission Control app integrated into cocoItemp but UI still sucks" />
+    <option name="LAST_COMMIT_MESSAGE" value="Collin Palmer 11/04/19 Mission Control app integrated into cocoItemp but UI still sucks" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -283,6 +286,11 @@
           <url>file://$PROJECT_DIR$/src/network/DeviceController.java</url>
           <line>100</line>
           <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/ibutton/IButtonHandler.java</url>
+          <line>57</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -84,7 +84,7 @@ public class MissionControl extends GUI implements ActionListener {
             }
         }
         // Stops the current mission
-        if (a.getSource() == stopMission) {
+        else if (a.getSource() == stopMission) {
             try {
                 MissionHandler.stopMission(activeDevice);
                 log.append("Mission ended\n");
@@ -92,11 +92,12 @@ public class MissionControl extends GUI implements ActionListener {
                 log.append("Failed to stop mission!\n");
             }
         }
-        if(a.getSource()==back){
+        else if(a.getSource()==back){
+            log.setText(null);
             IButtonApp.showPreviousCard();
         }
         // Writes mission samples into the data folder(C://Users/{user}/AppData/Roaming/iButtonData)
-        if (a.getSource() == readData) {
+        else if (a.getSource() == readData) {
 
             log.append("Loading Mission...\n");
 

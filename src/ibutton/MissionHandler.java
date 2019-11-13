@@ -58,6 +58,7 @@ public class MissionHandler {
 	 */
 	public static boolean stopMission(OneWireContainer21 container) throws OneWireException {
 			container.disableMission();
+			container.clearMemory();
 		return true;
 	}
 
@@ -79,6 +80,7 @@ public class MissionHandler {
 		container.setClock(System.currentTimeMillis(),state);
 		container.clearMemory();
 		container.enableMission(60);
+
 		return true;
 	}
 
