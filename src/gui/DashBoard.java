@@ -31,6 +31,7 @@ import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -238,12 +239,20 @@ public class DashBoard extends GUI implements ListSelectionListener {
 
             Device device = list.getSelectedValue();
             OneWireContainer21 owc = (OneWireContainer21) device.iButton;
+            List<Site> retrievedSites = new ArrayList<>();
+
+			retrievedSites = NetworkController.currentLoggedInUser.getSites();
+			if(retrievedSites.size()==0)
+			{
+				JOptionPane.showMessageDialog(this,"You have no sites " +
+						"please go to the website and create one");
+				return;
+			}
 
             Site site = (Site) JOptionPane.showInputDialog(this, "Pick a site",
                     "", JOptionPane.QUESTION_MESSAGE, null,
                     NetworkController.currentLoggedInUser.getSites().toArray(),
-                    NetworkController.currentLoggedInUser.getSites().get(0));
-
+			 		 retrievedSites.get(0));
             if(site == null){
                 return;
             }
@@ -252,7 +261,7 @@ public class DashBoard extends GUI implements ListSelectionListener {
 				OneWireContainer21 ms = (OneWireContainer21) device.iButton;
 				try {
 					MissionHandler.startMission(ms);
-					DeviceController.editDevice(device.id, site.id, device.type, device.manufacture_num);
+					DeviceController.editDevice(device.id, site.id, device.deviceType, device.manufacture_num,device.shelterType);
 				} catch (OneWireException e) {
                     Logger.writeErrorToLog(e);
                 }
@@ -260,7 +269,7 @@ public class DashBoard extends GUI implements ListSelectionListener {
 				OneWireContainer21 ms = (OneWireContainer21) device.iButton;
                 try {
                     MissionHandler.startMission(ms);
-                    DeviceController.addDevice(site.id, device.type, device.manufacture_num);
+                    DeviceController.addDevice(site.id, device.deviceType, device.manufacture_num, device.shelterType);
                 } catch (OneWireException e) {
                     Logger.writeErrorToLog(e);
                 }

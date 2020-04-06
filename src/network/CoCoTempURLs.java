@@ -12,7 +12,7 @@ public enum CoCoTempURLs {
 	GET_DEVICES("dashboard/devices.json"),
 	EDIT_SITE("settings/site/update"),
 	NEW_SITE("settings/site/update"),
-    NEW_DEVICE("/device/new"),
+    NEW_DEVICE("device/new"),
 	EDIT_DEVICE("settings/device"),
 	UPLOAD("upload"),
 	DASHBOARD("dashboard");

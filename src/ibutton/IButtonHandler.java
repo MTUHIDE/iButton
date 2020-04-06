@@ -28,7 +28,7 @@ public class IButtonHandler {
 	private static Set<DSPortAdapter> getAdapters(String adapterName) {
 		Set<DSPortAdapter> aps = new HashSet<DSPortAdapter>();
 
-		for (int portNum = 2; portNum <= 15; portNum++) {
+		for (int portNum = 0; portNum <= 15; portNum++) {
 			try {
 				aps.add(OneWireAccessProvider.getAdapter(adapterName, "USB" + Integer.toString(portNum)));
 			} catch (OneWireException e) {

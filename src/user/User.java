@@ -56,7 +56,7 @@ public class User {
             for(OneWireContainer ibutton : iButtons){
                 boolean in = false;
                 for (Device device: devices) {
-                    if(ibutton.getAddressAsString().equals(device.manufacture_num) && device.type.equals("iButton")){
+                    if(ibutton.getAddressAsString().equals(device.manufacture_num) && device.deviceType.equals("iButton")){
                         device.iButton = ibutton;
                         in = true;
                     }

@@ -55,15 +55,15 @@ public class DeviceController extends NetworkController {
         }
     }
 
-    public static boolean addDevice(String siteID, String type, String manufacture_num){
+    public static boolean addDevice(String siteID, String type, String manufacture_num, String shelter_type){
 
         try {
             MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 
             // HTTP request body
             RequestBody body = RequestBody.create(mediaType,
-                    "siteID=" + siteID.replaceAll(" ", "%20") + "&type="
-                            + type + "&manufacture_num=" + manufacture_num);
+                    "siteID=" + siteID.replaceAll(" ", "%20") + "&deviceType="
+                            + type + "&manufacture_num=" + manufacture_num+"&shelterType="+shelter_type);
 
             // HTTP request headers and builds the request
             Request request = new Request.Builder().url(CoCoTempURLs.NEW_DEVICE.url()).post(body)
@@ -81,14 +81,14 @@ public class DeviceController extends NetworkController {
 
     }
 
-    public static boolean editDevice(String deviceID, String siteID, String type, String manufacture_num){
+    public static boolean editDevice(String deviceID, String siteID, String type, String manufacture_num,String shelter_type){
         try {
             MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 
             // HTTP request body
             RequestBody body = RequestBody.create(mediaType,
-                    "id=" + deviceID + "&siteID=" + siteID + "&type=" + type
-                            + "&manufacture_num=" + manufacture_num + "&update=update");
+                    "id=" + deviceID + "&siteID=" + siteID + "&deviceType=" + type
+                            + "&manufacture_num=" + manufacture_num+"&shelterType="+shelter_type + "&update=update");
 
             // HTTP request headers and builds the request
             Request request = new Request.Builder().url(CoCoTempURLs.EDIT_DEVICE.url()).post(body)

@@ -8,7 +8,7 @@ import com.dalsemi.onewire.container.OneWireContainer;
  */
 public class Device {
 
-    public String id, manufacture_num, type, siteID;
+    public String id, manufacture_num, deviceType, siteID, shelterType;
 
     public OneWireContainer iButton;
 
@@ -20,7 +20,8 @@ public class Device {
      */
     public Device(OneWireContainer iButton) {
         this.iButton = iButton;
-        type = "iButton";
+        deviceType = "iButton";
+        shelterType = "No Shield";
         manufacture_num = iButton.getAddressAsString();
         siteID = "";
     }
@@ -30,7 +31,7 @@ public class Device {
      */
     @Override
     public String toString() {
-        return type + ": " + manufacture_num;
+        return deviceType + ": " + manufacture_num;
 
     }
 
