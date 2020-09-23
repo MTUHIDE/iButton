@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="680.0" style="-fx-background-color: #00416A;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="51.0" fitWidth="77.0" layoutX="297.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../IdeaProjects/CoCoTemp/src/main/resources/static/images/logo.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="275.0" layoutY="51.0" text="CoCo" textFill="#2196f3">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="333.0" layoutY="51.0" text="iTemp" textFill="#a0a2ab">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <JFXButton layoutX="48.0" layoutY="14.0" text="Back" textFill="#a0a2ab">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+      <JFXButton layoutX="267.0" layoutY="381.0" text="CoCo iTemp v1.1.1" textFill="#a0a2ab">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+      <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="22.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+         <image>
+            <Image url="@expandArrow.png" />
+         </image>
+      </ImageView>
+      <JFXTextArea focusColor="#a0a2ab" layoutX="49.0" layoutY="108.0" prefHeight="274.0" prefWidth="583.0" text="About: Coco iTemp version: 1.1.1&#10;&#10;This application is for managing CoCo Temp sites that use an iButton for temperature collection.&#10;The CoCo Temp website can be found here: http://localhost:4040/cocotemp/&#10;&#10;For help on using CoCo iTemp App see the CoCo iButton user guide in Start -&gt; CoCoiTemp -&gt; CoCoiButtonAppUserGuide.pdf&#10;&#10;The open source code for the CoCo iTemp App can be found here:https://github.com/MTUHIDE/iButton" unFocusColor="#a0a2ab">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextArea>
+   </children>
+</AnchorPane>

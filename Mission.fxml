@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="680.0" style="-fx-background-color: #00416A;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="51.0" fitWidth="77.0" layoutX="297.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@../IdeaProjects/CoCoTemp/src/main/resources/static/images/logo.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="275.0" layoutY="51.0" text="CoCo" textFill="#2196f3" AnchorPane.topAnchor="51.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="333.0" layoutY="51.0" text="iTemp" textFill="#a0a2ab" AnchorPane.topAnchor="51.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="22.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" AnchorPane.leftAnchor="22.0" AnchorPane.topAnchor="22.0">
+         <image>
+            <Image url="@expandArrow.png" />
+         </image>
+      </ImageView>
+      <JFXButton layoutX="40.0" layoutY="14.0" text="Back" textFill="#a0a2ab" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="14.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+      <JFXButton layoutX="267.0" layoutY="373.0" text="CoCo iTemp v1.1.1" textFill="#a0a2ab" AnchorPane.bottomAnchor="7.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+      <JFXButton layoutX="293.0" layoutY="256.0" style="-fx-background-color: #5CB85C;" text="Read Data" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+      <ImageView fitHeight="22.0" fitWidth="33.0" layoutX="273.0" layoutY="157.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Downloads/iconsflow/icon4.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="22.0" fitWidth="33.0" layoutX="273.0" layoutY="208.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Downloads/iconsflow/icon1.png" />
+         </image>
+      </ImageView>
+      <JFXButton layoutX="293.0" layoutY="204.0" text="Stop Mission" textFill="#a0a2ab">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+      <JFXButton layoutX="292.0" layoutY="153.0" text="Start Mission" textFill="#a0a2ab">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>
