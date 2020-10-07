@@ -10,10 +10,14 @@ import ibutton.MissionSamples;
 import output.Logger;
 import output.TemperatureData;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
@@ -24,36 +28,140 @@ public class MissionControl extends GUI implements ActionListener {
     private JButton stopMission;
     private JButton readData;
     private JButton back;
-    private JScrollPane scrollV;
+    private JScrollPane scrollPane;
     private List<OneWireContainer> devices; // All connected iButtons
     private OneWireContainer21 activeDevice;
 
-    public MissionControl(){
+    public MissionControl() throws IOException {
         super("MissionControl");
-        setBackground(Color.WHITE);
+        setBackground(new Color(0,0,205));
+        setBorder(new EmptyBorder(5, 5, 5, 5));
+        GridBagLayout gbl_contentPane = new GridBagLayout();
+        gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0, 0, 60, 0, 0, 0, 0, 0};
+        gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+        setLayout(gbl_contentPane);
 
-        log = new JTextArea(10, 40); // Displays helpful information
-        startMission = new JButton("Start Mission");
-        stopMission = new JButton("Stop Mission");
+        BufferedImage myPicture = ImageIO.read(new File("res/logo.png"));
+        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+        GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+        gbc_lblNewLabel.gridx = 4;
+        gbc_lblNewLabel.gridy = 1;
+        add(picLabel, gbc_lblNewLabel);
+
+        startMission = new JButton("New Mission");
+        GridBagConstraints gbc_btnStart = new GridBagConstraints();
+        gbc_btnStart.insets = new Insets(0, 0, 5, 5);
+        gbc_btnStart.gridx = 4;
+        gbc_btnStart.gridy = 3;
+        add(startMission, gbc_btnStart);
+
+        stopMission = new JButton("Stop Misson");
+        GridBagConstraints gbc_btnStopMisson = new GridBagConstraints();
+        gbc_btnStopMisson.insets = new Insets(0, 0, 5, 5);
+        gbc_btnStopMisson.gridx = 4;
+        gbc_btnStopMisson.gridy = 4;
+        add(stopMission, gbc_btnStopMisson);
+
         readData = new JButton("Read Data");
+        GridBagConstraints gbc_btnRead = new GridBagConstraints();
+        gbc_btnRead.insets = new Insets(0, 0, 5, 5);
+        gbc_btnRead.gridx = 4;
+        gbc_btnRead.gridy = 5;
+        add(readData, gbc_btnRead);
+
+        log = new JTextArea(10,40);
+        log.setBackground(new Color(192, 192, 192));
+
+        scrollPane = new JScrollPane(log);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.getViewport().setBackground(new Color(0,0,205));
+        GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+        gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
+        gbc_scrollPane.fill = GridBagConstraints.BOTH;
+        gbc_scrollPane.gridx = 4;
+        gbc_scrollPane.gridy = 6;
+        add(scrollPane, gbc_scrollPane);
+
         back = new JButton("Back");
-        scrollV = new JScrollPane(log);
-        scrollV.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        GridBagConstraints gbc_btnBack = new GridBagConstraints();
+        gbc_btnBack.insets = new Insets(0, 0, 5, 5);
+        gbc_btnBack.gridx = 0;
+        gbc_btnBack.gridy = 8;
+        add(back, gbc_btnBack);
 
-        setLayout(new FlowLayout());
+//        GridBagLayout gbl_contentPane = new GridBagLayout();
+//        gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0, 0, 64, 0, 0, 0, 0, 0};
+//        gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//        gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+//        gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+//        setLayout(gbl_contentPane);
+//
+//        //Logo
+//        BufferedImage logo = ImageIO.read(new File("C:\\Users\\wilma\\testGUI\\gui\\src\\images\\logo.png"));
+//        JLabel picLabel = new JLabel(new ImageIcon(logo));
+//        GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+//        gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+//        gbc_lblNewLabel.gridx = 4;
+//        gbc_lblNewLabel.gridy = 1;
+//        add(picLabel, gbc_lblNewLabel);
+//
+//        //Start mission button
+//        startMission = new JButton("Start Mission");
+//        GridBagConstraints gbc_btnSrtButton = new GridBagConstraints();
+//        gbc_btnSrtButton.insets = new Insets(0, 0, 5, 5);
+//        gbc_btnSrtButton.gridx = 4;
+//        gbc_btnSrtButton.gridy = 3;
+//        add(startMission, gbc_btnSrtButton);
+//
+//        //Stop mission button
+//        stopMission = new JButton("Stop Mission");
+//        GridBagConstraints gbc_btnStopMisson = new GridBagConstraints();
+//        gbc_btnStopMisson.insets = new Insets(0, 0, 5, 5);
+//        gbc_btnStopMisson.gridx = 4;
+//        gbc_btnStopMisson.gridy = 4;
+//        add(stopMission, gbc_btnStopMisson);
+//
+//        //Read Data Button
+//        readData = new JButton("Read Data");
+//        GridBagConstraints gbc_btnRead = new GridBagConstraints();
+//        gbc_btnRead.insets = new Insets(0, 0, 5, 5);
+//        gbc_btnRead.gridx = 4;
+//        gbc_btnRead.gridy = 5;
+//        add(readData, gbc_btnRead);
+//
+//        //Log area
+//        log = new JTextArea(10, 40); // Displays helpful information
+//        log.setBackground(new Color(0, 0, 205));
+//        log.setEditable(false);
+//        scrollPane = new JScrollPane(log);
+//        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+//        scrollPane.getViewport().setBackground(new Color(0,0,205));
+//        GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+//        gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
+//        gbc_scrollPane.fill = GridBagConstraints.BOTH;
+//        gbc_scrollPane.gridx = 4;
+//        gbc_scrollPane.gridy = 6;
+//        add(scrollPane, gbc_scrollPane);
+//
+//        //Back button
+//        back = new JButton("Back");
+//        GridBagConstraints gbc_btnBack = new GridBagConstraints();
+//        gbc_btnBack.insets = new Insets(0, 0, 0, 5);
+//        gbc_btnBack.gridx = 0;
+//        gbc_btnBack.gridy = 8;
+//        add(back, gbc_btnBack);
+//        scrollV = new JScrollPane(log);
+//        scrollV.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        log.setEditable(false);
+
+        //Add Listeners
         startMission.addActionListener(this);
         stopMission.addActionListener(this);
         readData.addActionListener(this);
         back.addActionListener(this);
 
-        add(log);
-        add(scrollV);
-        add(startMission);
-        add(stopMission);
-        add(readData);
-        add(back);
         setVisible(true);
         this.load();
     }

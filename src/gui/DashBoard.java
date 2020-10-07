@@ -3,6 +3,7 @@ package gui;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -21,13 +22,12 @@ import output.Logger;
 import user.Device;
 import user.Site;
 
-import java.awt.Color;
+import java.awt.*;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.border.EtchedBorder;
-import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
@@ -54,68 +54,170 @@ public class DashBoard extends GUI implements ListSelectionListener {
 	 */
 	public DashBoard() {
 		super("Dashboard");
-		setBackground(Color.WHITE);
-		setLayout(null);
+		setBorder(new EmptyBorder(5, 5, 5, 5));
+		setBackground(new Color(0, 0, 205));
+
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[]{98, 174, 96, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 121, 0};
+		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		setLayout(gbl_contentPane);
+
 
 		// The list of the user's sites
 		list = new JList<Device>();
-		list.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, SystemColor.activeCaption));
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setBackground(Color.WHITE);
-		list.setBounds(10, 28, 177, 400);
+//		list.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, SystemColor.activeCaption));
+////		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+////		list.setBackground(Color.WHITE);
+////		list.setBounds(10, 28, 177, 400);
+		list.setBackground(new Color(192, 192, 192));
+		GridBagConstraints gbc_list = new GridBagConstraints();
+		gbc_list.insets = new Insets(0, 0, 0, 5);
+		gbc_list.fill = GridBagConstraints.BOTH;
+		gbc_list.gridx = 0;
+		gbc_list.gridy = 1;
 		list.addListSelectionListener(this);
-		add(list);
+		add(list, gbc_list);
+
+		//Main text area panel
+		JPanel panel = new JPanel();
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.insets = new Insets(0, 0, 0, 5);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 1;
+		gbc_panel.gridy = 1;
+		add(panel, gbc_panel);
+
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[]{0, 0};
+		gbl_panel.rowHeights = new int[]{0, 0};
+		gbl_panel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		panel.setLayout(gbl_panel);
+
+		info = new JTextArea();
+		info.setBackground(new Color(192, 192, 192));
+		info.setEditable(false);
+		GridBagConstraints gbc_textArea = new GridBagConstraints();
+		gbc_textArea.fill = GridBagConstraints.BOTH;
+		gbc_textArea.gridx = 0;
+		gbc_textArea.gridy = 0;
+		panel.add(info, gbc_textArea);
+
+
+
+
+		//Control Panel
+		JPanel controlPanel = new JPanel();
+		controlPanel.setBackground(new Color(0, 0, 255));
+		GridBagConstraints gbc_controlPanel = new GridBagConstraints();
+		gbc_controlPanel.fill = GridBagConstraints.BOTH;
+		gbc_controlPanel.gridx = 2;
+		gbc_controlPanel.gridy = 1;
+		add(controlPanel, gbc_controlPanel);
+		GridBagLayout gbl_controlPanel = new GridBagLayout();
+		gbl_controlPanel.columnWidths = new int[]{65, 0, 0};
+		gbl_controlPanel.rowHeights = new int[]{23, 0, 0, 0};
+		gbl_controlPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_controlPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		controlPanel.setLayout(gbl_controlPanel);
+
 
 		// Setting Button
+//		btnAbout = new JButton("About");
+//		btnAbout.addActionListener(this);
+//		btnAbout.setBackground(Color.LIGHT_GRAY);
+//		btnAbout.setBounds(755, 338, 89, 23);
+//		add(btnAbout);
 		btnAbout = new JButton("About");
+		GridBagConstraints gbc_about = new GridBagConstraints();
+		gbc_about.insets = new Insets(0, 0, 5, 0);
+		gbc_about.gridx = 1;
+		gbc_about.gridy = 0;
 		btnAbout.addActionListener(this);
 		btnAbout.setBackground(Color.LIGHT_GRAY);
-		btnAbout.setBounds(755, 338, 89, 23);
-		add(btnAbout);
+		controlPanel.add(btnAbout, gbc_about);
 
+
+		//Mission
+//		btnMission = new JButton("Mission");
+//		btnMission.addActionListener(this);
+//		btnMission.setBackground(Color.LIGHT_GRAY);
+//		btnMission.setBounds(755, 372, 100, 23);
+//		add(btnMission);
 		btnMission = new JButton("Mission");
+		GridBagConstraints gbc_mission = new GridBagConstraints();
+		gbc_mission.insets = new Insets(0, 0, 5, 0);
+		gbc_mission.gridx = 1;
+		gbc_mission.gridy = 1;
 		btnMission.addActionListener(this);
 		btnMission.setBackground(Color.LIGHT_GRAY);
-		btnMission.setBounds(755, 372, 100, 23);
-		add(btnMission);
+		controlPanel.add(btnMission, gbc_mission);
 
 		// Logout Button
+//		btnLogOut = new JButton("Logout");
+//		btnLogOut.addActionListener(this);
+//		btnLogOut.setBackground(Color.LIGHT_GRAY);
+//		btnLogOut.setBounds(755, 406, 89, 23);
+//		add(btnLogOut);
 		btnLogOut = new JButton("Logout");
+		GridBagConstraints gbc_logout = new GridBagConstraints();
+		gbc_logout.gridx = 1;
+		gbc_logout.gridy = 2;
 		btnLogOut.addActionListener(this);
 		btnLogOut.setBackground(Color.LIGHT_GRAY);
-		btnLogOut.setBounds(755, 406, 89, 23);
-		add(btnLogOut);
+		controlPanel.add(btnLogOut, gbc_logout);
 
 		// The subJPanel that contains site information, edit site, and upload
 		// components. Mainly for looks.
-		JPanel panel = new JPanel();
-		panel.setBounds(197, 28, 548, 400);
-		add(panel);
-		panel.setLayout(null);
+//		JPanel panel = new JPanel();
+//		panel.setBounds(197, 28, 548, 400);
+//		add(panel);
+//		panel.setLayout(null);
 
 		// Text box that displays site information
-		info = new JTextArea();
-		info.setBounds(10, 11, 409, 378);
-		info.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, SystemColor.activeCaption));
-		info.setEditable(false);
-		info.setBackground(Color.WHITE);
-		panel.add(info);
+//		info = new JTextArea();
+//		info.setBounds(10, 11, 409, 378);
+//		info.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, SystemColor.activeCaption));
+//		info.setEditable(false);
+//		info.setBackground(Color.WHITE);
+//		panel.add(info);
 
 		// UploadController Button
+//		btnUpload = new JButton("Upload");
+//		btnUpload.setBounds(429, 12, 109, 23);
+//		btnUpload.setEnabled(false);
+//		btnUpload.addActionListener(this);
+//		btnUpload.setBackground(Color.LIGHT_GRAY);
+//		panel.add(btnUpload);
 		btnUpload = new JButton("Upload");
-		btnUpload.setBounds(429, 12, 109, 23);
-		btnUpload.setEnabled(false);
+		GridBagConstraints gbc_btnUpload = new GridBagConstraints();
+		gbc_btnUpload.insets = new Insets(0, 0, 5, 5);
+		gbc_btnUpload.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnUpload.gridx = 0;
+		gbc_btnUpload.gridy = 0;
 		btnUpload.addActionListener(this);
+		btnUpload.setEnabled(false);
 		btnUpload.setBackground(Color.LIGHT_GRAY);
-		panel.add(btnUpload);
+		controlPanel.add(btnUpload, gbc_btnUpload);
 
 		// Edit SiteController Button
-		btnEditSite = new JButton("Edit Site");
+//		btnEditSite = new JButton("Edit Site");
+//		btnEditSite.addActionListener(this);
+//		btnEditSite.setEnabled(false);
+//		btnEditSite.setBackground(Color.LIGHT_GRAY);
+//		btnEditSite.setBounds(429, 46, 109, 23);
+//		panel.add(btnEditSite);
+		btnEditSite = new JButton("Assign Site");
+		GridBagConstraints gbc_btnEditSites = new GridBagConstraints();
+		gbc_btnEditSites.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEditSites.gridx = 0;
+		gbc_btnEditSites.gridy = 1;
 		btnEditSite.addActionListener(this);
 		btnEditSite.setEnabled(false);
 		btnEditSite.setBackground(Color.LIGHT_GRAY);
-		btnEditSite.setBounds(429, 46, 109, 23);
-		panel.add(btnEditSite);
+		controlPanel.add(btnEditSite, gbc_btnEditSites);
 	}
 
 	/**
@@ -235,7 +337,7 @@ public class DashBoard extends GUI implements ListSelectionListener {
 			IButtonApp.showCard(GUI.login);
 		}
 		// Shows edit site JPanel
-		if (action.getActionCommand().equals("Edit Site")) {
+		if (action.getActionCommand().equals("Assign Site")) {
 
             Device device = list.getSelectedValue();
             OneWireContainer21 owc = (OneWireContainer21) device.iButton;
@@ -244,12 +346,12 @@ public class DashBoard extends GUI implements ListSelectionListener {
 			retrievedSites = NetworkController.currentLoggedInUser.getSites();
 			if(retrievedSites.size()==0)
 			{
-				JOptionPane.showMessageDialog(this,"You have no sites " +
+				JOptionPane.showMessageDialog(null,"You have no sites " +
 						"please go to the website and create one");
 				return;
 			}
 
-            Site site = (Site) JOptionPane.showInputDialog(this, "Pick a site",
+            Site site = (Site) JOptionPane.showInputDialog(null, "Pick a site",
                     "", JOptionPane.QUESTION_MESSAGE, null,
                     NetworkController.currentLoggedInUser.getSites().toArray(),
 			 		 retrievedSites.get(0));

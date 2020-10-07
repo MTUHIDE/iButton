@@ -1,24 +1,20 @@
 package gui;
 
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import java.awt.Color;
-import java.awt.Desktop;
-
-import javax.swing.SwingConstants;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 
 import app.IButtonApp;
 import network.CoCoTempURLs;
 import network.LoginController;
 import output.Logger;
 
-import javax.swing.JButton;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.awt.event.ActionEvent;
-import java.awt.Font;
 
 /**
  * The JPanel for the login GUI. This JPanel displays the login fields.
@@ -37,72 +33,142 @@ public class Login extends GUI {
 	/**
 	 * Creates and adds all of the components to this JPanel.
 	 */
-	public Login() {
+	public Login() throws IOException {
 	    super("Login");
-		setBackground(Color.WHITE);
-		setLayout(null);
+		setBackground(new Color(0, 0, 205));
+
+		// Create Layout
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		setLayout(gbl_contentPane);
+
+		//Get image
+		BufferedImage myPicture = ImageIO.read(new File("res/logo.png"));
+		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+		GridBagConstraints gbc_lblPicture = new GridBagConstraints();
+		gbc_lblPicture.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPicture.gridx = 1;
+		gbc_lblPicture.gridy = 0;
+		add(picLabel, gbc_lblPicture);
+
 
 		// labels for the fields
-		JLabel lblWelcome = new JLabel("Welcome");
-		lblWelcome.setBounds(393, 94, 64, 14);
-		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblWelcome);
 
 		JLabel lblUsername = new JLabel("Username");
-		lblUsername.setBounds(275, 138, 64, 14);
-		lblUsername.setLabelFor(username);
-		add(lblUsername);
+		lblUsername.setFont(new Font("Segoe UI Semibold", Font.BOLD, 13));
+		lblUsername.setForeground(Color.LIGHT_GRAY);
+		lblUsername.setHorizontalAlignment(SwingConstants.LEFT);
+		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
+		gbc_lblUsername.anchor = GridBagConstraints.SOUTH;
+		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
+		gbc_lblUsername.gridx = 1;
+		gbc_lblUsername.gridy = 1;
+		add(lblUsername, gbc_lblUsername);
 
 		JLabel lblPassword = new JLabel("Password");
-		lblPassword.setBounds(275, 187, 79, 14);
-		lblPassword.setLabelFor(passwordField);
-		add(lblPassword);
+		lblPassword.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 13));
+		lblPassword.setForeground(Color.LIGHT_GRAY);
+		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
+		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPassword.gridx = 1;
+		gbc_lblPassword.gridy = 3;
+		add(lblPassword, gbc_lblPassword);
 
-		JLabel lblVersion = new JLabel("CoCo iTemp v" + IButtonApp.version);
-		lblVersion.setBounds(730, 429, 137, 14);
-		add(lblVersion);
+//		JLabel lblVersion = new JLabel("CoCo iTemp v" + IButtonApp.version);
+//		lblVersion.setBounds(730, 429, 137, 14);
+//		add(lblVersion);
 
 		// Username field
 		username = new JTextField();
-		username.setBounds(275, 153, 300, 23);
-        username.setColumns(25);
-		add(username);
+		GridBagConstraints gbc_txtUsername = new GridBagConstraints();
+		gbc_txtUsername.insets = new Insets(0, 0, 5, 5);
+		gbc_txtUsername.gridx = 1;
+		gbc_txtUsername.gridy = 2;
+		add(username, gbc_txtUsername);
+		username.setColumns(10);
 
 		// Password field
 		passwordField = new JPasswordField();
-		passwordField.setBounds(275, 204, 300, 23);
-		add(passwordField);
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_1.gridx = 1;
+		gbc_textField_1.gridy = 4;
+		add(passwordField, gbc_textField_1);
+		passwordField.setColumns(10);
+
+		//Member text
+		JLabel lblRegister = new JLabel("Not a member?");
+		lblRegister.setFont(new Font("Segoe UI Semibold", Font.BOLD, 13));
+		lblRegister.setVerticalAlignment(SwingConstants.TOP);
+		lblRegister.setForeground(Color.LIGHT_GRAY);
+		GridBagConstraints gbc_lblRegister1 = new GridBagConstraints();
+		gbc_lblRegister1.anchor = GridBagConstraints.SOUTH;
+		gbc_lblRegister1.insets = new Insets(0, 0, 0, 5);
+		gbc_lblRegister1.gridx = 2;
+		gbc_lblRegister1.gridy = 8;
+		add(lblRegister, gbc_lblRegister1);
 
 		// Login button
-		btnLogin = new JButton("Login");
-		btnLogin.setBounds(380, 242, 89, 23);
+//		btnLogin = new JButton("Login");
+//		btnLogin.setBounds(380, 242, 89, 23);
+//		btnLogin.addActionListener(this);
+//		btnLogin.setBackground(Color.LIGHT_GRAY);
+//		add(btnLogin);
+		JButton btnLogin = new JButton("Login");
+		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
+		gbc_btnLogin.insets = new Insets(0, 0, 5, 5);
+		gbc_btnLogin.gridx = 1;
+		gbc_btnLogin.gridy = 6;
 		btnLogin.addActionListener(this);
 		btnLogin.setBackground(Color.LIGHT_GRAY);
-		add(btnLogin);
+		add(btnLogin, gbc_btnLogin);
 
 		// Register button
+//		btnRegister = new JButton("Register");
+//		btnRegister.setBounds(380, 276, 89, 23);
+//		btnRegister.addActionListener(this);
+//		btnRegister.setBackground(Color.LIGHT_GRAY);
+//		add(btnRegister);
 		btnRegister = new JButton("Register");
-		btnRegister.setBounds(380, 276, 89, 23);
+		GridBagConstraints gbc_btnRegister = new GridBagConstraints();
+		gbc_btnRegister.anchor =  GridBagConstraints.SOUTH;
+		gbc_btnRegister.gridx = 3;
+		gbc_btnRegister.gridy = 8;
 		btnRegister.addActionListener(this);
 		btnRegister.setBackground(Color.LIGHT_GRAY);
-		add(btnRegister);
+		add(btnRegister, gbc_btnRegister);
 
 		// Settings button
+//		btnAbout = new JButton("About");
+//		btnAbout.setBounds(10, 420, 89, 23);
+//		btnAbout.addActionListener(this);
+//		btnAbout.setBackground(Color.LIGHT_GRAY);
+//		add(btnAbout);
 		btnAbout = new JButton("About");
-		btnAbout.setBounds(10, 420, 89, 23);
+		GridBagConstraints gbc_btnAbout = new GridBagConstraints();
+		gbc_btnAbout.anchor = GridBagConstraints.SOUTH;
+		gbc_btnAbout.insets = new Insets(0, 0, 0, 5);
+		gbc_btnAbout.gridx = 0;
+		gbc_btnAbout.gridy = 8;
 		btnAbout.addActionListener(this);
 		btnAbout.setBackground(Color.LIGHT_GRAY);
-		add(btnAbout);
+		add(btnAbout, gbc_btnAbout);
+
 
 		// Wrong pass or username text
-		lblWrongCons = new JLabel("Wrong Password or Username");
+		lblWrongCons = new JLabel("Wrong Username or Password");
 		lblWrongCons.setEnabled(false);
 		lblWrongCons.setVisible(false);
 		lblWrongCons.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblWrongCons.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWrongCons.setForeground(Color.RED);
-		lblWrongCons.setBounds(328, 310, 198, 14);
-		add(lblWrongCons);
+		GridBagConstraints gbc_lblWrong = new GridBagConstraints();
+		gbc_lblWrong.insets = new Insets(0, 0, 5, 5);
+		gbc_lblWrong.gridx = 1;
+		gbc_lblWrong.gridy = 7;
+		add(lblWrongCons, gbc_lblWrong);
 	}
 
 	/**

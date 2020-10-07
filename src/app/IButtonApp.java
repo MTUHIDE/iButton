@@ -43,7 +43,9 @@ public class IButtonApp extends JFrame {
 		// Sets the application icon and other JFrame settings
 		setIconImage(img.getImage());
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
+		Dimension dimension = new Dimension();
+		dimension.setSize(Toolkit.getDefaultToolkit().getScreenSize().width-100, Toolkit.getDefaultToolkit().getScreenSize().height-100);
+		setPreferredSize(dimension);
 		add(cards);
 		setVisible(true);
 		setResizable(true);
