@@ -45,6 +45,7 @@ public class Login extends GUI {
 		gbl_contentPane.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		setLayout(gbl_contentPane);
 
+		
 		//Get image
 		BufferedImage myPicture = ImageIO.read(new File("res/logo.png"));
 		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
